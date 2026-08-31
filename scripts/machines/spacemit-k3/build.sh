@@ -11,6 +11,14 @@ GENDIL_ROOT="${GENDIL_ROOT:-$(cd -- "${SCRIPT_DIR}/../../.." && pwd -P)}"
 CXX="${CXX:-g++-15}"
 BUILD_TYPE="${BUILD_TYPE:-Release}"
 JOBS="${JOBS:-8}"
+K3_CXX_FLAGS_RELEASE="${K3_CXX_FLAGS_RELEASE:--O3 -DNDEBUG}"
+K3_ENABLE_EXPERIMENTS="${K3_ENABLE_EXPERIMENTS:-OFF}"
+
+if [[ "${K3_ENABLE_EXPERIMENTS}" != "ON" &&
+      "${K3_ENABLE_EXPERIMENTS}" != "OFF" ]]; then
+  printf 'error: K3_ENABLE_EXPERIMENTS must be ON or OFF\n' >&2
+  exit 1
+fi
 
 if ! command -v "${CXX}" >/dev/null 2>&1; then
   printf 'error: C++ compiler is unavailable: %s\n' "${CXX}" >&2
@@ -28,6 +36,7 @@ cmake_args=(
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
   -DBUILD_TESTING=ON
   -DGENDIL_ENABLE_BENCHMARKS=ON
+  -DGENDIL_ENABLE_K3_EXPERIMENTS="${K3_ENABLE_EXPERIMENTS}"
   -DUSE_OPENMP=ON
   -DUSE_CUDA=OFF
   -DUSE_HIP=OFF
@@ -37,7 +46,7 @@ cmake_args=(
   -DUSE_CALIPER=OFF
 )
 
-if [[ -n "${K3_CXX_FLAGS_RELEASE:-}" ]]; then
+if [[ -n "${K3_CXX_FLAGS_RELEASE}" ]]; then
   cmake_args+=("-DCMAKE_CXX_FLAGS_RELEASE=${K3_CXX_FLAGS_RELEASE}")
 fi
 
@@ -75,7 +84,11 @@ else
     'warning: no OpenMP runtime directory found; verify the loader path' >&2
 fi
 
+build_targets=(gendil-tests range-benchmarks)
+if [[ "${K3_ENABLE_EXPERIMENTS}" == "ON" ]]; then
+  build_targets+=(k3-experiments)
+fi
 cmake --build "${BUILD_DIR}" --parallel "${JOBS}" \
-  --target gendil-tests range-benchmarks
+  --target "${build_targets[@]}"
 
 printf 'K3 build ready: %s\n' "${BUILD_DIR}"

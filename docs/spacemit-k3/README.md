@@ -6,6 +6,8 @@ commit.
 
 Detailed benchmark-harness design and rollback notes are in
 [`benchmark-harness.md`](benchmark-harness.md).
+The mixed X100/A100 safety design is in
+[`heterogeneous-openmp-design.md`](heterogeneous-openmp-design.md).
 The first native result review is in
 [`results-2026-08-31.md`](results-2026-08-31.md).
 
@@ -21,10 +23,11 @@ moves a newly created process to A100 before executing the requested program.
 Moving a process after it has established RVV state is unsafe because the two
 core classes have different VLENs.
 
-Consequently, GenDiL uses separate process runs for X100 and A100. "Run on both"
-means that the same vector-length-agnostic implementation is validated in a
-fresh process on each core class. Combining all 16 cores would require a
-separate multiprocess design and is not part of the initial port.
+The current production-safe path uses separate process runs for X100 and A100;
+the same vector-length-agnostic implementation is validated in a fresh process
+on each core class. Concurrent use of all 16 cores is an experimental goal. It
+requires the documented per-thread vector-state and placement probe to pass;
+otherwise the implementation must use the two-process MPI fallback.
 
 ## Stages
 
@@ -107,6 +110,11 @@ them. Set `K3_CXX_FLAGS_RELEASE` only after the system survey establishes the
 required ISA flags; its exact value is stored in `CMakeCache.txt` and captured
 by the benchmark manifest.
 
+The K3 script defaults release flags to `-O3 -DNDEBUG` because the installed
+GCC 15 rejects `-march=native`. Source-specific scalar and RVV flags are used
+only by the heterogeneous safety probe. Override `K3_CXX_FLAGS_RELEASE` when a
+reviewed common K3 ISA string is introduced.
+
 Run correctness tests on each core class:
 
 ```sh
@@ -179,6 +187,32 @@ This runs every range benchmark with GCC and Clang at 1, 2, 4, and 8 threads.
 Performance mode uses seven timed iterations and the validated smoke-size cap.
 Set `RUN_GCC=0`, `RUN_CLANG=0`, `THREAD_COUNTS="1 8"`, or `RESULT_TAG=name` to
 control a rerun without editing the script.
+
+## Heterogeneous OpenMP Probe
+
+Before implementing a mixed-core kernel, rebuild and run the vector-state probe
+with both compilers:
+
+```sh
+git pull --ff-only
+K3_ENABLE_EXPERIMENTS=ON CXX=/usr/bin/g++-15 \
+  scripts/machines/spacemit-k3/build.sh
+scripts/machines/spacemit-k3/run-heterogeneous-openmp-probe.sh \
+  build-k3-g++-15
+
+K3_ENABLE_EXPERIMENTS=ON \
+  CXX=/home/lin32/opt/llvm-main/bin/clang++ \
+  scripts/machines/spacemit-k3/build.sh
+scripts/machines/spacemit-k3/run-heterogeneous-openmp-probe.sh \
+  build-k3-clang++
+```
+
+Run this script normally on X100, never through `ai`. The scalar launcher keeps
+RVV disabled while OpenMP starts. Workers 0-7 pin to X100; workers 8-15 request
+A100 placement by Linux TID and only then enable RVV. A nonzero result selects
+the documented MPI fallback; do not weaken or bypass a failed safety check.
+K3 experiments are disabled in ordinary builds unless
+`K3_ENABLE_EXPERIMENTS=ON` is supplied.
 
 ## Evidence Required Per Change
 

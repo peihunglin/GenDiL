@@ -146,3 +146,7 @@ if(GENDIL_ENABLE_BENCHMARKS)
   add_subdirectory(benchmarks)
 endif()
 add_subdirectory(examples)
+
+if(GENDIL_ENABLE_K3_EXPERIMENTS)
+  add_subdirectory(tools/spacemit-k3)
+endif()

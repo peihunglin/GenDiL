@@ -9,6 +9,11 @@ option(USE_CALIPER "Enables Caliper interface for benchmarking." OFF)
 option(USE_HYPRE "Enables Hypre interface." OFF)
 option(GENDIL_ENABLE_BENCHMARKS "Build GenDiL benchmark executables" OFF)
 option(
+  GENDIL_ENABLE_K3_EXPERIMENTS
+  "Build opt-in SpacemiT K3 hardware probes"
+  OFF
+)
+option(
   GENDIL_ENABLE_FILTERED_SYNC_EXPERIMENT_CTEST
   "Register filtered CellIterator Sync experiment in CTest."
   OFF
