@@ -29,7 +29,12 @@ if [[ "${CORE_TYPE}" == "a100" && "${GENDIL_K3_A100_PROCESS:-0}" != "1" ]]; then
     OMP_PROC_BIND="${OMP_PROC_BIND}" bash "$0" "$@"
 fi
 
-OUTPUT_FILE="${2:-${GENDIL_ROOT}/results/spacemit-k3/tests-${CORE_TYPE}.txt}"
+compiler_path="$(
+  awk -F= '/^CMAKE_CXX_COMPILER:FILEPATH=/{print $2}' \
+    "${BUILD_DIR}/CMakeCache.txt"
+)"
+compiler_name="$(basename -- "${compiler_path:-unknown-compiler}")"
+OUTPUT_FILE="${2:-${GENDIL_ROOT}/results/spacemit-k3/${compiler_name}/${CORE_TYPE}/tests.txt}"
 mkdir -p "$(dirname -- "${OUTPUT_FILE}")"
 
 {

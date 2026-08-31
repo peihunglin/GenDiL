@@ -60,6 +60,11 @@ BENCHMARK_MODE=smoke CORE_TYPE=x100 \
 Repeat for Clang 24 and for A100. A full run follows only after all smoke rows
 report `pass`.
 
+CTest output defaults to
+`results/spacemit-k3/<compiler>/<core>/tests.txt`, preventing one compiler or
+core run from overwriting another. An explicit second argument to
+`run-tests.sh` overrides that location.
+
 The runner checks process exit status and requires finite coordinate output.
 It does not prove numerical correctness. CTest is the current numerical gate;
 benchmark-level reference comparisons remain required before RVV or IME
