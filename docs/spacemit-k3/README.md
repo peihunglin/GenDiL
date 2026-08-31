@@ -1,0 +1,105 @@
+# SpacemiT K3 Port
+
+This directory records the design, reproduction steps, and evidence for the
+GenDiL K3 port. Code changes must update the relevant document in the same
+commit.
+
+## Hardware Model
+
+The K3 exposes two core classes:
+
+- Eight out-of-order X100 cores with 256-bit RISC-V vector registers.
+- Eight in-order A100 cores with 1024-bit RISC-V vector registers and IME.
+
+Normal Linux processes start on X100. The external `k3_ai` `ai`/`aix` launcher
+moves a newly created process to A100 before executing the requested program.
+Moving a process after it has established RVV state is unsafe because the two
+core classes have different VLENs.
+
+Consequently, GenDiL uses separate process runs for X100 and A100. "Run on both"
+means that the same vector-length-agnostic implementation is validated in a
+fresh process on each core class. Combining all 16 cores would require a
+separate multiprocess design and is not part of the initial port.
+
+## Stages
+
+### 1. X100 OpenMP
+
+- Build natively with GCC 15 and Clang 24 using C++20 and OpenMP.
+- Run the complete configured CTest suite on one and eight X100 cores.
+- Run every `range-*` benchmark with fixed OpenMP affinity.
+- Record correctness evidence and 1, 2, 4, and 8-thread scaling.
+
+### 2. X100 And A100 RVV
+
+- Add vector-length-agnostic RVV kernels and aligned storage contracts.
+- Prioritize tensor contractions, vector reductions, and sparse matrix rows.
+- Build with both compilers and run separate X100 and A100 processes.
+- Inspect compiler vectorization reports and disassembly to prove RVV coverage.
+
+### 3. A100 IME
+
+- Record the installed IME headers, compiler flags, supported element types,
+  tile shapes, and accumulation semantics before adding an API.
+- Add IME behind the same contraction semantics as scalar and RVV paths.
+- Compare against FP64 references. If native precision is insufficient,
+  evaluate an Ozaki-style split-product scheme with higher-precision
+  accumulation and residual correction.
+- Include packing, conversion, and correction costs in performance results.
+
+## Initial System Survey
+
+Run from a clean checkout on K3:
+
+```sh
+scripts/machines/spacemit-k3/collect-system-info.sh \
+  results/spacemit-k3/system-info.txt
+```
+
+The script does not assume compiler executable names. Override its candidate
+list when needed:
+
+```sh
+CXX_CANDIDATES="/path/to/g++ /path/to/clang++" \
+  scripts/machines/spacemit-k3/collect-system-info.sh \
+  results/spacemit-k3/system-info.txt
+```
+
+Install `k3_ai` and ensure `ai` is on `PATH` before the survey. The script runs
+its small OpenMP probe normally on X100 and, when `ai` is available, in a fresh
+A100 process.
+
+Review generated logs for hostnames, usernames, paths, and environment details
+before committing them.
+
+## Evidence Required Per Change
+
+Each implementation commit must document:
+
+- Problem and rationale.
+- Files, public options, and execution paths changed.
+- Compiler and hardware assumptions.
+- Exact configure, build, test, and benchmark commands.
+- Correctness reference and tolerance.
+- Performance result or an explicit statement that performance was not tested.
+- Known limitations and how to revert or disable the change.
+
+Use small commits that introduce one abstraction, kernel family, or validation
+step. Do not combine infrastructure, RVV, IME, and numerical-policy changes in
+one commit.
+
+## Result Layout
+
+Store concise, reviewable evidence as:
+
+```text
+results/spacemit-k3/<date>/<compiler>/<core>/
+  manifest.txt
+  tests.txt
+  range-benchmarks.csv
+```
+
+The manifest must include the GenDiL commit, compiler version, complete flags,
+core class, thread count, affinity variables, OS/kernel version, and whether
+`ai` launched the process. Keep bulky temporary compiler and build logs outside
+Git unless they are necessary to explain a failure.
