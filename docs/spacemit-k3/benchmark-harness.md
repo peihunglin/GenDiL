@@ -31,6 +31,8 @@ size only; they do not select kernels or alter numerical types.
 The K3 runner provides two policies:
 
 - `BENCHMARK_MODE=smoke`: cap at 2,000,000 and use one timed iteration.
+- `BENCHMARK_MODE=performance`: use the same cap and seven timed iterations to
+  reduce timer and OpenMP startup noise while retaining manageable memory use.
 - `BENCHMARK_MODE=full`: leave both variables unset and preserve the original
   program behavior.
 
@@ -89,6 +91,8 @@ results can be accepted.
   p-adaptive, and h-adaptive programs.
 - One iteration is suitable only for smoke testing, not performance reporting.
 - Full benchmark logs retain the programs' existing PGFPlots-oriented format.
+- Performance mode does not run to each program's historical maximum size;
+  use full mode only after checking available memory and expected duration.
 - The 64 MiB stack defaults reserve virtual address space per OpenMP worker;
   they are a portability guard, not a substitute for reducing kernel storage.
 

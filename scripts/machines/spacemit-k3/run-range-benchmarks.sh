@@ -22,8 +22,11 @@ BENCHMARK_MODE="${BENCHMARK_MODE:-full}"
 if [[ "${BENCHMARK_MODE}" == "smoke" ]]; then
   GENDIL_BENCHMARK_MAX_DOFS="${GENDIL_BENCHMARK_MAX_DOFS:-2000000}"
   GENDIL_BENCHMARK_ITERATIONS="${GENDIL_BENCHMARK_ITERATIONS:-1}"
+elif [[ "${BENCHMARK_MODE}" == "performance" ]]; then
+  GENDIL_BENCHMARK_MAX_DOFS="${GENDIL_BENCHMARK_MAX_DOFS:-2000000}"
+  GENDIL_BENCHMARK_ITERATIONS="${GENDIL_BENCHMARK_ITERATIONS:-7}"
 elif [[ "${BENCHMARK_MODE}" != "full" ]]; then
-  printf 'error: BENCHMARK_MODE must be smoke or full\n' >&2
+  printf 'error: BENCHMARK_MODE must be smoke, performance, or full\n' >&2
   exit 1
 fi
 

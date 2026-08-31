@@ -169,6 +169,17 @@ RUN_CLANG=0 scripts/machines/spacemit-k3/rerun-x100-baseline.sh
 `RESULT_TAG` can replace the default `rerun-<commit>` suffix. Commit all
 generated result files even when the script returns nonzero.
 
+After the baseline passes, collect Stage 1 OpenMP scaling data with:
+
+```sh
+scripts/machines/spacemit-k3/run-x100-stage1-performance.sh
+```
+
+This runs every range benchmark with GCC and Clang at 1, 2, 4, and 8 threads.
+Performance mode uses seven timed iterations and the validated smoke-size cap.
+Set `RUN_GCC=0`, `RUN_CLANG=0`, `THREAD_COUNTS="1 8"`, or `RESULT_TAG=name` to
+control a rerun without editing the script.
+
 ## Evidence Required Per Change
 
 Each implementation commit must document:
