@@ -1,0 +1,20 @@
+timestamp_utc=2026-08-31T22:12:19Z
+commit=8046f59ac5a5361f65ecf8c24f7232c2405ee59a
+build_dir=/data/projects/GenDiL/build-k3-g++-15
+core_type=x100
+a100_launcher=0
+omp_num_threads=8
+omp_places=cores
+omp_proc_bind=close
+omp_stacksize=64M
+process_stack_kb=65536
+benchmark_mode=smoke
+benchmark_max_dofs=2000000
+benchmark_iterations=1
+Linux RISKY-spacemitk3 6.18.3-generic #1.0.5.4 SMP PREEMPT_DYNAMIC Wed Jul 15 16:27:49 CST 2026 riscv64 GNU/Linux
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CXX_FLAGS:STRING=
+CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+OpenMP_gomp_LIBRARY:FILEPATH=/usr/lib/gcc/riscv64-linux-gnu/15/libgomp.so
+OpenMP_pthread_LIBRARY:FILEPATH=/lib/riscv64-linux-gnu/libpthread.a
+USE_OPENMP:BOOL=ON
