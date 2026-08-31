@@ -53,7 +53,18 @@ mkdir -p "$(dirname -- "${OUTPUT_FILE}")"
   printf 'omp_proc_bind=%s\n' "${OMP_PROC_BIND}"
   printf 'omp_stacksize=%s\n' "${OMP_STACKSIZE}"
   printf 'process_stack_kb=%s\n' "$(ulimit -s)"
-  cmake -LA -N "${BUILD_DIR}" | \
-    awk '/^(CMAKE_BUILD_RPATH|CMAKE_CXX_COMPILER|OpenMP_.*_LIBRARY):/'
+  printf 'compiler=%s\n' "${compiler_path}"
+  printf 'compiler_target=%s\n' "$("${compiler_path}" -dumpmachine)"
+  printf '%s\n' 'compiler_version_begin'
+  "${compiler_path}" --version
+  printf '%s\n' 'compiler_version_end'
+  awk '/^(CMAKE_BUILD_RPATH|CMAKE_BUILD_TYPE|CMAKE_CXX_COMPILER|CMAKE_CXX_FLAGS|CMAKE_CXX_FLAGS_RELEASE|OpenMP_.*_LIBRARY|USE_OPENMP):/' \
+    "${BUILD_DIR}/CMakeCache.txt"
+  if command -v ldd >/dev/null 2>&1; then
+    printf '%s\n' 'openmp_linkage_begin'
+    ldd "${BUILD_DIR}/tests/unit/test-dot" | \
+      awk '/lib(g?omp)/'
+    printf '%s\n' 'openmp_linkage_end'
+  fi
   ctest --test-dir "${BUILD_DIR}" --output-on-failure
 } 2>&1 | tee "${OUTPUT_FILE}"

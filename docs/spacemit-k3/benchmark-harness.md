@@ -71,6 +71,11 @@ CTest output defaults to
 core run from overwriting another. An explicit second argument to
 `run-tests.sh` overrides that location.
 
+Test and benchmark manifests record the compiler executable, version, target,
+CMake flags, OpenMP library cache entries, build RPATH, and the OpenMP shared
+library resolved by `ldd`. This distinguishes a configured library from the
+runtime that each executable actually loads.
+
 The runner checks process exit status and requires finite coordinate output.
 It does not prove numerical correctness. CTest is the current numerical gate;
 benchmark-level reference comparisons remain required before RVV or IME

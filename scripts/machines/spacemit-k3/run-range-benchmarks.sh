@@ -59,6 +59,10 @@ mkdir -p "${OUTPUT_DIR}"
 MANIFEST="${OUTPUT_DIR}/manifest.txt"
 SUMMARY="${OUTPUT_DIR}/range-benchmarks.csv"
 TARGETS_FILE="${GENDIL_ROOT}/benchmarks/range-benchmarks.txt"
+compiler_path="$(
+  awk -F= '/^CMAKE_CXX_COMPILER:[^=]*=/{print $2}' \
+    "${BUILD_DIR}/CMakeCache.txt"
+)"
 
 {
   printf 'timestamp_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -75,8 +79,19 @@ TARGETS_FILE="${GENDIL_ROOT}/benchmarks/range-benchmarks.txt"
   printf 'benchmark_max_dofs=%s\n' "${GENDIL_BENCHMARK_MAX_DOFS:-full}"
   printf 'benchmark_iterations=%s\n' "${GENDIL_BENCHMARK_ITERATIONS:-default}"
   uname -a
-  cmake -LA -N "${BUILD_DIR}" | \
-    awk '/^(CMAKE_BUILD_RPATH|CMAKE_BUILD_TYPE|CMAKE_CXX_COMPILER|CMAKE_CXX_FLAGS|CMAKE_CXX_FLAGS_RELEASE|OpenMP_.*_LIBRARY|USE_OPENMP):/'
+  printf 'compiler=%s\n' "${compiler_path}"
+  printf 'compiler_target=%s\n' "$("${compiler_path}" -dumpmachine)"
+  printf '%s\n' 'compiler_version_begin'
+  "${compiler_path}" --version
+  printf '%s\n' 'compiler_version_end'
+  awk '/^(CMAKE_BUILD_RPATH|CMAKE_BUILD_TYPE|CMAKE_CXX_COMPILER|CMAKE_CXX_FLAGS|CMAKE_CXX_FLAGS_RELEASE|OpenMP_.*_LIBRARY|USE_OPENMP):/' \
+    "${BUILD_DIR}/CMakeCache.txt"
+  if command -v ldd >/dev/null 2>&1; then
+    printf '%s\n' 'openmp_linkage_begin'
+    ldd "${BUILD_DIR}/benchmarks/range-benchmark-sol-3d" | \
+      awk '/lib(g?omp)/'
+    printf '%s\n' 'openmp_linkage_end'
+  fi
 } > "${MANIFEST}"
 
 printf 'target,status,elapsed_seconds,coordinate_count,log\n' > "${SUMMARY}"
