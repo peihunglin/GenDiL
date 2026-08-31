@@ -1,0 +1,348 @@
+
+===== Survey metadata =====
+timestamp_utc=2026-08-31T20:26:31Z
+repository=/data/projects/GenDiL
+99520bfef8a91883f280b9949411e1cb7be412d0
+## SpacemiTK3...origin/SpacemiTK3
+?? results/
+
+===== Kernel and architecture =====
+Linux RISKY-spacemitk3 6.18.3-generic #1.0.5.4 SMP PREEMPT_DYNAMIC Wed Jul 15 16:27:49 CST 2026 riscv64 GNU/Linux
+Architecture:                            riscv64
+Byte Order:                              Little Endian
+CPU(s):                                  16
+On-line CPU(s) list:                     0-15
+Vendor ID:                               0x710
+Model name:                              Spacemit(R) A100
+CPU family:                              0x8000000041000002
+Model:                                   0x10000000d5686200
+Thread(s) per core:                      1
+Core(s) per socket:                      8
+Socket(s):                               1
+Frequency boost:                         disabled
+CPU(s) scaling MHz:                      100%
+CPU max MHz:                             1800.0000
+CPU min MHz:                             614.4000
+Model name:                              Spacemit(R) X100
+CPU family:                              0x8000000058000002
+Model:                                   0x33d8a600
+Thread(s) per core:                      1
+Core(s) per socket:                      8
+Socket(s):                               1
+CPU(s) scaling MHz:                      100%
+CPU max MHz:                             2200.0000
+CPU min MHz:                             614.4000
+L1d cache:                               768 KiB (16 instances)
+L1i cache:                               768 KiB (16 instances)
+L2 cache:                                10 MiB (4 instances)
+Vulnerability Gather data sampling:      Not affected
+Vulnerability Ghostwrite:                Not affected
+Vulnerability Indirect target selection: Not affected
+Vulnerability Itlb multihit:             Not affected
+Vulnerability L1tf:                      Not affected
+Vulnerability Mds:                       Not affected
+Vulnerability Meltdown:                  Not affected
+Vulnerability Mmio stale data:           Not affected
+Vulnerability Old microcode:             Not affected
+Vulnerability Reg file data sampling:    Not affected
+Vulnerability Retbleed:                  Not affected
+Vulnerability Spec rstack overflow:      Not affected
+Vulnerability Spec store bypass:         Not affected
+Vulnerability Spectre v1:                Not affected
+Vulnerability Spectre v2:                Not affected
+Vulnerability Srbds:                     Not affected
+Vulnerability Tsa:                       Not affected
+Vulnerability Tsx async abort:           Not affected
+Vulnerability Vmscape:                   Not affected
+64
+16
+
+===== RISC-V CPU information =====
+processor	: 0
+hart		: 0
+model name	: Spacemit(R) X100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 1
+hart		: 1
+model name	: Spacemit(R) X100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 2
+hart		: 2
+model name	: Spacemit(R) X100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 3
+hart		: 3
+model name	: Spacemit(R) X100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 4
+hart		: 4
+model name	: Spacemit(R) X100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 5
+hart		: 5
+model name	: Spacemit(R) X100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 6
+hart		: 6
+model name	: Spacemit(R) X100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 7
+hart		: 7
+model name	: Spacemit(R) X100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 8
+hart		: 8
+model name	: Spacemit(R) A100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 9
+hart		: 9
+model name	: Spacemit(R) A100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 10
+hart		: 10
+model name	: Spacemit(R) A100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 11
+hart		: 11
+model name	: Spacemit(R) A100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 12
+hart		: 12
+model name	: Spacemit(R) A100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 13
+hart		: 13
+model name	: Spacemit(R) A100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 14
+hart		: 14
+model name	: Spacemit(R) A100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+processor	: 15
+hart		: 15
+model name	: Spacemit(R) A100
+isa		: rv64imafdcvh_zicbom_zicbop_zicboz_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zaamo_zalrsc_zawrs_zfa_zfbfmin_zfh_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbc_zbs_zkt_zvbb_zvbc_zve32f_zve32x_zve64d_zve64f_zve64x_zvfbfmin_zvfbfwma_zvfh_zvfhmin_zvkb_zvkg_zvkned_zvknha_zvknhb_zvksed_zvksh_zvkt_smaia_smstateen_ssaia_sscofpmf_ssnpm_sstc_svade_svinval_svnapot_svpbmt_sdtrig
+
+===== A100 launcher =====
+ai=/home/lin32/bin/ai
+--w--w--w- 1 root root 0 Aug 31 13:26 /proc/set_ai_thread
+
+===== Build tools =====
+cmake version 4.2.3
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).
+1.13.2
+GNU Make 4.4.1
+Built for riscv64-unknown-linux-gnu
+Copyright (C) 1988-2023 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+===== Compiler /usr/bin/g++-15 =====
+g++-15 (Bianbu 15.2.0-16ubuntu1bb5) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+riscv64-linux-gnu
+-- Native target expansion --
+Using built-in specs.
+g++-15: error: ‘-march=native’: ISA string must begin with rv32 or rv64
+COLLECT_GCC=/usr/bin/g++-15
+Target: riscv64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Bianbu 15.2.0-16ubuntu1bb5' --with-bugurl=file:///usr/share/doc/gcc-15/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,m2,rust,cobol,algol68 --prefix=/usr --with-gcc-major-version-only --program-suffix=-15 --program-prefix=riscv64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/libexec --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-libstdcxx-backtrace --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --enable-libphobos-checking=release --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --disable-werror --disable-multilib --with-abi=lp64d --with-tune=spacemit-x100 --with-arch=rv64i_m_a_f_d_c_b_v_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbs_zkt_zvbb_zve32f_zve32x_zve64d_zve64f_zve64x_zvfhmin_zvkb_zvkt_zvl128b_zvl32b_zvl64b_supm_zvl256b --enable-checking=release --build=riscv64-linux-gnu --host=riscv64-linux-gnu --target=riscv64-linux-gnu --with-build-config=bootstrap-lto-lean --enable-link-serialization=4
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 15.2.0 (Bianbu 15.2.0-16ubuntu1bb5) 
+-- Relevant predefined macros --
+#define __riscv 1
+#define __riscv_zicclsm 1000000
+#define __riscv_atomic 1
+#define __riscv_cmodel_medany 1
+#define __riscv_zmmul 1000000
+#define __riscv_v_elen_fp 64
+#define __riscv_zvl32b 1000000
+#define __riscv_zihpm 2000000
+#define __riscv_zalrsc 1000000
+#define __riscv_zvbb 1000000
+#define __riscv_zvfhmin 1000000
+#define __riscv_ziccif 1000000
+#define __riscv_zvkb 1000000
+#define __riscv_zvkt 1000000
+#define __riscv_v_intrinsic 12000
+#define __GNUC__ 15
+#define __riscv_zcmop 1000000
+#define __riscv_zicbom 1000000
+#define __riscv_zaamo 1000000
+#define __riscv_zawrs 1000000
+#define __riscv_zve64d 1000000
+#define __riscv_zve64f 1000000
+#define __riscv_zve64x 1000000
+#define __riscv_flen 64
+#define __riscv_zca 1000000
+#define __riscv_mul 1
+#define __riscv_supm 1000000
+#define __VERSION__ "15.2.0"
+#define __riscv_zicntr 2000000
+#define __riscv_zicond 1000000
+#define __riscv_muldiv 1
+#define __riscv_xlen 64
+#define __riscv_zve32f 1000000
+#define __riscv_zve32x 1000000
+#define __riscv_zvl128b 1000000
+#define __riscv_fsqrt 1
+#define __riscv_zihintpause 2000000
+#define __riscv_ziccrse 1000000
+#define __riscv_v_min_vlen 256
+#define __riscv_zvl256b 1000000
+#define __riscv_zicbop 1000000
+#define __riscv_b 1000000
+#define __riscv_v_elen 64
+#define __riscv_m 2000000
+#define __riscv_fdiv 1
+#define __STDCPP_DEFAULT_NEW_ALIGNMENT__ 16
+#define __riscv_a 2001000
+#define __riscv_c 2000000
+#define __riscv_d 2002000
+#define __riscv_f 2002000
+#define __riscv_i 2001000
+#define __riscv_v 1000000
+#define __STDCPP_THREADS__ 1
+#define __riscv_zicsr 2000000
+#define __riscv_compressed 1
+#define __riscv_vector 1
+#define __riscv_float_abi_double 1
+#define __riscv_misaligned_fast 1
+#define __riscv_arch_test 1
+#define __riscv_za64rs 1000000
+#define __riscv_zihintntl 1000000
+#define __riscv_zimop 1000000
+#define __riscv_zvl64b 1000000
+#define __riscv_ziccamoa 1000000
+#define __riscv_zba 1000000
+#define __riscv_zbb 1000000
+#define __riscv_zbs 1000000
+#define __riscv_div 1
+#define __riscv_zcb 1000000
+#define __riscv_zcd 1000000
+#define __riscv_zfhmin 1000000
+#define __riscv_zifencei 2000000
+#define __riscv_zicboz 1000000
+#define __riscv_zfa 1000000
+#define __riscv_zic64b 1000000
+#define __riscv_zkt 1000000
+-- OpenMP probe --
+openmp=201511 threads=8
+openmp=201511 threads=8
+
+===== Compiler /usr/bin/g++ =====
+g++ (Bianbu 15.2.0-16ubuntu1bb5) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+riscv64-linux-gnu
+-- Native target expansion --
+Using built-in specs.
+g++: error: ‘-march=native’: ISA string must begin with rv32 or rv64
+COLLECT_GCC=/usr/bin/g++
+Target: riscv64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Bianbu 15.2.0-16ubuntu1bb5' --with-bugurl=file:///usr/share/doc/gcc-15/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,m2,rust,cobol,algol68 --prefix=/usr --with-gcc-major-version-only --program-suffix=-15 --program-prefix=riscv64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/libexec --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-libstdcxx-backtrace --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --enable-libphobos-checking=release --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --disable-werror --disable-multilib --with-abi=lp64d --with-tune=spacemit-x100 --with-arch=rv64i_m_a_f_d_c_b_v_zic64b_zicbom_zicbop_zicboz_ziccamoa_ziccif_zicclsm_ziccrse_zicntr_zicond_zicsr_zifencei_zihintntl_zihintpause_zihpm_zimop_zmmul_za64rs_zaamo_zalrsc_zawrs_zfa_zfhmin_zca_zcb_zcd_zcmop_zba_zbb_zbs_zkt_zvbb_zve32f_zve32x_zve64d_zve64f_zve64x_zvfhmin_zvkb_zvkt_zvl128b_zvl32b_zvl64b_supm_zvl256b --enable-checking=release --build=riscv64-linux-gnu --host=riscv64-linux-gnu --target=riscv64-linux-gnu --with-build-config=bootstrap-lto-lean --enable-link-serialization=4
+Thread model: posix
+Supported LTO compression algorithms: zlib zstd
+gcc version 15.2.0 (Bianbu 15.2.0-16ubuntu1bb5) 
+-- Relevant predefined macros --
+#define __riscv 1
+#define __riscv_zicclsm 1000000
+#define __riscv_atomic 1
+#define __riscv_cmodel_medany 1
+#define __riscv_zmmul 1000000
+#define __riscv_v_elen_fp 64
+#define __riscv_zvl32b 1000000
+#define __riscv_zihpm 2000000
+#define __riscv_zalrsc 1000000
+#define __riscv_zvbb 1000000
+#define __riscv_zvfhmin 1000000
+#define __riscv_ziccif 1000000
+#define __riscv_zvkb 1000000
+#define __riscv_zvkt 1000000
+#define __riscv_v_intrinsic 12000
+#define __GNUC__ 15
+#define __riscv_zcmop 1000000
+#define __riscv_zicbom 1000000
+#define __riscv_zaamo 1000000
+#define __riscv_zawrs 1000000
+#define __riscv_zve64d 1000000
+#define __riscv_zve64f 1000000
+#define __riscv_zve64x 1000000
+#define __riscv_flen 64
+#define __riscv_zca 1000000
+#define __riscv_mul 1
+#define __riscv_supm 1000000
+#define __VERSION__ "15.2.0"
+#define __riscv_zicntr 2000000
+#define __riscv_zicond 1000000
+#define __riscv_muldiv 1
+#define __riscv_xlen 64
+#define __riscv_zve32f 1000000
+#define __riscv_zve32x 1000000
+#define __riscv_zvl128b 1000000
+#define __riscv_fsqrt 1
+#define __riscv_zihintpause 2000000
+#define __riscv_ziccrse 1000000
+#define __riscv_v_min_vlen 256
+#define __riscv_zvl256b 1000000
+#define __riscv_zicbop 1000000
+#define __riscv_b 1000000
+#define __riscv_v_elen 64
+#define __riscv_m 2000000
+#define __riscv_fdiv 1
+#define __STDCPP_DEFAULT_NEW_ALIGNMENT__ 16
+#define __riscv_a 2001000
+#define __riscv_c 2000000
+#define __riscv_d 2002000
+#define __riscv_f 2002000
+#define __riscv_i 2001000
+#define __riscv_v 1000000
+#define __STDCPP_THREADS__ 1
+#define __riscv_zicsr 2000000
+#define __riscv_compressed 1
+#define __riscv_vector 1
+#define __riscv_float_abi_double 1
+#define __riscv_misaligned_fast 1
+#define __riscv_arch_test 1
+#define __riscv_za64rs 1000000
+#define __riscv_zihintntl 1000000
+#define __riscv_zimop 1000000
+#define __riscv_zvl64b 1000000
+#define __riscv_ziccamoa 1000000
+#define __riscv_zba 1000000
+#define __riscv_zbb 1000000
+#define __riscv_zbs 1000000
+#define __riscv_div 1
+#define __riscv_zcb 1000000
+#define __riscv_zcd 1000000
+#define __riscv_zfhmin 1000000
+#define __riscv_zifencei 2000000
+#define __riscv_zicboz 1000000
+#define __riscv_zfa 1000000
+#define __riscv_zic64b 1000000
+#define __riscv_zkt 1000000
+-- OpenMP probe --
+openmp=201511 threads=8
+openmp=201511 threads=8
+
+===== Relevant environment =====
+CC=
+CXX=
+CFLAGS=
+CXXFLAGS=
+LDFLAGS=
+OMP_NUM_THREADS=
+OMP_PLACES=
+OMP_PROC_BIND=
+LD_LIBRARY_PATH=
+PATH=/home/lin32/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Survey written to results/spacemit-k3/system-info.txt

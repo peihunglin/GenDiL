@@ -1,0 +1,470 @@
+commit=99520bfef8a91883f280b9949411e1cb7be412d0
+core_type=x100
+a100_launcher=0
+omp_num_threads=8
+omp_places=cores
+omp_proc_bind=close
+Test project /data/projects/GenDiL/build-k3-clang++
+      Start  1: configure-device-sparse-finalization-auto
+ 1/93 Test  #1: configure-device-sparse-finalization-auto .................   Passed    1.50 sec
+      Start  2: configure-device-sparse-finalization-off
+ 2/93 Test  #2: configure-device-sparse-finalization-off ..................   Passed    1.49 sec
+      Start  3: configure-device-sparse-finalization-on-requires-device
+ 3/93 Test  #3: configure-device-sparse-finalization-on-requires-device ...   Passed    1.06 sec
+      Start  4: test-dot
+ 4/93 Test  #4: test-dot ..................................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-dot: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start  5: test-kernel-configuration
+ 5/93 Test  #5: test-kernel-configuration .................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-kernel-configuration: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start  6: test-getpoint
+ 6/93 Test  #6: test-getpoint .............................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-getpoint: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start  7: test-garbage-collector
+ 7/93 Test  #7: test-garbage-collector ....................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-garbage-collector: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start  8: test-read-write
+ 8/93 Test  #8: test-read-write ...........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-read-write: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start  9: test-vector-access
+ 9/93 Test  #9: test-vector-access ........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-vector-access: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 10: test-kernel-loop
+10/93 Test #10: test-kernel-loop ..........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-kernel-loop: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 11: test-atomic-add
+11/93 Test #11: test-atomic-add ...........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-atomic-add: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 12: test-dof-to-quad-policies
+12/93 Test #12: test-dof-to-quad-policies .................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-dof-to-quad-policies: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 13: test-facet-quad-data
+13/93 Test #13: test-facet-quad-data ......................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-facet-quad-data: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 14: test-restriction-layout
+14/93 Test #14: test-restriction-layout ...................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-restriction-layout: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 15: test-structural-broken-space-restriction
+15/93 Test #15: test-structural-broken-space-restriction ..................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-structural-broken-space-restriction: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 16: test-cell-reference-geometry
+16/93 Test #16: test-cell-reference-geometry ..............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-cell-reference-geometry: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 17: test-orientation
+17/93 Test #17: test-orientation ..........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-orientation: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 18: test-face-read-dofs-direct-global
+18/93 Test #18: test-face-read-dofs-direct-global .........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-face-read-dofs-direct-global: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 19: test-face-read-dofs-direct-global-vector
+19/93 Test #19: test-face-read-dofs-direct-global-vector ..................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-face-read-dofs-direct-global-vector: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 20: test-generic-oriented-dof-view
+20/93 Test #20: test-generic-oriented-dof-view ............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-generic-oriented-dof-view: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 21: test-bsr-block-layout
+21/93 Test #21: test-bsr-block-layout .....................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-bsr-block-layout: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 22: test-bsr-dof-layout
+22/93 Test #22: test-bsr-dof-layout .......................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-bsr-dof-layout: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 23: test-sgbsr-matrix
+23/93 Test #23: test-sgbsr-matrix .........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-sgbsr-matrix: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 24: test-matrix-assembly-defaults
+24/93 Test #24: test-matrix-assembly-defaults .............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-matrix-assembly-defaults: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 25: test-element-block-diagonal-assembly
+25/93 Test #25: test-element-block-diagonal-assembly ......................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-element-block-diagonal-assembly: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 26: test-coo-matrix
+26/93 Test #26: test-coo-matrix ...........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-coo-matrix: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 27: test-csr-matrix
+27/93 Test #27: test-csr-matrix ...........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-csr-matrix: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 28: test-csc-matrix
+28/93 Test #28: test-csc-matrix ...........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-csc-matrix: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 29: test-sparse-matrix-apply-arithmetic
+29/93 Test #29: test-sparse-matrix-apply-arithmetic .......................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-sparse-matrix-apply-arithmetic: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 30: test-sparse-matrix-apply-add
+30/93 Test #30: test-sparse-matrix-apply-add ..............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-sparse-matrix-apply-add: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 31: test-raw-coo-assembly
+31/93 Test #31: test-raw-coo-assembly .....................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-raw-coo-assembly: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 32: test-device-sparse-finalization
+32/93 Test #32: test-device-sparse-finalization ...........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-device-sparse-finalization: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 33: test-sparse-storage-ownership
+33/93 Test #33: test-sparse-storage-ownership .............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-sparse-storage-ownership: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 34: test-cell-iterator
+34/93 Test #34: test-cell-iterator ........................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-cell-iterator: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 35: test-weak-form
+35/93 Test #35: test-weak-form ............................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-weak-form: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 36: test-vector-h1-generic-operator
+36/93 Test #36: test-vector-h1-generic-operator ...........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-vector-h1-generic-operator: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 37: test-named-field-requirements
+37/93 Test #37: test-named-field-requirements .............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-named-field-requirements: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 38: test-vector-weakform-traits
+38/93 Test #38: test-vector-weakform-traits ...............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-vector-weakform-traits: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 39: test-vector-expression-construction
+39/93 Test #39: test-vector-expression-construction .......................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-vector-expression-construction: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 40: test-transpose-expression
+40/93 Test #40: test-transpose-expression .................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-transpose-expression: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 41: test-pullback-skeleton
+41/93 Test #41: test-pullback-skeleton ....................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-pullback-skeleton: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 42: test-pullback-generic-cell
+42/93 Test #42: test-pullback-generic-cell ................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-pullback-generic-cell: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 43: test-openmp
+43/93 Test #43: test-openmp ...............................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/unit/test-openmp: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 44: test-mass-3d-generic
+44/93 Test #44: test-mass-3d-generic ......................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-mass-3d-generic: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 45: test-nodal-subspace-projection
+45/93 Test #45: test-nodal-subspace-projection ............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-nodal-subspace-projection: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 46: test-coefficient-field-inputs-cell
+46/93 Test #46: test-coefficient-field-inputs-cell ........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-coefficient-field-inputs-cell: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 47: test-boundary-coefficient-field-inputs
+47/93 Test #47: test-boundary-coefficient-field-inputs ....................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-boundary-coefficient-field-inputs: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 48: test-interior-coefficient-field-inputs
+48/93 Test #48: test-interior-coefficient-field-inputs ....................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-interior-coefficient-field-inputs: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 49: test-vector-coefficient-field-inputs
+49/93 Test #49: test-vector-coefficient-field-inputs ......................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-vector-coefficient-field-inputs: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 50: test-upwind-vector-coefficient-field-inputs
+50/93 Test #50: test-upwind-vector-coefficient-field-inputs ...............***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-upwind-vector-coefficient-field-inputs: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 51: test-sipdg-coefficient-field-inputs
+51/93 Test #51: test-sipdg-coefficient-field-inputs .......................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-sipdg-coefficient-field-inputs: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 52: test-anisotropic-diffusion-coefficient
+52/93 Test #52: test-anisotropic-diffusion-coefficient ....................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-anisotropic-diffusion-coefficient: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 53: test-vector-mass-cell-3d
+53/93 Test #53: test-vector-mass-cell-3d ..................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-vector-mass-cell-3d: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 54: test-vector-mass-bsr-3d
+54/93 Test #54: test-vector-mass-bsr-3d ...................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-vector-mass-bsr-3d: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 55: test-vector-boundary-mass-bsr-2d
+55/93 Test #55: test-vector-boundary-mass-bsr-2d ..........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-vector-boundary-mass-bsr-2d: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 56: test-vector-interior-jump-bsr-2d
+56/93 Test #56: test-vector-interior-jump-bsr-2d ..........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-vector-interior-jump-bsr-2d: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 57: test-rectangular-bsr-assembly
+57/93 Test #57: test-rectangular-bsr-assembly .............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-rectangular-bsr-assembly: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 58: test-vector-gradgrad-cell-3d
+58/93 Test #58: test-vector-gradgrad-cell-3d ..............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-vector-gradgrad-cell-3d: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 59: test-advection-1d-generic
+59/93 Test #59: test-advection-1d-generic .................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-advection-1d-generic: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 60: test-advection-3d-generic
+60/93 Test #60: test-advection-3d-generic .................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-advection-3d-generic: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 61: test-upwind-3d-generic
+61/93 Test #61: test-upwind-3d-generic ....................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-upwind-3d-generic: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 62: test-diffusion-3d-generic
+62/93 Test #62: test-diffusion-3d-generic .................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-3d-generic: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 63: test-pullback-runtime-validation
+63/93 Test #63: test-pullback-runtime-validation ..........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-pullback-runtime-validation: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 64: test-diffusion-volume-only
+64/93 Test #64: test-diffusion-volume-only ................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-volume-only: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 65: test-diffusion-consistency-only
+65/93 Test #65: test-diffusion-consistency-only ...........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-consistency-only: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 66: test-diffusion-symmetry-only
+66/93 Test #66: test-diffusion-symmetry-only ..............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-symmetry-only: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 67: test-diffusion-symmetry-vs-legacy
+67/93 Test #67: test-diffusion-symmetry-vs-legacy .........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-symmetry-vs-legacy: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 68: test-diffusion-symmetry-1d-minimal
+68/93 Test #68: test-diffusion-symmetry-1d-minimal ........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-symmetry-1d-minimal: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 69: test-diffusion-vary-sigma
+69/93 Test #69: test-diffusion-vary-sigma .................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-vary-sigma: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 70: test-face-advection
+70/93 Test #70: test-face-advection .......................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-face-advection: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 71: test-advection-p-adaptivity
+71/93 Test #71: test-advection-p-adaptivity ...............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-advection-p-adaptivity: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 72: test-advection-h-adaptivity-2d
+72/93 Test #72: test-advection-h-adaptivity-2d ............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-advection-h-adaptivity-2d: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 73: test-advection-hp-adaptivity-3d
+73/93 Test #73: test-advection-hp-adaptivity-3d ...........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-advection-hp-adaptivity-3d: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 74: test-face-advection-split-mesh
+74/93 Test #74: test-face-advection-split-mesh ............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-face-advection-split-mesh: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 75: test-face-advection-split-mesh-2d-ascii
+75/93 Test #75: test-face-advection-split-mesh-2d-ascii ...................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-face-advection-split-mesh-2d-ascii: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 76: test-diffusion-symmetry-face-analysis
+76/93 Test #76: test-diffusion-symmetry-face-analysis .....................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-symmetry-face-analysis: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 77: test-diffusion-symmetry-per-face
+77/93 Test #77: test-diffusion-symmetry-per-face ..........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-symmetry-per-face: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 78: test-diffusion-symmetry-plus-minus-faces
+78/93 Test #78: test-diffusion-symmetry-plus-minus-faces ..................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-diffusion-symmetry-plus-minus-faces: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 79: test-boundary-mass-2d-generic
+79/93 Test #79: test-boundary-mass-2d-generic .............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-boundary-mass-2d-generic: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 80: test-boundary-sipdg-2d-generic
+80/93 Test #80: test-boundary-sipdg-2d-generic ............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-boundary-sipdg-2d-generic: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 81: test-generic-global-face-domains
+81/93 Test #81: test-generic-global-face-domains ..........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-generic-global-face-domains: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 82: test-unstructured-global-face-connectivity
+82/93 Test #82: test-unstructured-global-face-connectivity ................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-unstructured-global-face-connectivity: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 83: test-nonconforming-global-facet-geometry
+83/93 Test #83: test-nonconforming-global-facet-geometry ..................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-nonconforming-global-facet-geometry: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 84: test-h-adaptive-face-geometry-map
+84/93 Test #84: test-h-adaptive-face-geometry-map .........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-h-adaptive-face-geometry-map: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 85: test-generic-hp-adaptive-upwind
+85/93 Test #85: test-generic-hp-adaptive-upwind ...........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-generic-hp-adaptive-upwind: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 86: test-mfem-point-matrix-decoder
+86/93 Test #86: test-mfem-point-matrix-decoder ............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-mfem-point-matrix-decoder: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 87: test-mixed-integration-domain
+87/93 Test #87: test-mixed-integration-domain .............................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-mixed-integration-domain: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 88: test-partition-mixed-fes
+88/93 Test #88: test-partition-mixed-fes ..................................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-partition-mixed-fes: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 89: test-tensor-product-facet-dof-io
+89/93 Test #89: test-tensor-product-facet-dof-io ..........................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-tensor-product-facet-dof-io: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 90: test-cartesian-product-partition-structure
+90/93 Test #90: test-cartesian-product-partition-structure ................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-cartesian-product-partition-structure: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 91: test-cartesian-product-partition-operators
+91/93 Test #91: test-cartesian-product-partition-operators ................***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-cartesian-product-partition-operators: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 92: test-cartesian-product-partition-nonconforming
+92/93 Test #92: test-cartesian-product-partition-nonconforming ............***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-cartesian-product-partition-nonconforming: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+      Start 93: test-cartesian-product-partition-device-smoke
+93/93 Test #93: test-cartesian-product-partition-device-smoke .............***Failed    0.00 sec
+/data/projects/GenDiL/build-k3-clang++/tests/integration/gendil/test-cartesian-product-partition-device-smoke: error while loading shared libraries: libomp.so: cannot open shared object file: No such file or directory
+
+
+3% tests passed, 90 tests failed out of 93
+
+Total Test time (real) =   4.28 sec
+
+The following tests FAILED:
+	  4 - test-dot (Failed)
+	  5 - test-kernel-configuration (Failed)
+	  6 - test-getpoint (Failed)
+	  7 - test-garbage-collector (Failed)
+	  8 - test-read-write (Failed)
+	  9 - test-vector-access (Failed)
+	 10 - test-kernel-loop (Failed)
+	 11 - test-atomic-add (Failed)
+	 12 - test-dof-to-quad-policies (Failed)
+	 13 - test-facet-quad-data (Failed)
+	 14 - test-restriction-layout (Failed)
+	 15 - test-structural-broken-space-restriction (Failed)
+	 16 - test-cell-reference-geometry (Failed)
+	 17 - test-orientation (Failed)
+	 18 - test-face-read-dofs-direct-global (Failed)
+	 19 - test-face-read-dofs-direct-global-vector (Failed)
+	 20 - test-generic-oriented-dof-view (Failed)
+	 21 - test-bsr-block-layout (Failed)
+	 22 - test-bsr-dof-layout (Failed)
+	 23 - test-sgbsr-matrix (Failed)
+	 24 - test-matrix-assembly-defaults (Failed)
+	 25 - test-element-block-diagonal-assembly (Failed)
+	 26 - test-coo-matrix (Failed)
+	 27 - test-csr-matrix (Failed)
+	 28 - test-csc-matrix (Failed)
+	 29 - test-sparse-matrix-apply-arithmetic (Failed)
+	 30 - test-sparse-matrix-apply-add (Failed)
+	 31 - test-raw-coo-assembly (Failed)
+	 32 - test-device-sparse-finalization (Failed)
+	 33 - test-sparse-storage-ownership (Failed)
+	 34 - test-cell-iterator (Failed)
+	 35 - test-weak-form (Failed)
+	 36 - test-vector-h1-generic-operator (Failed)
+	 37 - test-named-field-requirements (Failed)
+	 38 - test-vector-weakform-traits (Failed)
+	 39 - test-vector-expression-construction (Failed)
+	 40 - test-transpose-expression (Failed)
+	 41 - test-pullback-skeleton (Failed)
+	 42 - test-pullback-generic-cell (Failed)
+	 43 - test-openmp (Failed)
+	 44 - test-mass-3d-generic (Failed)
+	 45 - test-nodal-subspace-projection (Failed)
+	 46 - test-coefficient-field-inputs-cell (Failed)
+	 47 - test-boundary-coefficient-field-inputs (Failed)
+	 48 - test-interior-coefficient-field-inputs (Failed)
+	 49 - test-vector-coefficient-field-inputs (Failed)
+	 50 - test-upwind-vector-coefficient-field-inputs (Failed)
+	 51 - test-sipdg-coefficient-field-inputs (Failed)
+	 52 - test-anisotropic-diffusion-coefficient (Failed)
+	 53 - test-vector-mass-cell-3d (Failed)
+	 54 - test-vector-mass-bsr-3d (Failed)
+	 55 - test-vector-boundary-mass-bsr-2d (Failed)
+	 56 - test-vector-interior-jump-bsr-2d (Failed)
+	 57 - test-rectangular-bsr-assembly (Failed)
+	 58 - test-vector-gradgrad-cell-3d (Failed)
+	 59 - test-advection-1d-generic (Failed)
+	 60 - test-advection-3d-generic (Failed)
+	 61 - test-upwind-3d-generic (Failed)
+	 62 - test-diffusion-3d-generic (Failed)
+	 63 - test-pullback-runtime-validation (Failed)
+	 64 - test-diffusion-volume-only (Failed)
+	 65 - test-diffusion-consistency-only (Failed)
+	 66 - test-diffusion-symmetry-only (Failed)
+	 67 - test-diffusion-symmetry-vs-legacy (Failed)
+	 68 - test-diffusion-symmetry-1d-minimal (Failed)
+	 69 - test-diffusion-vary-sigma (Failed)
+	 70 - test-face-advection (Failed)
+	 71 - test-advection-p-adaptivity (Failed)
+	 72 - test-advection-h-adaptivity-2d (Failed)
+	 73 - test-advection-hp-adaptivity-3d (Failed)
+	 74 - test-face-advection-split-mesh (Failed)
+	 75 - test-face-advection-split-mesh-2d-ascii (Failed)
+	 76 - test-diffusion-symmetry-face-analysis (Failed)
+	 77 - test-diffusion-symmetry-per-face (Failed)
+	 78 - test-diffusion-symmetry-plus-minus-faces (Failed)
+	 79 - test-boundary-mass-2d-generic (Failed)
+	 80 - test-boundary-sipdg-2d-generic (Failed)
+	 81 - test-generic-global-face-domains (Failed)
+	 82 - test-unstructured-global-face-connectivity (Failed)
+	 83 - test-nonconforming-global-facet-geometry (Failed)
+	 84 - test-h-adaptive-face-geometry-map (Failed)
+	 85 - test-generic-hp-adaptive-upwind (Failed)
+	 86 - test-mfem-point-matrix-decoder (Failed)
+	 87 - test-mixed-integration-domain (Failed)
+	 88 - test-partition-mixed-fes (Failed)
+	 89 - test-tensor-product-facet-dof-io (Failed)
+	 90 - test-cartesian-product-partition-structure (Failed)
+	 91 - test-cartesian-product-partition-operators (Failed)
+	 92 - test-cartesian-product-partition-nonconforming (Failed)
+	 93 - test-cartesian-product-partition-device-smoke (Failed)
+Errors while running CTest
