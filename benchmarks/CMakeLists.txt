@@ -87,3 +87,32 @@ gendil_add_benchmark(benchmark-advection-6d benchmark-advection-6d.cpp)
 gendil_add_benchmark(range-benchmark-advection-6d range-benchmark-advection-6d.cpp)
 gendil_add_non_cuda_benchmark(range-benchmark-advection-p-adaptivity-6d range-benchmark-advection-p-adaptivity-6d.cpp)
 gendil_add_non_cuda_benchmark(range-benchmark-advection-h-adaptivity-6d range-benchmark-advection-h-adaptivity-6d.cpp)
+
+file(
+  STRINGS
+  "${CMAKE_CURRENT_SOURCE_DIR}/range-benchmarks.txt"
+  GENDIL_RANGE_BENCHMARK_TARGETS
+)
+add_custom_target(
+  range-benchmarks
+  COMMENT "Building all range benchmarks"
+)
+foreach(range_benchmark_target IN LISTS GENDIL_RANGE_BENCHMARK_TARGETS)
+  if(NOT TARGET ${range_benchmark_target})
+    if(USE_CUDA)
+      message(
+        STATUS
+        "Skipping range benchmark ${range_benchmark_target}: excluded from "
+        "CUDA builds"
+      )
+      continue()
+    else()
+      message(
+        FATAL_ERROR
+        "Range benchmark target ${range_benchmark_target} is unavailable in "
+        "this configuration. The K3 range suite requires every listed target."
+      )
+    endif()
+  endif()
+  add_dependencies(range-benchmarks ${range_benchmark_target})
+endforeach()

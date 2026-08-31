@@ -72,6 +72,21 @@ A100 process.
 Review generated logs for hostnames, usernames, paths, and environment details
 before committing them.
 
+## Range Benchmark Inventory
+
+`benchmarks/range-benchmarks.txt` is the source of truth for K3 performance
+coverage. Configuring a non-CUDA build with `-DGENDIL_ENABLE_BENCHMARKS=ON`
+creates the aggregate `range-benchmarks` target and fails if any listed
+benchmark is unavailable.
+Build the complete suite with:
+
+```sh
+cmake --build build-k3 --parallel --target range-benchmarks
+```
+
+The strict failure is intentional. CUDA currently omits some adaptive range
+targets, but all entries must exist in an OpenMP/RVV/IME K3 configuration.
+
 ## Evidence Required Per Change
 
 Each implementation commit must document:
