@@ -30,7 +30,7 @@ if [[ "${CORE_TYPE}" == "a100" && "${GENDIL_K3_A100_PROCESS:-0}" != "1" ]]; then
 fi
 
 compiler_path="$(
-  awk -F= '/^CMAKE_CXX_COMPILER:FILEPATH=/{print $2}' \
+  awk -F= '/^CMAKE_CXX_COMPILER:[^=]*=/{print $2}' \
     "${BUILD_DIR}/CMakeCache.txt"
 )"
 compiler_name="$(basename -- "${compiler_path:-unknown-compiler}")"
@@ -44,5 +44,7 @@ mkdir -p "$(dirname -- "${OUTPUT_FILE}")"
   printf 'omp_num_threads=%s\n' "${OMP_NUM_THREADS}"
   printf 'omp_places=%s\n' "${OMP_PLACES}"
   printf 'omp_proc_bind=%s\n' "${OMP_PROC_BIND}"
+  cmake -LA -N "${BUILD_DIR}" | \
+    awk '/^(CMAKE_BUILD_RPATH|CMAKE_CXX_COMPILER|OpenMP_.*_LIBRARY):/'
   ctest --test-dir "${BUILD_DIR}" --output-on-failure
 } 2>&1 | tee "${OUTPUT_FILE}"

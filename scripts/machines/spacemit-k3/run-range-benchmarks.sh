@@ -65,7 +65,7 @@ TARGETS_FILE="${GENDIL_ROOT}/benchmarks/range-benchmarks.txt"
   printf 'benchmark_iterations=%s\n' "${GENDIL_BENCHMARK_ITERATIONS:-default}"
   uname -a
   cmake -LA -N "${BUILD_DIR}" | \
-    awk '/^(CMAKE_BUILD_TYPE|CMAKE_CXX_COMPILER|CMAKE_CXX_FLAGS|CMAKE_CXX_FLAGS_RELEASE|USE_OPENMP):/'
+    awk '/^(CMAKE_BUILD_RPATH|CMAKE_BUILD_TYPE|CMAKE_CXX_COMPILER|CMAKE_CXX_FLAGS|CMAKE_CXX_FLAGS_RELEASE|OpenMP_.*_LIBRARY|USE_OPENMP):/'
 } > "${MANIFEST}"
 
 printf 'target,status,elapsed_seconds,coordinate_count,log\n' > "${SUMMARY}"

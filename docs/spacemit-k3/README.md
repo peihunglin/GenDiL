@@ -6,6 +6,8 @@ commit.
 
 Detailed benchmark-harness design and rollback notes are in
 [`benchmark-harness.md`](benchmark-harness.md).
+The first native result review is in
+[`results-2026-08-31.md`](results-2026-08-31.md).
 
 ## Hardware Model
 

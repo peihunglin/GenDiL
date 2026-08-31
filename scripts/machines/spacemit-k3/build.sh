@@ -44,6 +44,37 @@ fi
 # Additional arguments permit SDK paths or a generator without changing the
 # recorded workflow, for example: build.sh -G Ninja.
 cmake "${cmake_args[@]}" "$@"
+
+# A locally installed Clang commonly finds libomp at link time while leaving
+# its directory outside the dynamic loader's default search path. Derive the
+# runtime directory from FindOpenMP's cache result and embed it in build-tree
+# executables. K3_OPENMP_RUNTIME_DIR remains available for unusual SDK layouts.
+openmp_runtime_dirs="${K3_OPENMP_RUNTIME_DIR:-}"
+if [[ -z "${openmp_runtime_dirs}" ]]; then
+  while IFS= read -r openmp_library; do
+    [[ -f "${openmp_library}" ]] || continue
+    openmp_runtime_dir="$(dirname -- "${openmp_library}")"
+    case ";${openmp_runtime_dirs};" in
+      *";${openmp_runtime_dir};"*) ;;
+      *)
+        openmp_runtime_dirs="${openmp_runtime_dirs:+${openmp_runtime_dirs};}${openmp_runtime_dir}"
+        ;;
+    esac
+  done < <(
+    awk -F= '/^OpenMP_.*_LIBRARY:[^=]*=/{print $2}' \
+      "${BUILD_DIR}/CMakeCache.txt"
+  )
+fi
+
+if [[ -n "${openmp_runtime_dirs}" ]]; then
+  cmake "${cmake_args[@]}" \
+    "-DCMAKE_BUILD_RPATH=${openmp_runtime_dirs}" "$@"
+  printf 'OpenMP build RPATH: %s\n' "${openmp_runtime_dirs}"
+else
+  printf '%s\n' \
+    'warning: no OpenMP runtime directory found; verify the loader path' >&2
+fi
+
 cmake --build "${BUILD_DIR}" --parallel "${JOBS}" \
   --target gendil-tests range-benchmarks
 
