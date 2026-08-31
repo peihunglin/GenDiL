@@ -12,11 +12,17 @@ CORE_TYPE="${CORE_TYPE:-x100}"
 OMP_NUM_THREADS="${OMP_NUM_THREADS:-8}"
 OMP_PLACES="${OMP_PLACES:-cores}"
 OMP_PROC_BIND="${OMP_PROC_BIND:-close}"
-export CORE_TYPE OMP_NUM_THREADS OMP_PLACES OMP_PROC_BIND
+OMP_STACKSIZE="${OMP_STACKSIZE:-64M}"
+K3_STACK_SIZE_KB="${K3_STACK_SIZE_KB:-65536}"
+export CORE_TYPE OMP_NUM_THREADS OMP_PLACES OMP_PROC_BIND OMP_STACKSIZE
 
 if [[ "${CORE_TYPE}" != "x100" && "${CORE_TYPE}" != "a100" ]]; then
   printf 'error: CORE_TYPE must be x100 or a100\n' >&2
   exit 1
+fi
+
+if [[ "${K3_STACK_SIZE_KB}" != "0" ]]; then
+  ulimit -s "${K3_STACK_SIZE_KB}"
 fi
 
 if [[ "${CORE_TYPE}" == "a100" && "${GENDIL_K3_A100_PROCESS:-0}" != "1" ]]; then
@@ -26,7 +32,8 @@ if [[ "${CORE_TYPE}" == "a100" && "${GENDIL_K3_A100_PROCESS:-0}" != "1" ]]; then
   fi
   exec ai env GENDIL_K3_A100_PROCESS=1 CORE_TYPE="${CORE_TYPE}" \
     OMP_NUM_THREADS="${OMP_NUM_THREADS}" OMP_PLACES="${OMP_PLACES}" \
-    OMP_PROC_BIND="${OMP_PROC_BIND}" bash "$0" "$@"
+    OMP_PROC_BIND="${OMP_PROC_BIND}" OMP_STACKSIZE="${OMP_STACKSIZE}" \
+    K3_STACK_SIZE_KB="${K3_STACK_SIZE_KB}" bash "$0" "$@"
 fi
 
 compiler_path="$(
@@ -44,6 +51,8 @@ mkdir -p "$(dirname -- "${OUTPUT_FILE}")"
   printf 'omp_num_threads=%s\n' "${OMP_NUM_THREADS}"
   printf 'omp_places=%s\n' "${OMP_PLACES}"
   printf 'omp_proc_bind=%s\n' "${OMP_PROC_BIND}"
+  printf 'omp_stacksize=%s\n' "${OMP_STACKSIZE}"
+  printf 'process_stack_kb=%s\n' "$(ulimit -s)"
   cmake -LA -N "${BUILD_DIR}" | \
     awk '/^(CMAKE_BUILD_RPATH|CMAKE_CXX_COMPILER|OpenMP_.*_LIBRARY):/'
   ctest --test-dir "${BUILD_DIR}" --output-on-failure

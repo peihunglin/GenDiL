@@ -37,6 +37,12 @@ The K3 runner provides two policies:
 Explicit environment values take precedence in smoke mode. Every selected
 value is copied into `manifest.txt`.
 
+The runners default `OMP_STACKSIZE` to `64M` and the inherited process stack to
+65,536 KiB. High-order 6D host kernels use large compile-time tensor temporaries
+on these stacks. Override `OMP_STACKSIZE` and `K3_STACK_SIZE_KB` for controlled
+experiments; set `K3_STACK_SIZE_KB=0` to retain the shell's current process
+limit. Both effective values are recorded in result logs.
+
 ## A100 Process Safety
 
 When `CORE_TYPE=a100`, the test and benchmark runners replace themselves with a
@@ -78,6 +84,8 @@ results can be accepted.
   p-adaptive, and h-adaptive programs.
 - One iteration is suitable only for smoke testing, not performance reporting.
 - Full benchmark logs retain the programs' existing PGFPlots-oriented format.
+- The 64 MiB stack defaults reserve virtual address space per OpenMP worker;
+  they are a portability guard, not a substitute for reducing kernel storage.
 
 ## Rollback
 
