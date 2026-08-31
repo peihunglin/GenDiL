@@ -87,6 +87,46 @@ cmake --build build-k3 --parallel --target range-benchmarks
 The strict failure is intentional. CUDA currently omits some adaptive range
 targets, but all entries must exist in an OpenMP/RVV/IME K3 configuration.
 
+## Native Build And Test
+
+Configure and build the complete test and range suites with either compiler:
+
+```sh
+CXX=g++-15 scripts/machines/spacemit-k3/build.sh
+CXX=clang++-24 scripts/machines/spacemit-k3/build.sh
+```
+
+The default build directories are `build-k3-g++-15` and
+`build-k3-clang++-24`. Set `BUILD_DIR`, `JOBS`, or `BUILD_TYPE` to override
+them. Set `K3_CXX_FLAGS_RELEASE` only after the system survey establishes the
+required ISA flags; its exact value is stored in `CMakeCache.txt` and captured
+by the benchmark manifest.
+
+Run correctness tests on each core class:
+
+```sh
+CORE_TYPE=x100 scripts/machines/spacemit-k3/run-tests.sh build-k3-g++-15
+CORE_TYPE=a100 scripts/machines/spacemit-k3/run-tests.sh build-k3-g++-15
+```
+
+Run all range benchmarks and capture one log per executable:
+
+```sh
+CORE_TYPE=x100 scripts/machines/spacemit-k3/run-range-benchmarks.sh \
+  build-k3-g++-15 results/spacemit-k3/gcc15/x100
+CORE_TYPE=a100 scripts/machines/spacemit-k3/run-range-benchmarks.sh \
+  build-k3-g++-15 results/spacemit-k3/gcc15/a100
+```
+
+Repeat with `build-k3-clang++-24`. The scripts re-execute themselves through
+`ai` for A100 before invoking CTest or benchmark binaries. Do not wrap an
+already running X100 benchmark process with `/proc/set_ai_thread`.
+
+The range runner rejects missing executables, nonzero exits, empty coordinate
+output, and non-finite results. This is an execution sanity check, not a
+numerical oracle; CTest remains the correctness gate until benchmark-level
+reference checks are implemented.
+
 ## Evidence Required Per Change
 
 Each implementation commit must document:
