@@ -4,6 +4,7 @@
 
 
 #include <gendil/gendil.hpp>
+#include "range-benchmark-config.hpp"
 
 #include <chrono>
 
@@ -65,7 +66,7 @@ void test_advection_4D(
 
    auto adv_operator = MakeAdvectionOperator< KernelPolicy >( fe_space, int_rules, advection_field );
 
-   const Integer num_iter = 5;
+   const Integer num_iter = gendil::benchmarks::RangeBenchmarkIterations( 5 );
    double throughput( 0.0 );
    {
       const Integer num_dofs = fe_space.GetNumberOfFiniteElementDofs();
@@ -96,7 +97,7 @@ void test_advection_4D(
 template < Integer order, Integer num_quad_1d = order + 2 >
 void test_range()
 {
-   const Integer max_dofs = 1e8;
+   const auto max_dofs = gendil::benchmarks::RangeBenchmarkMaxDofs( 100000000 );
    constexpr Integer dim = 4;
    Integer n[dim] = { 1, 1, 1, 1 };
    Integer num_dofs = Pow< dim >( order + 1 ) * n[0] * n[1] * n[2] * n[3];

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: (BSD-3-Clause)
 
 #include <gendil/gendil.hpp>
+#include "range-benchmark-config.hpp"
 
 #include <chrono>
 #include <iomanip>
@@ -106,7 +107,7 @@ void bench_face_components_once_6D(Integer nx_full, Integer ny, Integer nz, Inte
   Vector x(ndofs_split), y(ndofs_split);
   x = 1.0; y = 0.0;
 
-  const int num_iter = 5;
+  const int num_iter = gendil::benchmarks::RangeBenchmarkIterations(5);
   const double tpL  = time_face_op(face_L,  x, y, num_iter);
   const double tpR  = time_face_op(face_R,  x, y, num_iter);
   const double tpIF = time_face_op(face_IF, x, y, num_iter);
@@ -148,7 +149,8 @@ void sweep_face_components(std::ostringstream& out_L,
 
   const Integer nx_full = 4; // -> nxL=2, nxR=2 (balanced)
   Integer ny = 1, nz = 1, nw = 1, nt = 1, nu = 1;
-  const long long max_items = 10'000'000; // safety cap (tune as needed)
+  const auto max_items =
+    gendil::benchmarks::RangeBenchmarkMaxDofs(10'000'000); // safety cap
 
   // element dofs (6D)
   const Integer nldofsL = (pL+1)*(pL+1)*(pL+1)*(pL+1)*(pL+1)*(pL+1);

@@ -4,6 +4,9 @@ This directory records the design, reproduction steps, and evidence for the
 GenDiL K3 port. Code changes must update the relevant document in the same
 commit.
 
+Detailed benchmark-harness design and rollback notes are in
+[`benchmark-harness.md`](benchmark-harness.md).
+
 ## Hardware Model
 
 The K3 exposes two core classes:
@@ -112,6 +115,9 @@ CORE_TYPE=a100 scripts/machines/spacemit-k3/run-tests.sh build-k3-g++-15
 Run all range benchmarks and capture one log per executable:
 
 ```sh
+BENCHMARK_MODE=smoke CORE_TYPE=x100 \
+  scripts/machines/spacemit-k3/run-range-benchmarks.sh \
+  build-k3-g++-15 results/spacemit-k3/gcc15/x100-smoke
 CORE_TYPE=x100 scripts/machines/spacemit-k3/run-range-benchmarks.sh \
   build-k3-g++-15 results/spacemit-k3/gcc15/x100
 CORE_TYPE=a100 scripts/machines/spacemit-k3/run-range-benchmarks.sh \
@@ -121,6 +127,12 @@ CORE_TYPE=a100 scripts/machines/spacemit-k3/run-range-benchmarks.sh \
 Repeat with `build-k3-clang++-24`. The scripts re-execute themselves through
 `ai` for A100 before invoking CTest or benchmark binaries. Do not wrap an
 already running X100 benchmark process with `/proc/set_ai_thread`.
+
+`BENCHMARK_MODE=smoke` defaults to one timed iteration and a 2,000,000-item
+sweep cap. `BENCHMARK_MODE=full` preserves each benchmark's original limits and
+iteration count. Either mode can be overridden explicitly with the positive
+integer environment variables `GENDIL_BENCHMARK_MAX_DOFS` and
+`GENDIL_BENCHMARK_ITERATIONS`; their values are recorded in the manifest.
 
 The range runner rejects missing executables, nonzero exits, empty coordinate
 output, and non-finite results. This is an execution sanity check, not a

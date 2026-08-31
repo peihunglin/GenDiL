@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: (BSD-3-Clause)
 
 #include <gendil/gendil.hpp>
+#include "range-benchmark-config.hpp"
 
 #include <chrono>
 #include <sstream>
@@ -26,6 +27,7 @@ static inline long long interior_faces_6d(int nx,int ny,int nz,int nw,int nv,int
 // time a single operator; returns seconds per application
 template<class Op>
 double time_operator(Op& op, Vector& in, Vector& out, int iters=6){
+  iters = gendil::benchmarks::RangeBenchmarkIterations(iters);
   // one warmup
   op(in, out);
   GENDIL_DEVICE_SYNC;
@@ -160,7 +162,8 @@ void sweep_h_adaptivity(std::ostringstream& outL,
   int toggle = 0;
 
   // stop when total element DoFs becomes too large
-  const long long max_dofs = 25'000'000;
+  const auto max_dofs =
+    gendil::benchmarks::RangeBenchmarkMaxDofs(25'000'000);
 
   while (true){
     // quick OOM guard (rough)

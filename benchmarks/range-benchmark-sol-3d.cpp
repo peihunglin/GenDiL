@@ -4,6 +4,7 @@
 
 
 #include <gendil/gendil.hpp>
+#include "range-benchmark-config.hpp"
 #include <chrono>
 
 using namespace std;
@@ -40,7 +41,7 @@ void test_speed_of_light_3D( const Integer nx, const Integer ny, const Integer n
    Vector dofs_out( num_dofs );
    dofs_in = 1.0;
 
-   const Integer num_iter = 5;
+   const Integer num_iter = gendil::benchmarks::RangeBenchmarkIterations( 5 );
    GENDIL_DEVICE_SYNC;
    op( dofs_in, dofs_out );
    GENDIL_DEVICE_SYNC;
@@ -88,7 +89,7 @@ template < typename Factory, Integer order, Integer num_quad_1d = order + 2 >
 void test_sol_range(const std::string& label, Factory factory)
 {
    constexpr Integer dim = 3;
-   const Integer max_dofs = 1e7;
+   const auto max_dofs = gendil::benchmarks::RangeBenchmarkMaxDofs( 10000000 );
    Integer n[dim] = {1, 1, 1};
    Integer num_dofs = Pow<dim>(order + 1) * n[0] * n[1] * n[2];
    Integer i = 0;

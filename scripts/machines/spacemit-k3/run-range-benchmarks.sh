@@ -15,7 +15,18 @@ CORE_TYPE="${CORE_TYPE:-x100}"
 OMP_NUM_THREADS="${OMP_NUM_THREADS:-8}"
 OMP_PLACES="${OMP_PLACES:-cores}"
 OMP_PROC_BIND="${OMP_PROC_BIND:-close}"
-export CORE_TYPE OMP_NUM_THREADS OMP_PLACES OMP_PROC_BIND
+BENCHMARK_MODE="${BENCHMARK_MODE:-full}"
+
+if [[ "${BENCHMARK_MODE}" == "smoke" ]]; then
+  GENDIL_BENCHMARK_MAX_DOFS="${GENDIL_BENCHMARK_MAX_DOFS:-2000000}"
+  GENDIL_BENCHMARK_ITERATIONS="${GENDIL_BENCHMARK_ITERATIONS:-1}"
+elif [[ "${BENCHMARK_MODE}" != "full" ]]; then
+  printf 'error: BENCHMARK_MODE must be smoke or full\n' >&2
+  exit 1
+fi
+
+export CORE_TYPE OMP_NUM_THREADS OMP_PLACES OMP_PROC_BIND BENCHMARK_MODE
+export GENDIL_BENCHMARK_MAX_DOFS GENDIL_BENCHMARK_ITERATIONS
 
 if [[ "${CORE_TYPE}" != "x100" && "${CORE_TYPE}" != "a100" ]]; then
   printf 'error: CORE_TYPE must be x100 or a100\n' >&2
@@ -29,7 +40,10 @@ if [[ "${CORE_TYPE}" == "a100" && "${GENDIL_K3_A100_PROCESS:-0}" != "1" ]]; then
   fi
   exec ai env GENDIL_K3_A100_PROCESS=1 CORE_TYPE="${CORE_TYPE}" \
     OMP_NUM_THREADS="${OMP_NUM_THREADS}" OMP_PLACES="${OMP_PLACES}" \
-    OMP_PROC_BIND="${OMP_PROC_BIND}" bash "$0" "$@"
+    OMP_PROC_BIND="${OMP_PROC_BIND}" BENCHMARK_MODE="${BENCHMARK_MODE}" \
+    GENDIL_BENCHMARK_MAX_DOFS="${GENDIL_BENCHMARK_MAX_DOFS:-}" \
+    GENDIL_BENCHMARK_ITERATIONS="${GENDIL_BENCHMARK_ITERATIONS:-}" \
+    bash "$0" "$@"
 fi
 
 mkdir -p "${OUTPUT_DIR}"
@@ -46,6 +60,7 @@ TARGETS_FILE="${GENDIL_ROOT}/benchmarks/range-benchmarks.txt"
   printf 'omp_num_threads=%s\n' "${OMP_NUM_THREADS}"
   printf 'omp_places=%s\n' "${OMP_PLACES}"
   printf 'omp_proc_bind=%s\n' "${OMP_PROC_BIND}"
+  printf 'benchmark_mode=%s\n' "${BENCHMARK_MODE}"
   printf 'benchmark_max_dofs=%s\n' "${GENDIL_BENCHMARK_MAX_DOFS:-full}"
   printf 'benchmark_iterations=%s\n' "${GENDIL_BENCHMARK_ITERATIONS:-default}"
   uname -a
