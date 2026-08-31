@@ -141,6 +141,34 @@ output, and non-finite results. This is an execution sanity check, not a
 numerical oracle; CTest remains the correctness gate until benchmark-level
 reference checks are implemented.
 
+## Baseline Rerun
+
+After pulling a review fix, run the complete GCC 15 and Clang X100 baseline
+with one command:
+
+```sh
+git pull --ff-only
+scripts/machines/spacemit-k3/rerun-x100-baseline.sh
+```
+
+The script uses `/usr/bin/g++-15` and
+`/home/lin32/opt/llvm-main/bin/clang++`, rebuilds both configurations, runs
+CTest, and runs all 18 smoke benchmarks. It continues after failures so one
+compiler cannot prevent collection of the other compiler's results. Output
+paths include the tested Git commit by default.
+
+Override installed compiler paths or run only one compiler when needed:
+
+```sh
+GCC_CXX=/path/to/g++-15 CLANG_CXX=/path/to/clang++ \
+  scripts/machines/spacemit-k3/rerun-x100-baseline.sh
+RUN_GCC=0 scripts/machines/spacemit-k3/rerun-x100-baseline.sh
+RUN_CLANG=0 scripts/machines/spacemit-k3/rerun-x100-baseline.sh
+```
+
+`RESULT_TAG` can replace the default `rerun-<commit>` suffix. Commit all
+generated result files even when the script returns nonzero.
+
 ## Evidence Required Per Change
 
 Each implementation commit must document:
