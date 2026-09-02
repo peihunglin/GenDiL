@@ -21,5 +21,6 @@
 - Do not add fixed-VLEN assumptions. RVV kernels must remain vector-length agnostic and be validated on both X100 and A100.
 - Build hardware probes only with `K3_ENABLE_EXPERIMENTS=ON`. Run the heterogeneous probe normally on X100, never through `ai`; selected worker TIDs perform their own A100 placement while RVV is disabled.
 - A failed heterogeneous placement/VLEN probe is a mandatory MPI fallback signal; do not bypass its checks.
+- The current GCC and Clang single-process probes fail with `SIGILL` during vector-disabled startup. Use separate X100/A100 MPI ranks with eight OpenMP workers each; launch the A100 rank through `aix` before `MPI_Init`.
 - Do not guess IME intrinsics, data types, or flags. Record the installed SDK/compiler interface first.
 - Every porting change requires documentation of rationale, design, verification, limitations, and rollback. Keep commits atomic and include focused test evidence.

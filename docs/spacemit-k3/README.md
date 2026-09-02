@@ -10,6 +10,8 @@ The mixed X100/A100 safety design is in
 [`heterogeneous-openmp-design.md`](heterogeneous-openmp-design.md).
 The first native result review is in
 [`results-2026-08-31.md`](results-2026-08-31.md).
+The heterogeneous safety-gate result is in
+[`results-2026-09-02.md`](results-2026-09-02.md).
 
 ## Hardware Model
 
@@ -213,6 +215,17 @@ A100 placement by Linux TID and only then enable RVV. A nonzero result selects
 the documented MPI fallback; do not weaken or bypass a failed safety check.
 K3 experiments are disabled in ordinary builds unless
 `K3_ENABLE_EXPERIMENTS=ON` is supplied.
+
+The single-process probe failed under both compilers because runtime startup
+uses RVV before worker placement. Do not rerun it with vector-state protection
+removed. Use the MPI/OpenMP fallback probe commands in
+`results-2026-09-02.md`.
+
+The MPI probe requires a CMake-discovered MPI C++ installation and a supported
+Open MPI or MPICH/Hydra MPMD launcher. It fails closed for unknown launcher
+syntax or nonempty pre/post flags. Rank roles are explicit rather than inferred
+from MPI rank numbering, and MPI binding is disabled before each process checks
+that `MPI_Init_thread` preserved its X100 or A100 affinity.
 
 ## Evidence Required Per Change
 

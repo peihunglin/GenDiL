@@ -94,7 +94,9 @@ imply disjoint algebraic output ranges.
 
 ## MPI Fallback
 
-If per-thread movement or vector-state control fails, use two processes:
+The September 2 probe results show `SIGILL` under both GCC and Clang before
+program output when RVV is disabled during startup. The installed loader/runtime
+path therefore fails the single-process safety gate. Use two processes:
 
 - X100 rank launched normally with eight OpenMP workers.
 - A100 rank launched through `ai` before `MPI_Init`, also with eight workers.
@@ -104,8 +106,9 @@ If per-thread movement or vector-state control fails, use two processes:
   reduction. Independent OpenMP runtimes must not coordinate writes through
   OpenMP atomics.
 
-This costs memory and reduction bandwidth but preserves the non-migration
-invariant and provides a correct reference implementation.
+This candidate costs memory and reduction bandwidth but preserves the
+non-migration invariant. It becomes the reference implementation only after
+both compiler probes and numerical operator comparisons pass.
 
 ## Verification And Rollback
 
