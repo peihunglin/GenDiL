@@ -239,6 +239,17 @@ the K3 policy against the existing host mass operator. Set
 `GENDIL_K3_A100_SHARE=50` (or another percentage from 0 to 100) when running
 the target. The target must run normally on X100, not through `ai`.
 
+Run the placement check and mass comparison in the required order with:
+
+```sh
+GENDIL_K3_A100_SHARE=50 \
+  scripts/machines/spacemit-k3/run-k3-mass-study.sh \
+  build-k3-g++-15
+```
+
+The runner stops before the mass comparison if placement/VLEN validation fails,
+and records the share, probe output, and numerical comparison in one result.
+
 
 ## Evidence Required Per Change
 
