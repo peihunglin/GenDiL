@@ -44,8 +44,25 @@ set_source_files_properties(
   PROPERTIES COMPILE_OPTIONS "-march=rv64gcv"
 )
 
+add_executable(
+  k3-heterogeneous-openmp-mass
+  k3-heterogeneous-openmp-mass.cpp
+)
+target_compile_features(k3-heterogeneous-openmp-mass PRIVATE cxx_std_20)
+target_compile_definitions(
+  k3-heterogeneous-openmp-mass
+  PRIVATE GENDIL_K3_HETERO_OPENMP
+)
+target_compile_options(k3-heterogeneous-openmp-mass PRIVATE -fno-lto -march=rv64gcv)
+target_link_options(k3-heterogeneous-openmp-mass PRIVATE -fno-lto)
+target_link_libraries(
+  k3-heterogeneous-openmp-mass
+  PRIVATE GENDIL::GENDIL OpenMP::OpenMP_CXX
+)
+
 add_custom_target(k3-experiments)
 add_dependencies(
   k3-experiments
   k3-heterogeneous-openmp-probe
+  k3-heterogeneous-openmp-mass
 )

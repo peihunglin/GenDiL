@@ -23,3 +23,8 @@
 
 // Backward-compatible name for HostKernelConfiguration.
 #include "serial.hpp"
+
+#ifdef GENDIL_K3_HETERO_OPENMP
+// Opt-in K3-only empirical X100/A100 OpenMP execution policy.
+#include "k3heterogeneousopenmp.hpp"
+#endif

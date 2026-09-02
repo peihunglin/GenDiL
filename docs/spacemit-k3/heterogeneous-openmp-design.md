@@ -89,6 +89,14 @@ contention and numerical ordering require validation. Face and H1 operators
 will follow disjoint DG cell operators because disjoint cell ranges do not
 imply disjoint algebraic output ranges.
 
+The first implementation target is `k3-heterogeneous-openmp-mass`. It compares
+the existing `SerialKernelConfiguration` result with the same legacy mass
+operator instantiated with `K3HeterogeneousOpenMPConfiguration`. The policy
+preserves each global cell index while assigning a contiguous X100/A100 range
+boundary and round-robin work inside each eight-worker group. This validates
+execution and output ownership before adding separately compiled optimized
+microkernels.
+
 ## Historical Safety-Gate Result
 
 The September 2 vector-disabled probe produced `SIGILL` under both GCC and

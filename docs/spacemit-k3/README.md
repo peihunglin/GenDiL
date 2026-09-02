@@ -227,6 +227,18 @@ with `ai`.
 The empirical probe passes under GCC 15 and Clang 24. Proceed with the
 single-process OpenMP backend study; do not make MPI a prerequisite.
 
+The next focused target is built with the same opt-in experiment build:
+
+```sh
+K3_ENABLE_EXPERIMENTS=ON CXX=/usr/bin/g++-15 \
+  scripts/machines/spacemit-k3/build.sh
+```
+
+This builds `tools/spacemit-k3/k3-heterogeneous-openmp-mass`, which compares
+the K3 policy against the existing host mass operator. Set
+`GENDIL_K3_A100_SHARE=50` (or another percentage from 0 to 100) when running
+the target. The target must run normally on X100, not through `ai`.
+
 
 ## Evidence Required Per Change
 
