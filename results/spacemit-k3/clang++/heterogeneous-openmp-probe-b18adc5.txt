@@ -1,0 +1,32 @@
+timestamp_utc=2026-09-02T21:28:34Z
+commit=b18adc55ab8e0c7cf2ce2439a60ddd1a63e02502
+build_dir=build-k3-clang++/
+compiler=/home/lin32/opt/llvm-main/bin/clang++
+clang version 24.0.0git (https://github.com/llvm/llvm-project.git 652e04312e8c5f4fc90ac16be494c3562c111ab9)
+Target: riscv64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/lin32/opt/llvm-main/bin
+Linux RISKY-spacemitk3 6.18.3-generic #1.0.5.4 SMP PREEMPT_DYNAMIC Wed Jul 15 16:27:49 CST 2026 riscv64 GNU/Linux
+riscv_v_default_allow=1
+--w--w--w- 1 root root 0 Sep  1 14:53 /proc/set_ai_thread
+probe_output_begin
+actual_workers=16 expected_workers=16 stability_rounds=64
+omp_thread,linux_thread,initial_cpu,placed_cpu,final_cpu,placement_result,placement_errno,vlen_bytes,vlmax_e64m1,affinity_mask,class_changes,vlen_changes,canary_failures,status
+0,1722279,6,0,0,0,0,32,4,0x0000000000000001,0,0,0,pass
+1,1722280,7,1,1,0,0,32,4,0x0000000000000002,0,0,0,pass
+2,1722281,2,2,2,0,0,32,4,0x0000000000000004,0,0,0,pass
+3,1722282,5,3,3,0,0,32,4,0x0000000000000008,0,0,0,pass
+4,1722283,1,4,4,0,0,32,4,0x0000000000000010,0,0,0,pass
+5,1722284,5,5,5,0,0,32,4,0x0000000000000020,0,0,0,pass
+6,1722285,6,6,6,0,0,32,4,0x0000000000000040,0,0,0,pass
+7,1722286,4,7,7,0,0,32,4,0x0000000000000080,0,0,0,pass
+8,1722287,7,10,10,0,0,128,16,0x000000000000ff00,0,0,0,pass
+9,1722288,3,9,9,0,0,128,16,0x000000000000ff00,0,0,0,pass
+10,1722289,5,8,8,0,0,128,16,0x000000000000ff00,0,0,0,pass
+11,1722290,7,9,9,0,0,128,16,0x000000000000ff00,0,0,0,pass
+12,1722291,4,8,11,0,0,128,16,0x000000000000ff00,0,0,0,pass
+13,1722292,4,9,9,0,0,128,16,0x000000000000ff00,0,0,0,pass
+14,1722293,7,8,8,0,0,128,16,0x000000000000ff00,0,0,0,pass
+15,1722294,3,8,11,0,0,128,16,0x000000000000ff00,0,0,0,pass
+heterogeneous_openmp_probe=pass
+probe_output_end

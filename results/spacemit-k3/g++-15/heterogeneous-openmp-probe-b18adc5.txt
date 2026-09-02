@@ -1,0 +1,33 @@
+timestamp_utc=2026-09-02T21:27:59Z
+commit=b18adc55ab8e0c7cf2ce2439a60ddd1a63e02502
+build_dir=build-k3-g++-15/
+compiler=/usr/bin/g++-15
+g++-15 (Bianbu 15.2.0-16ubuntu1bb5) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Linux RISKY-spacemitk3 6.18.3-generic #1.0.5.4 SMP PREEMPT_DYNAMIC Wed Jul 15 16:27:49 CST 2026 riscv64 GNU/Linux
+riscv_v_default_allow=1
+--w--w--w- 1 root root 0 Sep  1 14:53 /proc/set_ai_thread
+probe_output_begin
+actual_workers=16 expected_workers=16 stability_rounds=64
+omp_thread,linux_thread,initial_cpu,placed_cpu,final_cpu,placement_result,placement_errno,vlen_bytes,vlmax_e64m1,affinity_mask,class_changes,vlen_changes,canary_failures,status
+0,1721206,3,0,0,0,0,32,4,0x0000000000000001,0,0,0,pass
+1,1721207,7,1,1,0,0,32,4,0x0000000000000002,0,0,0,pass
+2,1721208,1,2,2,0,0,32,4,0x0000000000000004,0,0,0,pass
+3,1721209,4,3,3,0,0,32,4,0x0000000000000008,0,0,0,pass
+4,1721210,5,4,4,0,0,32,4,0x0000000000000010,0,0,0,pass
+5,1721211,5,5,5,0,0,32,4,0x0000000000000020,0,0,0,pass
+6,1721212,6,6,6,0,0,32,4,0x0000000000000040,0,0,0,pass
+7,1721213,6,7,7,0,0,32,4,0x0000000000000080,0,0,0,pass
+8,1721214,6,15,15,0,0,128,16,0x000000000000ff00,0,0,0,pass
+9,1721215,6,9,10,0,0,128,16,0x000000000000ff00,0,0,0,pass
+10,1721216,6,10,9,0,0,128,16,0x000000000000ff00,0,0,0,pass
+11,1721217,6,11,11,0,0,128,16,0x000000000000ff00,0,0,0,pass
+12,1721218,6,12,12,0,0,128,16,0x000000000000ff00,0,0,0,pass
+13,1721219,6,13,13,0,0,128,16,0x000000000000ff00,0,0,0,pass
+14,1721220,6,14,14,0,0,128,16,0x000000000000ff00,0,0,0,pass
+15,1721221,6,8,8,0,0,128,16,0x000000000000ff00,0,0,0,pass
+heterogeneous_openmp_probe=pass
+probe_output_end
