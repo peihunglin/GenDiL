@@ -21,5 +21,6 @@
 - Do not add fixed-VLEN assumptions. RVV kernels must remain vector-length agnostic and be validated on both X100 and A100.
 - Build hardware probes only with `K3_ENABLE_EXPERIMENTS=ON`. Run the heterogeneous probe normally on X100, never through `ai`; selected worker TIDs perform their own A100 placement while RVV is disabled.
 - The vector-disabled startup probe failed with `SIGILL` under GCC and Clang; the active experiment follows the K3 GEMM-style OpenMP path instead: start normally on X100, place selected worker TIDs on A100, and validate VLEN after placement.
+- The empirical OpenMP probe passes under GCC 15 and Clang 24. A100 placement confines workers to the A100 class but does not provide singleton CPU affinity; never assume one A100 worker per core.
 - Do not guess IME intrinsics, data types, or flags. Record the installed SDK/compiler interface first.
 - Every porting change requires documentation of rationale, design, verification, limitations, and rollback. Keep commits atomic and include focused test evidence.

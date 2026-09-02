@@ -52,7 +52,8 @@ The single-process design may proceed only when GCC 15 and Clang 24 both show:
 
 - Exactly 16 OpenMP workers.
 - Workers 0-7 pinned to X100 CPUs 0-7.
-- Workers 8-15 successfully moved to A100 CPUs 8-15 by their individual TIDs.
+- Workers 8-15 successfully confined to the A100 CPU class by their individual
+  TIDs.
 - `vlenb == 32` and e64/m1 VLMAX of 4 on every X100 worker.
 - `vlenb == 128` and e64/m1 VLMAX of 16 on every A100 worker.
 - No worker changes core class or VLEN over repeated barriers.
@@ -61,6 +62,10 @@ The single-process design may proceed only when GCC 15 and Clang 24 both show:
 Passing is necessary but not sufficient. The production implementation must
 retain a scalar launch path, explicit worker placement, fixed team size, and
 runtime assertions in debug builds.
+
+These criteria passed for GCC 15 and Clang 24 in result commit `bf5149e` using
+probe commit `b18adc5`. The A100 criterion is class confinement, not singleton
+CPU affinity.
 
 ## Planned Work Dispatch
 

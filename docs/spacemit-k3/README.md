@@ -12,6 +12,8 @@ The first native result review is in
 [`results-2026-08-31.md`](results-2026-08-31.md).
 The heterogeneous safety-gate result is in
 [`results-2026-09-02.md`](results-2026-09-02.md).
+The passing empirical OpenMP result is in
+[`results-2026-09-02-omp.md`](results-2026-09-02-omp.md).
 
 ## Hardware Model
 
@@ -221,6 +223,9 @@ runtime startup uses RVV before worker placement. The active probe now follows
 the validated K3 GEMM-style OpenMP path: start normally on X100, place selected
 worker TIDs on A100, and check VLEN after placement. Do not wrap the mixed probe
 with `ai`.
+
+The empirical probe passes under GCC 15 and Clang 24. Proceed with the
+single-process OpenMP backend study; do not make MPI a prerequisite.
 
 
 ## Evidence Required Per Change
