@@ -1,0 +1,15 @@
+timestamp_utc=2026-09-02T15:49:42Z
+commit=7223bb6355f3a554b70fa6259c8ade88ef1cf408
+build_dir=build-k3-g++-15
+compiler=/usr/bin/g++-15
+g++-15 (Bianbu 15.2.0-16ubuntu1bb5) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Linux RISKY-spacemitk3 6.18.3-generic #1.0.5.4 SMP PREEMPT_DYNAMIC Wed Jul 15 16:27:49 CST 2026 riscv64 GNU/Linux
+riscv_v_default_allow=1
+--w--w--w- 1 root root 0 Sep  1 14:53 /proc/set_ai_thread
+probe_output_begin
+./scripts/machines/spacemit-k3/run-heterogeneous-openmp-probe.sh: line 55: 1515181 Illegal instruction        env -u OMP_PLACES -u OMP_THREAD_LIMIT -u GOMP_CPU_AFFINITY -u KMP_AFFINITY OMP_NUM_THREADS=16 OMP_DYNAMIC=FALSE OMP_PROC_BIND=FALSE "${LAUNCHER}" "${PROBE}"
+probe_output_end

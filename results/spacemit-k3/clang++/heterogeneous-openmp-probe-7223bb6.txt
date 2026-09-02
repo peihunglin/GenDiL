@@ -1,0 +1,14 @@
+timestamp_utc=2026-09-02T15:50:16Z
+commit=7223bb6355f3a554b70fa6259c8ade88ef1cf408
+build_dir=build-k3-clang++/
+compiler=/home/lin32/opt/llvm-main/bin/clang++
+clang version 24.0.0git (https://github.com/llvm/llvm-project.git 652e04312e8c5f4fc90ac16be494c3562c111ab9)
+Target: riscv64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/lin32/opt/llvm-main/bin
+Linux RISKY-spacemitk3 6.18.3-generic #1.0.5.4 SMP PREEMPT_DYNAMIC Wed Jul 15 16:27:49 CST 2026 riscv64 GNU/Linux
+riscv_v_default_allow=1
+--w--w--w- 1 root root 0 Sep  1 14:53 /proc/set_ai_thread
+probe_output_begin
+./scripts/machines/spacemit-k3/run-heterogeneous-openmp-probe.sh: line 55: 1516262 Illegal instruction        env -u OMP_PLACES -u OMP_THREAD_LIMIT -u GOMP_CPU_AFFINITY -u KMP_AFFINITY OMP_NUM_THREADS=16 OMP_DYNAMIC=FALSE OMP_PROC_BIND=FALSE "${LAUNCHER}" "${PROBE}"
+probe_output_end
