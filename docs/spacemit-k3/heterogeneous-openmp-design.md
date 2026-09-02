@@ -7,9 +7,9 @@ to X100 and eight fixed to A100. X100 has 256-bit RVV registers and A100 has
 1024-bit RVV registers. A worker must never move between core classes after it
 has established vector state.
 
-This document defines the safety experiment that must pass before a mixed-core
-GenDiL kernel is implemented. Failure at any gate selects the two-rank MPI
-fallback instead of weakening the checks.
+This document defines the empirical OpenMP experiment used before a mixed-core
+GenDiL kernel is implemented. It follows the working K3 GEMM reference path;
+it is a K3-specific runtime contract, not a portable OpenMP guarantee.
 
 ## Why One Scalable Kernel Comes First
 
@@ -24,34 +24,27 @@ FP64. General FP32 support requires a separate scalar-type design; silently
 converting existing FP64 vectors inside selected kernels would not constitute
 general GenDiL FP32 support.
 
-## Vector-State Hazard
+## K3 OpenMP Placement
 
-`ai`/`aix` safely moves a new process to A100 before `exec`, but cannot split an
-existing process into X100 and A100 worker groups. Moving an OpenMP worker after
-the runtime or a library has used RVV can restore vector state with the wrong
-VLEN.
+`ai`/`aix` remains required for a process dedicated to A100, but the mixed
+OpenMP process starts normally on X100. Inside one persistent OpenMP team:
 
-Linux exposes per-thread RISC-V vector controls through
-`PR_RISCV_V_SET_CONTROL`. The experiment uses them as follows:
+1. Workers 0-7 pin themselves to X100 CPUs 0-7 with `sched_setaffinity`.
+2. Workers 8-15 write their Linux TIDs to `/proc/set_ai_thread`.
+3. A barrier separates placement from the first explicit RVV canary.
+4. Workers execute scalable FP64 load/add/store canaries and repeatedly check
+   CPU class, VLEN, affinity, and arithmetic output.
 
-1. A scalar launcher requests vector state `OFF` for the next `exec` and marks
-   that `NEXT=OFF` policy persistent across later `exec` calls. Worker threads
-   are expected to inherit the current disabled state through thread creation,
-   and the probe verifies that expectation independently with `GET_CONTROL`.
-2. The probe, dynamic loader, C++ runtime, and initial OpenMP worker startup run
-   with RVV disabled. An unexpected vector instruction terminates the probe,
-   which is a safety failure rather than something to bypass.
-3. X100 workers pin themselves to CPUs 0-7.
-4. A100 workers write their Linux thread IDs to `/proc/set_ai_thread` while RVV
-   remains disabled.
-5. Each worker enables RVV for itself only after placement.
-6. Workers execute scalable full-lane FP64 load/add/store canaries, read
-   `vlenb`, and repeatedly cross OpenMP barriers while checking their CPU
-   class, VLEN, and arithmetic output.
+This intentionally matches `rvv-evaluation/proxy_bench/gemm/gemm_hetero.c`.
+The runtime establishes vector state during ordinary startup, so the earlier
+vector-disabled `prctl` probe is retained only as a failed historical safety
+experiment and is not the active execution contract.
 
-The coordinator and placement source are compiled for `rv64gc`. The RVV probe
-is isolated in a translation unit compiled for scalable `rv64gcv`. This keeps
-vector instructions out of the code that runs before worker placement.
+The reference builds the X100 and A100 worker objects separately with
+`-mcpu=spacemit-x100` and `-mcpu=spacemit-a100`, respectively. GenDiL will use
+the same object-level separation once the probe passes; a single compiler
+translation unit must not be expected to optimize both microarchitectures
+equally.
 
 ## Go/No-Go Criteria
 
@@ -63,8 +56,7 @@ The single-process design may proceed only when GCC 15 and Clang 24 both show:
 - `vlenb == 32` and e64/m1 VLMAX of 4 on every X100 worker.
 - `vlenb == 128` and e64/m1 VLMAX of 16 on every A100 worker.
 - No worker changes core class or VLEN over repeated barriers.
-- The process exits normally with all checks passing while vector state was
-  disabled during loader and OpenMP startup.
+- The process exits normally with all checks passing after worker placement.
 
 Passing is necessary but not sufficient. The production implementation must
 retain a scalar launch path, explicit worker placement, fixed team size, and
@@ -92,29 +84,18 @@ contention and numerical ordering require validation. Face and H1 operators
 will follow disjoint DG cell operators because disjoint cell ranges do not
 imply disjoint algebraic output ranges.
 
-## MPI Fallback
+## Historical Safety-Gate Result
 
-The September 2 probe results show `SIGILL` under both GCC and Clang before
-program output when RVV is disabled during startup. The installed loader/runtime
-path therefore fails the single-process safety gate. Use two processes:
-
-- X100 rank launched normally with eight OpenMP workers.
-- A100 rank launched through `ai` before `MPI_Init`, also with eight workers.
-- `MPI_THREAD_FUNNELED`; MPI calls occur outside parallel regions.
-- Immutable input is duplicated or shared read-only.
-- Each rank initially writes a private partial output, followed by an MPI
-  reduction. Independent OpenMP runtimes must not coordinate writes through
-  OpenMP atomics.
-
-This candidate costs memory and reduction bandwidth but preserves the
-non-migration invariant. It becomes the reference implementation only after
-both compiler probes and numerical operator comparisons pass.
+The September 2 vector-disabled probe produced `SIGILL` under both GCC and
+Clang before program output. This rejects only that stricter startup experiment;
+it does not reject the empirically demonstrated K3 GEMM-style placement path.
+Keep the result in `docs/spacemit-k3/results-2026-09-02.md` for traceability.
 
 ## Verification And Rollback
 
 The probe is opt-in through `GENDIL_ENABLE_K3_EXPERIMENTS` or the K3 script's
 `K3_ENABLE_EXPERIMENTS=ON`; it is not installed, registered with CTest, or
-included in ordinary builds. Interprocedural optimization is disabled for the
-probe targets so vector instructions cannot cross the scalar/RVV translation
-unit boundary. Remove the option and `tools/spacemit-k3` subdirectory to roll
-back the experiment without affecting GenDiL headers or execution policies.
+included in ordinary builds. The probe compiles its coordinator and RVV canary
+in separate translation units with LTO disabled. Remove the option and
+`tools/spacemit-k3` subdirectory to roll back the experiment without affecting
+GenDiL headers or execution policies.

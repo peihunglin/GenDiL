@@ -27,9 +27,9 @@ core classes have different VLENs.
 
 The current production-safe path uses separate process runs for X100 and A100;
 the same vector-length-agnostic implementation is validated in a fresh process
-on each core class. Concurrent use of all 16 cores is an experimental goal. It
-requires the documented per-thread vector-state and placement probe to pass;
-otherwise the implementation must use the two-process MPI fallback.
+on each core class. Concurrent use of all 16 cores is an experimental goal
+following the K3 GEMM-style OpenMP placement path. It must pass the empirical
+placement/VLEN probe before GenDiL kernels use it.
 
 ## Stages
 
@@ -209,23 +209,19 @@ scripts/machines/spacemit-k3/run-heterogeneous-openmp-probe.sh \
   build-k3-clang++
 ```
 
-Run this script normally on X100, never through `ai`. The scalar launcher keeps
-RVV disabled while OpenMP starts. Workers 0-7 pin to X100; workers 8-15 request
-A100 placement by Linux TID and only then enable RVV. A nonzero result selects
-the documented MPI fallback; do not weaken or bypass a failed safety check.
+Run this script normally on X100, never through `ai`. Workers 0-7 pin to X100;
+workers 8-15 request A100 placement by Linux TID and only then execute the
+explicit RVV canary. A nonzero result blocks mixed-core kernel work; do not
+weaken or bypass a failed placement or VLEN check.
 K3 experiments are disabled in ordinary builds unless
 `K3_ENABLE_EXPERIMENTS=ON` is supplied.
 
-The single-process probe failed under both compilers because runtime startup
-uses RVV before worker placement. Do not rerun it with vector-state protection
-removed. Use the MPI/OpenMP fallback probe commands in
-`results-2026-09-02.md`.
+The stricter vector-disabled startup probe failed under both compilers because
+runtime startup uses RVV before worker placement. The active probe now follows
+the validated K3 GEMM-style OpenMP path: start normally on X100, place selected
+worker TIDs on A100, and check VLEN after placement. Do not wrap the mixed probe
+with `ai`.
 
-The MPI probe requires a CMake-discovered MPI C++ installation and a supported
-Open MPI or MPICH/Hydra MPMD launcher. It fails closed for unknown launcher
-syntax or nonempty pre/post flags. Rank roles are explicit rather than inferred
-from MPI rank numbering, and MPI binding is disabled before each process checks
-that `MPI_Init_thread` preserved its X100 or A100 affinity.
 
 ## Evidence Required Per Change
 

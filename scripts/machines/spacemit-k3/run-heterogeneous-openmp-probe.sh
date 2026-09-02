@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-# Test whether one OpenMP process can safely maintain fixed X100 and A100
-# worker groups. Run normally on X100; do not invoke this script through ai.
+# Study the K3 GEMM-style heterogeneous OpenMP mechanism. Run normally on X100;
+# do not invoke this script through ai.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 GENDIL_ROOT="${GENDIL_ROOT:-$(cd -- "${SCRIPT_DIR}/../../.." && pwd -P)}"
 BUILD_DIR="${1:?usage: run-heterogeneous-openmp-probe.sh BUILD_DIR [OUTPUT_FILE]}"
-LAUNCHER="${BUILD_DIR}/tools/spacemit-k3/k3-rvv-state-launcher"
 PROBE="${BUILD_DIR}/tools/spacemit-k3/k3-heterogeneous-openmp-probe"
 compiler_path="$(
   awk -F= '/^CMAKE_CXX_COMPILER:[^=]*=/{print $2}' \
@@ -17,7 +16,7 @@ compiler_path="$(
 compiler_name="$(basename -- "${compiler_path:-unknown-compiler}")"
 OUTPUT_FILE="${2:-${GENDIL_ROOT}/results/spacemit-k3/${compiler_name}/heterogeneous-openmp-probe-$(git -C "${GENDIL_ROOT}" rev-parse --short HEAD).txt}"
 
-if [[ ! -x "${LAUNCHER}" || ! -x "${PROBE}" ]]; then
+if [[ ! -x "${PROBE}" ]]; then
   printf 'error: K3 probe executables are missing; rerun the K3 build script\n' >&2
   exit 1
 fi
@@ -44,11 +43,11 @@ set +e
   ls -l /proc/set_ai_thread
   printf '%s\n' 'probe_output_begin'
   set +e
-  env -u OMP_PLACES -u OMP_THREAD_LIMIT -u GOMP_CPU_AFFINITY -u KMP_AFFINITY \
+  env -u OMP_THREAD_LIMIT -u GOMP_CPU_AFFINITY -u KMP_AFFINITY \
     OMP_NUM_THREADS=16 \
     OMP_DYNAMIC=FALSE \
     OMP_PROC_BIND=FALSE \
-    "${LAUNCHER}" "${PROBE}"
+    "${PROBE}"
   probe_status=$?
   printf '%s\n' 'probe_output_end'
   exit "${probe_status}"

@@ -9,19 +9,13 @@
 #include <cstdio>
 #include <cstring>
 #include <fcntl.h>
-#include <linux/prctl.h>
 #include <omp.h>
 #include <sched.h>
-#include <sys/prctl.h>
 #include <sys/syscall.h>
 #include <unistd.h>
 
 #if !defined( __linux__ ) || !defined( __riscv )
 #error "The heterogeneous OpenMP probe requires RISC-V Linux"
-#endif
-
-#if !defined( PR_RISCV_V_SET_CONTROL )
-#error "Linux headers do not provide RISC-V vector-state control"
 #endif
 
 namespace
@@ -43,9 +37,6 @@ struct ThreadResult
    int final_cpu = -1;
    int placement_result = -1;
    int placement_errno = 0;
-   long vector_control_before = -1;
-   int vector_enable_result = -1;
-   int vector_enable_errno = 0;
    std::size_t vlen_bytes = 0;
    std::size_t vlmax_e64m1 = 0;
    unsigned long long affinity_mask = 0;
@@ -141,17 +132,6 @@ int MoveCurrentThreadToA100( const long thread_id )
    return 0;
 }
 
-int EnableCurrentThreadRvv()
-{
-   constexpr unsigned long next_off =
-      PR_RISCV_V_VSTATE_CTRL_OFF << 2;
-   constexpr unsigned long control =
-      PR_RISCV_V_VSTATE_CTRL_ON |
-      next_off |
-      PR_RISCV_V_VSTATE_CTRL_INHERIT;
-   return prctl( PR_RISCV_V_SET_CONTROL, control );
-}
-
 } // namespace
 
 int main()
@@ -180,9 +160,9 @@ int main()
       }
       result.placement_errno = result.placement_result == 0 ? 0 : errno;
 
-      // set_ai_thread changes scheduler placement in the kernel. Give the
-      // scheduler a bounded opportunity to run the worker on its new class,
-      // still with RVV disabled.
+      // This follows the K3 GEMM reference path: placement is performed by the
+      // worker itself, before its first explicit RVV operation. The process is
+      // intentionally started normally on X100, not through ai.
       if ( result.placement_result == 0 )
       {
          for ( int attempt = 0; attempt < 10000; ++attempt )
@@ -198,8 +178,6 @@ int main()
          }
       }
 
-      // The barrier deliberately occurs while RVV remains disabled. It checks
-      // that OpenMP synchronization itself does not require vector execution.
       #pragma omp barrier
 
       #pragma omp single
@@ -207,7 +185,6 @@ int main()
 
       result.placed_cpu = sched_getcpu();
       result.affinity_mask = CurrentAffinityMask();
-      result.vector_control_before = prctl( PR_RISCV_V_GET_CONTROL );
 
       const bool is_x100 = thread < num_x100_workers;
       const bool placement_is_confirmed =
@@ -215,32 +192,18 @@ int main()
          ( is_x100 ? IsX100Cpu( result.placed_cpu ) :
                      IsA100Cpu( result.placed_cpu ) ) &&
          AffinityMatchesClass( result.affinity_mask, is_x100, thread );
-      const bool rvv_is_disabled =
-         result.vector_control_before >= 0 &&
-         ( result.vector_control_before & PR_RISCV_V_VSTATE_CTRL_CUR_MASK ) ==
-            PR_RISCV_V_VSTATE_CTRL_OFF;
-
-      // Never establish vector state on an unconfirmed core class. A worker
-      // that fails placement still participates in scalar barriers so every
-      // thread can report a clean failure without deadlocking the team.
-      if ( placement_is_confirmed && rvv_is_disabled )
+      // A failed placement never executes the RVV canary. It still reaches all
+      // barriers, allowing the probe to report a structured failure instead of
+      // deadlocking the OpenMP team.
+      if ( placement_is_confirmed )
       {
-         errno = 0;
-         result.vector_enable_result = EnableCurrentThreadRvv();
-         result.vector_enable_errno =
-            result.vector_enable_result == 0 ? 0 : errno;
-         if ( result.vector_enable_result == 0 &&
-              !gendil_k3_probe_rvv(
+         if ( !gendil_k3_probe_rvv(
                  &result.vlen_bytes,
                  &result.vlmax_e64m1,
                  static_cast< std::uint64_t >( result.linux_thread ) ) )
          {
             ++result.canary_failures;
          }
-      }
-      else
-      {
-         result.vector_enable_result = -2;
       }
 
       #pragma omp barrier
@@ -255,7 +218,7 @@ int main()
             ++result.class_changes;
          }
 
-         if ( result.vector_enable_result == 0 )
+         if ( result.vlen_bytes != 0 )
          {
             std::size_t current_vlen = 0;
             std::size_t current_vlmax = 0;
@@ -290,8 +253,6 @@ int main()
          thread );
       result.passed =
          result.placement_result == 0 &&
-         result.vector_enable_result == 0 &&
-         rvv_is_disabled &&
          cpu_is_correct &&
          affinity_is_correct &&
          result.vlen_bytes == expected_vlen &&
@@ -313,15 +274,14 @@ int main()
       stability_rounds );
    std::printf(
       "omp_thread,linux_thread,initial_cpu,placed_cpu,final_cpu,"
-      "placement_result,placement_errno,vector_control_before,"
-      "vector_enable_result,vector_enable_errno,vlen_bytes,vlmax_e64m1,"
+      "placement_result,placement_errno,vlen_bytes,vlmax_e64m1,"
       "affinity_mask,class_changes,vlen_changes,canary_failures,status\n" );
 
    bool passed = actual_workers == expected_workers;
    for ( const ThreadResult & result : results )
    {
       std::printf(
-         "%d,%ld,%d,%d,%d,%d,%d,%ld,%d,%d,%zu,%zu,0x%016llx,%d,%d,%d,%s\n",
+         "%d,%ld,%d,%d,%d,%d,%d,%zu,%zu,0x%016llx,%d,%d,%d,%s\n",
          result.omp_thread,
          result.linux_thread,
          result.initial_cpu,
@@ -329,9 +289,6 @@ int main()
          result.final_cpu,
          result.placement_result,
          result.placement_errno,
-         result.vector_control_before,
-         result.vector_enable_result,
-         result.vector_enable_errno,
          result.vlen_bytes,
          result.vlmax_e64m1,
          result.affinity_mask,
