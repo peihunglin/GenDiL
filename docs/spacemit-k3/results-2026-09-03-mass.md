@@ -33,7 +33,10 @@ GENDIL_K3_MASS_WARMUP=2 GENDIL_K3_MASS_ITERATIONS=10 \
 ```
 
 The original 50/50 results predate this timing instrumentation and must not be
-used as performance data.
+used as performance data. The first timed sweep also included worker placement
+on every timed `BlockLoop` call. Those values are useful for exposing setup
+overhead, but not as steady-state kernel performance. The policy now binds a
+reused OpenMP worker only once per worker ID; a new timed sweep is required.
 
 ## Next Measurement
 

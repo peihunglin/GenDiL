@@ -126,6 +126,19 @@ private:
       }
    }
 
+   static void EnsureWorkerBound( const GlobalIndex worker )
+   {
+      // OpenMP may reuse its pthreads across BlockLoop calls. Avoid paying the
+      // K3 placement syscall cost inside every timed operator invocation, while
+      // still rebinding if a runtime maps a pthread to another worker number.
+      thread_local GlobalIndex bound_worker = total_workers;
+      if ( bound_worker != worker )
+      {
+         BindWorker( worker );
+         bound_worker = worker;
+      }
+   }
+
 public:
    using thread_layout_type = ThreadBlockLayout<>;
 
@@ -164,7 +177,7 @@ public:
       #pragma omp parallel num_threads(total_workers) shared(body, split, count)
       {
          const auto worker = static_cast< GlobalIndex >( omp_get_thread_num() );
-         BindWorker( worker );
+         EnsureWorkerBound( worker );
          #pragma omp barrier
 
          if ( worker < x100_workers )

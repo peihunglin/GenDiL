@@ -265,6 +265,8 @@ compiler-specific directory. See
 scope.
 The completed share-sweep analysis is in
 [`results-2026-09-03-share-sweep.md`](results-2026-09-03-share-sweep.md).
+The initial timing artifact and required rerun are documented in
+[`results-2026-09-03-timing.md`](results-2026-09-03-timing.md).
 
 
 ## Evidence Required Per Change

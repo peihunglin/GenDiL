@@ -26,7 +26,9 @@ The cell-range partition and barrier/placement policy are correct for the
 current order-1, 4x4x4 mass case under both compilers. No runner or policy bug
 was exposed by the share sweep.
 
-This is not yet performance evidence and does not validate high-order tensor
+The first timed sweep is not yet steady-state performance evidence because the
+policy at that commit rebound workers on every operator invocation. It does not
+validate high-order tensor
 stack pressure, large meshes, advection, shared H1 DoFs, or face operators.
 The next test must increase polynomial order and mesh size before introducing
 separate tuned X100/A100 kernel objects.
