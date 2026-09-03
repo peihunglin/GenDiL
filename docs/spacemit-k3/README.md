@@ -188,6 +188,15 @@ The PGFPlots file emits one series for each benchmark/compiler/share group.
 These are performance curves only until numerical correctness oracles are
 added to the range programs.
 
+Compile the plot PDF reproducibly with:
+
+```sh
+scripts/machines/spacemit-k3/make-range-pdf.sh
+```
+
+This requires `pdflatex` and `pgfplots.sty`; it creates an 18-page PDF with one
+benchmark per page.
+
 ## Baseline Rerun
 
 After pulling a review fix, run the complete GCC 15 and Clang X100 baseline
