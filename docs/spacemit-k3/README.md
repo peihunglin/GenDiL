@@ -250,6 +250,17 @@ GENDIL_K3_A100_SHARE=50 \
 The runner stops before the mass comparison if placement/VLEN validation fails,
 and records the share, probe output, and numerical comparison in one result.
 
+Run both compilers over the initial share matrix with:
+
+```sh
+scripts/machines/spacemit-k3/run-k3-mass-share-sweep.sh
+```
+
+The default shares are `0 25 50 75 100`; each result is stored under a
+compiler-specific directory. See
+[`results-2026-09-03-mass.md`](results-2026-09-03-mass.md) for the acceptance
+scope.
+
 
 ## Evidence Required Per Change
 
