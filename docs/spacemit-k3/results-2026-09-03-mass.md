@@ -52,6 +52,14 @@ The default shares are `0 25 50 75 100`. Override with
 `RUN_CLANG=0`. Results are stored under compiler-specific directories and one
 file per share.
 
+The target accepts `GENDIL_K3_MASS_ORDER=1|2|3` and
+`GENDIL_K3_MASS_CELLS=<positive integer>`. For the next larger case, run:
+
+```sh
+GENDIL_K3_MASS_ORDER=2 GENDIL_K3_MASS_CELLS=8 \
+  scripts/machines/spacemit-k3/run-k3-mass-share-sweep.sh
+```
+
 The sweep is intended to expose edge cases where one worker group receives no
-cells, before increasing mesh/order sizes. A performance comparison should
+cells before increasing mesh/order sizes. A performance comparison should
 follow only after every share validates numerically.

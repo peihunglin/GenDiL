@@ -34,7 +34,7 @@ the same team topology and larger orders.
 
 Before adding advection or tuned microkernels:
 
-1. Add compile-time order 2 and order 3 mass variants with larger meshes.
+1. Use the new compile-time order 2 and order 3 mass variants with larger meshes.
 2. Repeat shares 0, 25, 50, 75, and 100 under both compilers.
 3. Collect 1, 2, 4, 8, and 16-thread host baselines where placement allows.
 4. Record separate setup, warmup, and steady-state operator time.

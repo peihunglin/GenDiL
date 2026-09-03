@@ -57,15 +57,18 @@ double TimeOperator(
 
 } // namespace
 
-int main()
+template < Integer order >
+int RunMass(
+   const Integer cells,
+   const Integer warmup,
+   const Integer iterations )
 {
-   constexpr Integer order = 1;
-   Cartesian3DMesh mesh( 1.0, 4, 4, 4 );
+   Cartesian3DMesh mesh( 1.0, cells, cells, cells );
    auto finite_element = MakeLegendreFiniteElement(
       FiniteElementOrders< order, order, order >{} );
    auto fe_space = MakeFiniteElementSpace( mesh, finite_element );
    auto integration_rule = MakeIntegrationRule(
-      IntegrationRuleNumPoints< 3, 3, 3 >{} );
+      IntegrationRuleNumPoints< order + 2, order + 2, order + 2 >{} );
    auto sigma = [] GENDIL_HOST_DEVICE (
       const std::array< Real, 3 > & ) -> Real
    {
@@ -81,10 +84,6 @@ int main()
          sigma );
 
    const auto dofs = fe_space.GetNumberOfFiniteElementDofs();
-   const Integer warmup = ReadPositiveEnvironment(
-      "GENDIL_K3_MASS_WARMUP", 1 );
-   const Integer iterations = ReadPositiveEnvironment(
-      "GENDIL_K3_MASS_ITERATIONS", 5 );
    constexpr Integer reference_threads = 8;
    Vector input( dofs );
    Vector reference( dofs );
@@ -109,6 +108,9 @@ int main()
       max_error = std::max( max_error, std::abs( expected[ i ] - actual[ i ] ) );
    }
 
+   std::cout << "K3 mass order: " << order << '\n';
+   std::cout << "K3 mass cells per dimension: " << cells << '\n';
+   std::cout << "K3 mass DoFs: " << dofs << '\n';
    std::cout << "K3 heterogeneous mass max error: " << max_error << '\n';
    const double reference_dofs_per_second =
       static_cast< double >( dofs ) / reference_seconds;
@@ -133,4 +135,29 @@ int main()
       return 1;
    }
    return 0;
+}
+
+int main()
+{
+   const Integer order = ReadPositiveEnvironment(
+      "GENDIL_K3_MASS_ORDER", 1 );
+   const Integer cells = ReadPositiveEnvironment(
+      "GENDIL_K3_MASS_CELLS", 4 );
+   const Integer warmup = ReadPositiveEnvironment(
+      "GENDIL_K3_MASS_WARMUP", 1 );
+   const Integer iterations = ReadPositiveEnvironment(
+      "GENDIL_K3_MASS_ITERATIONS", 5 );
+
+   switch ( order )
+   {
+      case 1:
+         return RunMass< 1 >( cells, warmup, iterations );
+      case 2:
+         return RunMass< 2 >( cells, warmup, iterations );
+      case 3:
+         return RunMass< 3 >( cells, warmup, iterations );
+      default:
+         std::cerr << "GENDIL_K3_MASS_ORDER must be 1, 2, or 3\n";
+         return 2;
+   }
 }

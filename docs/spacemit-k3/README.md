@@ -251,7 +251,8 @@ The runner stops before the mass comparison if placement/VLEN validation fails,
 and records the share, probe output, and numerical comparison in one result.
 The mass comparison performs one warmup and five timed applications by default,
 then reports reference and heterogeneous DoF/s and speedup. Override the
-protocol with `GENDIL_K3_MASS_WARMUP` and `GENDIL_K3_MASS_ITERATIONS`.
+protocol with `GENDIL_K3_MASS_WARMUP`, `GENDIL_K3_MASS_ITERATIONS`,
+`GENDIL_K3_MASS_ORDER` (1, 2, or 3), and `GENDIL_K3_MASS_CELLS`.
 
 Run both compilers over the initial share matrix with:
 

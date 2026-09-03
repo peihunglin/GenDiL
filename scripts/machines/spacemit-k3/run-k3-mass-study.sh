@@ -14,6 +14,8 @@ MASS="${BUILD_DIR}/tools/spacemit-k3/k3-heterogeneous-openmp-mass"
 SHARE="${GENDIL_K3_A100_SHARE:-50}"
 WARMUP="${GENDIL_K3_MASS_WARMUP:-1}"
 ITERATIONS="${GENDIL_K3_MASS_ITERATIONS:-5}"
+ORDER="${GENDIL_K3_MASS_ORDER:-1}"
+CELLS="${GENDIL_K3_MASS_CELLS:-4}"
 compiler_path="$(
   awk -F= '/^CMAKE_CXX_COMPILER:[^=]*=/{print $2}' \
     "${BUILD_DIR}/CMakeCache.txt"
@@ -43,6 +45,8 @@ mkdir -p "$(dirname -- "${OUTPUT_FILE}")"
   printf 'a100_share=%s\n' "${SHARE}"
   printf 'mass_warmup=%s\n' "${WARMUP}"
   printf 'mass_iterations=%s\n' "${ITERATIONS}"
+  printf 'mass_order=%s\n' "${ORDER}"
+  printf 'mass_cells=%s\n' "${CELLS}"
   printf '%s\n' 'placement_probe_begin'
   env -u OMP_THREAD_LIMIT -u GOMP_CPU_AFFINITY -u KMP_AFFINITY \
     OMP_NUM_THREADS=16 OMP_DYNAMIC=FALSE OMP_PROC_BIND=FALSE \
@@ -53,6 +57,8 @@ mkdir -p "$(dirname -- "${OUTPUT_FILE}")"
     GENDIL_K3_A100_SHARE="${SHARE}" \
     GENDIL_K3_MASS_WARMUP="${WARMUP}" \
     GENDIL_K3_MASS_ITERATIONS="${ITERATIONS}" \
+    GENDIL_K3_MASS_ORDER="${ORDER}" \
+    GENDIL_K3_MASS_CELLS="${CELLS}" \
     OMP_NUM_THREADS=16 OMP_DYNAMIC=FALSE OMP_PROC_BIND=FALSE \
     "${MASS}"
   printf '%s\n' 'mass_comparison_end'
