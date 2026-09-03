@@ -174,6 +174,20 @@ correctness checks before accepting Stage 2 results.
 The completed sweep analysis is in
 [`results-2026-09-03-range.md`](results-2026-09-03-range.md).
 
+Extract the stored throughput coordinates into plot-ready files:
+
+```sh
+python3 scripts/machines/spacemit-k3/extract-range-results.py \
+  results/spacemit-k3 \
+  --csv results/spacemit-k3/range-coordinates.csv \
+  --pgfplots results/spacemit-k3/range-coordinates.pgfplots.tex
+```
+
+The CSV retains benchmark, compiler, A100 share, commit, DoFs, and DoF/s.
+The PGFPlots file emits one series for each benchmark/compiler/share group.
+These are performance curves only until numerical correctness oracles are
+added to the range programs.
+
 ## Baseline Rerun
 
 After pulling a review fix, run the complete GCC 15 and Clang X100 baseline
