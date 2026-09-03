@@ -12,6 +12,8 @@ BUILD_DIR="${1:?usage: run-k3-mass-study.sh BUILD_DIR [OUTPUT_FILE]}"
 PROBE="${BUILD_DIR}/tools/spacemit-k3/k3-heterogeneous-openmp-probe"
 MASS="${BUILD_DIR}/tools/spacemit-k3/k3-heterogeneous-openmp-mass"
 SHARE="${GENDIL_K3_A100_SHARE:-50}"
+WARMUP="${GENDIL_K3_MASS_WARMUP:-1}"
+ITERATIONS="${GENDIL_K3_MASS_ITERATIONS:-5}"
 compiler_path="$(
   awk -F= '/^CMAKE_CXX_COMPILER:[^=]*=/{print $2}' \
     "${BUILD_DIR}/CMakeCache.txt"
@@ -39,6 +41,8 @@ mkdir -p "$(dirname -- "${OUTPUT_FILE}")"
   printf 'commit=%s\n' "$(git -C "${GENDIL_ROOT}" rev-parse HEAD)"
   printf 'build_dir=%s\n' "${BUILD_DIR}"
   printf 'a100_share=%s\n' "${SHARE}"
+  printf 'mass_warmup=%s\n' "${WARMUP}"
+  printf 'mass_iterations=%s\n' "${ITERATIONS}"
   printf '%s\n' 'placement_probe_begin'
   env -u OMP_THREAD_LIMIT -u GOMP_CPU_AFFINITY -u KMP_AFFINITY \
     OMP_NUM_THREADS=16 OMP_DYNAMIC=FALSE OMP_PROC_BIND=FALSE \
@@ -47,6 +51,8 @@ mkdir -p "$(dirname -- "${OUTPUT_FILE}")"
   printf '%s\n' 'mass_comparison_begin'
   env -u OMP_THREAD_LIMIT -u GOMP_CPU_AFFINITY -u KMP_AFFINITY \
     GENDIL_K3_A100_SHARE="${SHARE}" \
+    GENDIL_K3_MASS_WARMUP="${WARMUP}" \
+    GENDIL_K3_MASS_ITERATIONS="${ITERATIONS}" \
     OMP_NUM_THREADS=16 OMP_DYNAMIC=FALSE OMP_PROC_BIND=FALSE \
     "${MASS}"
   printf '%s\n' 'mass_comparison_end'

@@ -41,4 +41,6 @@ scripts/machines/spacemit-k3/run-k3-mass-share-sweep.sh
 ```
 
 Do not compare throughput until the larger-order cases pass for both compilers
-and every share.
+and every share. Future K3 experiments should report warmup count, timed
+iteration count, elapsed seconds, work units, and throughput alongside
+correctness results.

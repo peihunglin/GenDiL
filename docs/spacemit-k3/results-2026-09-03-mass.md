@@ -19,6 +19,22 @@ This validates the first K3 execution-policy slice for a small order-1,
 large-order behavior, performance, adaptive shares, or separate tuned X100 and
 A100 kernel objects.
 
+## Performance Protocol
+
+The mass target now performs one warmup and five timed applications by default.
+The reference uses eight unbound host OpenMP threads, while the heterogeneous
+path uses the fixed 16-worker K3 policy. It reports reference and heterogeneous
+seconds, DoF/s, and heterogeneous speedup after validating the final output.
+Override with:
+
+```sh
+GENDIL_K3_MASS_WARMUP=2 GENDIL_K3_MASS_ITERATIONS=10 \
+  scripts/machines/spacemit-k3/run-k3-mass-study.sh build-k3-g++-15
+```
+
+The original 50/50 results predate this timing instrumentation and must not be
+used as performance data.
+
 ## Next Measurement
 
 Run the five-share sweep with both compilers:
