@@ -12,7 +12,12 @@ BUILD_DIR="${1:?usage: run-k3-mass-study.sh BUILD_DIR [OUTPUT_FILE]}"
 PROBE="${BUILD_DIR}/tools/spacemit-k3/k3-heterogeneous-openmp-probe"
 MASS="${BUILD_DIR}/tools/spacemit-k3/k3-heterogeneous-openmp-mass"
 SHARE="${GENDIL_K3_A100_SHARE:-50}"
-OUTPUT_FILE="${2:-${GENDIL_ROOT}/results/spacemit-k3/mass-study-$(git -C "${GENDIL_ROOT}" rev-parse --short HEAD)-share${SHARE}.txt}"
+compiler_path="$(
+  awk -F= '/^CMAKE_CXX_COMPILER:[^=]*=/{print $2}' \
+    "${BUILD_DIR}/CMakeCache.txt"
+)"
+compiler_name="$(basename -- "${compiler_path:-unknown-compiler}")"
+OUTPUT_FILE="${2:-${GENDIL_ROOT}/results/spacemit-k3/${compiler_name}/mass-study-$(git -C "${GENDIL_ROOT}" rev-parse --short HEAD)-share${SHARE}.txt}"
 
 if [[ ! "${SHARE}" =~ ^(0|[1-9][0-9]?)$|^100$ ]]; then
   printf 'error: GENDIL_K3_A100_SHARE must be an integer in [0,100]\n' >&2
