@@ -1,0 +1,35 @@
+timestamp_utc=2026-09-03T21:04:17Z
+commit=e252fd51c394b44409034a492311ffed4e23fc80
+build_dir=/data/projects/GenDiL/build-k3-clang++
+core_type=mixed
+a100_launcher=0
+a100_share=75
+omp_num_threads=16
+omp_places=cores
+omp_proc_bind=close
+omp_stacksize=64M
+process_stack_kb=65536
+benchmark_mode=performance
+benchmark_max_dofs=2000000
+benchmark_iterations=7
+Linux RISKY-spacemitk3 6.18.3-generic #1.0.5.4 SMP PREEMPT_DYNAMIC Wed Jul 15 16:27:49 CST 2026 riscv64 GNU/Linux
+compiler=/home/lin32/opt/llvm-main/bin/clang++
+compiler_target=riscv64-unknown-linux-gnu
+compiler_version_begin
+clang version 24.0.0git (https://github.com/llvm/llvm-project.git 652e04312e8c5f4fc90ac16be494c3562c111ab9)
+Target: riscv64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/lin32/opt/llvm-main/bin
+compiler_version_end
+CMAKE_BUILD_RPATH:UNINITIALIZED=/usr/lib/gcc/riscv64-linux-gnu/15;/home/lin32/opt/llvm-main/lib/riscv64-unknown-linux-gnu;/lib/riscv64-linux-gnu
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CXX_COMPILER:UNINITIALIZED=/home/lin32/opt/llvm-main/bin/clang++
+CMAKE_CXX_FLAGS:STRING=
+CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+OpenMP_gomp_LIBRARY:FILEPATH=/usr/lib/gcc/riscv64-linux-gnu/15/libgomp.so
+OpenMP_omp_LIBRARY:FILEPATH=/home/lin32/opt/llvm-main/lib/riscv64-unknown-linux-gnu/libomp.so
+OpenMP_pthread_LIBRARY:FILEPATH=/lib/riscv64-linux-gnu/libpthread.a
+USE_OPENMP:BOOL=ON
+openmp_linkage_begin
+	libomp.so => /home/lin32/opt/llvm-main/lib/riscv64-unknown-linux-gnu/libomp.so (0x0000003fa081d000)
+openmp_linkage_end

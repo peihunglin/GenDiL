@@ -1,0 +1,35 @@
+timestamp_utc=2026-09-03T20:12:40Z
+commit=e252fd51c394b44409034a492311ffed4e23fc80
+build_dir=/data/projects/GenDiL/build-k3-g++-15
+core_type=mixed
+a100_launcher=0
+a100_share=25
+omp_num_threads=16
+omp_places=cores
+omp_proc_bind=close
+omp_stacksize=64M
+process_stack_kb=65536
+benchmark_mode=performance
+benchmark_max_dofs=2000000
+benchmark_iterations=7
+Linux RISKY-spacemitk3 6.18.3-generic #1.0.5.4 SMP PREEMPT_DYNAMIC Wed Jul 15 16:27:49 CST 2026 riscv64 GNU/Linux
+compiler=/usr/bin/g++-15
+compiler_target=riscv64-linux-gnu
+compiler_version_begin
+g++-15 (Bianbu 15.2.0-16ubuntu1bb5) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+compiler_version_end
+CMAKE_BUILD_RPATH:UNINITIALIZED=/usr/lib/gcc/riscv64-linux-gnu/15;/lib/riscv64-linux-gnu
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CXX_COMPILER:UNINITIALIZED=/usr/bin/g++-15
+CMAKE_CXX_FLAGS:STRING=
+CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
+OpenMP_gomp_LIBRARY:FILEPATH=/usr/lib/gcc/riscv64-linux-gnu/15/libgomp.so
+OpenMP_pthread_LIBRARY:FILEPATH=/lib/riscv64-linux-gnu/libpthread.a
+USE_OPENMP:BOOL=ON
+openmp_linkage_begin
+	libgomp.so.1 => /lib/riscv64-linux-gnu/libgomp.so.1 (0x0000003faca46000)
+openmp_linkage_end
