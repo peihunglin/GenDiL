@@ -1,0 +1,38 @@
+timestamp_utc=2026-09-03T17:57:48Z
+commit=b3fd6f218532f17e5b5a70a211a770497a2c7cef
+build_dir=/data/projects/GenDiL/build-k3-clang++
+a100_share=75
+mass_warmup=2
+mass_iterations=10
+placement_probe_begin
+actual_workers=16 expected_workers=16 stability_rounds=64
+omp_thread,linux_thread,initial_cpu,placed_cpu,final_cpu,placement_result,placement_errno,vlen_bytes,vlmax_e64m1,affinity_mask,class_changes,vlen_changes,canary_failures,status
+0,2425783,5,0,0,0,0,32,4,0x0000000000000001,0,0,0,pass
+1,2425786,4,1,1,0,0,32,4,0x0000000000000002,0,0,0,pass
+2,2425787,5,2,2,0,0,32,4,0x0000000000000004,0,0,0,pass
+3,2425788,7,3,3,0,0,32,4,0x0000000000000008,0,0,0,pass
+4,2425789,4,4,4,0,0,32,4,0x0000000000000010,0,0,0,pass
+5,2425790,4,5,5,0,0,32,4,0x0000000000000020,0,0,0,pass
+6,2425791,7,6,6,0,0,32,4,0x0000000000000040,0,0,0,pass
+7,2425792,4,7,7,0,0,32,4,0x0000000000000080,0,0,0,pass
+8,2425793,5,9,9,0,0,128,16,0x000000000000ff00,0,0,0,pass
+9,2425794,7,9,9,0,0,128,16,0x000000000000ff00,0,0,0,pass
+10,2425795,0,9,9,0,0,128,16,0x000000000000ff00,0,0,0,pass
+11,2425796,4,8,10,0,0,128,16,0x000000000000ff00,0,0,0,pass
+12,2425797,5,8,11,0,0,128,16,0x000000000000ff00,0,0,0,pass
+13,2425798,7,8,11,0,0,128,16,0x000000000000ff00,0,0,0,pass
+14,2425799,5,8,10,0,0,128,16,0x000000000000ff00,0,0,0,pass
+15,2425800,0,8,8,0,0,128,16,0x000000000000ff00,0,0,0,pass
+heterogeneous_openmp_probe=pass
+placement_probe_end
+mass_comparison_begin
+K3 heterogeneous mass max error: 0
+K3 mass warmup iterations: 2
+K3 mass timed iterations: 10
+K3 mass reference threads: 8
+K3 mass reference seconds: 2.92191e-05
+K3 mass heterogeneous seconds: 0.00186081
+K3 mass reference DoF/s: 1.75228e+07
+K3 mass heterogeneous DoF/s: 275149
+K3 mass heterogeneous speedup: 0.0157024
+mass_comparison_end
