@@ -260,6 +260,8 @@ The default shares are `0 25 50 75 100`; each result is stored under a
 compiler-specific directory. See
 [`results-2026-09-03-mass.md`](results-2026-09-03-mass.md) for the acceptance
 scope.
+The completed share-sweep analysis is in
+[`results-2026-09-03-share-sweep.md`](results-2026-09-03-share-sweep.md).
 
 
 ## Evidence Required Per Change
