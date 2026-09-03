@@ -171,6 +171,8 @@ range binaries with `ai`. Set `SHARES="0 25 50 75 100"` for edge-case
 partitioning. The current range executables emit throughput but no numerical
 oracle, so use this first for completion/performance and add operator-specific
 correctness checks before accepting Stage 2 results.
+The completed sweep analysis is in
+[`results-2026-09-03-range.md`](results-2026-09-03-range.md).
 
 ## Baseline Rerun
 
