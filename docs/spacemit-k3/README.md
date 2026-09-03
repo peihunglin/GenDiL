@@ -153,6 +153,25 @@ output, and non-finite results. This is an execution sanity check, not a
 numerical oracle; CTest remains the correctness gate until benchmark-level
 reference checks are implemented.
 
+## Mixed Range Sweep
+
+When the build uses `K3_ENABLE_EXPERIMENTS=ON`, benchmark targets compile
+`SerialKernelConfiguration` as the empirical K3 heterogeneous policy. Run all
+18 range benchmarks across both core classes with:
+
+```sh
+K3_ENABLE_EXPERIMENTS=ON CXX=/usr/bin/g++-15 \
+  scripts/machines/spacemit-k3/build.sh
+scripts/machines/spacemit-k3/run-k3-range-sweep.sh
+```
+
+The sweep defaults to A100 shares `25 50 75`, uses performance mode, and runs
+both GCC and Clang builds. It starts normally on X100; do not wrap the mixed
+range binaries with `ai`. Set `SHARES="0 25 50 75 100"` for edge-case
+partitioning. The current range executables emit throughput but no numerical
+oracle, so use this first for completion/performance and add operator-specific
+correctness checks before accepting Stage 2 results.
+
 ## Baseline Rerun
 
 After pulling a review fix, run the complete GCC 15 and Clang X100 baseline

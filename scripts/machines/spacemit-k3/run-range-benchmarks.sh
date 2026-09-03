@@ -12,12 +12,17 @@ GENDIL_ROOT="${GENDIL_ROOT:-$(cd -- "${SCRIPT_DIR}/../../.." && pwd -P)}"
 BUILD_DIR="${1:?usage: run-range-benchmarks.sh BUILD_DIR OUTPUT_DIR}"
 OUTPUT_DIR="${2:?usage: run-range-benchmarks.sh BUILD_DIR OUTPUT_DIR}"
 CORE_TYPE="${CORE_TYPE:-x100}"
-OMP_NUM_THREADS="${OMP_NUM_THREADS:-8}"
+if [[ "${CORE_TYPE}" == "mixed" ]]; then
+  OMP_NUM_THREADS="${OMP_NUM_THREADS:-16}"
+else
+  OMP_NUM_THREADS="${OMP_NUM_THREADS:-8}"
+fi
 OMP_PLACES="${OMP_PLACES:-cores}"
 OMP_PROC_BIND="${OMP_PROC_BIND:-close}"
 OMP_STACKSIZE="${OMP_STACKSIZE:-64M}"
 K3_STACK_SIZE_KB="${K3_STACK_SIZE_KB:-65536}"
 BENCHMARK_MODE="${BENCHMARK_MODE:-full}"
+GENDIL_K3_A100_SHARE="${GENDIL_K3_A100_SHARE:-50}"
 
 if [[ "${BENCHMARK_MODE}" == "smoke" ]]; then
   GENDIL_BENCHMARK_MAX_DOFS="${GENDIL_BENCHMARK_MAX_DOFS:-2000000}"
@@ -31,11 +36,23 @@ elif [[ "${BENCHMARK_MODE}" != "full" ]]; then
 fi
 
 export CORE_TYPE OMP_NUM_THREADS OMP_PLACES OMP_PROC_BIND OMP_STACKSIZE
+export GENDIL_K3_A100_SHARE
 export BENCHMARK_MODE
 export GENDIL_BENCHMARK_MAX_DOFS GENDIL_BENCHMARK_ITERATIONS
 
-if [[ "${CORE_TYPE}" != "x100" && "${CORE_TYPE}" != "a100" ]]; then
-  printf 'error: CORE_TYPE must be x100 or a100\n' >&2
+if [[ "${CORE_TYPE}" != "x100" && "${CORE_TYPE}" != "a100" &&
+      "${CORE_TYPE}" != "mixed" ]]; then
+  printf 'error: CORE_TYPE must be x100, a100, or mixed\n' >&2
+  exit 1
+fi
+if [[ "${CORE_TYPE}" == "mixed" ]] &&
+   ! awk -F= '/^GENDIL_ENABLE_K3_EXPERIMENTS:BOOL=ON$/{found=1} END{exit !found}' \
+      "${BUILD_DIR}/CMakeCache.txt"; then
+  printf 'error: mixed range execution requires GENDIL_ENABLE_K3_EXPERIMENTS=ON\n' >&2
+  exit 1
+fi
+if [[ ! "${GENDIL_K3_A100_SHARE}" =~ ^(0|[1-9][0-9]?)$|^100$ ]]; then
+  printf 'error: GENDIL_K3_A100_SHARE must be in [0,100]\n' >&2
   exit 1
 fi
 
@@ -52,6 +69,7 @@ if [[ "${CORE_TYPE}" == "a100" && "${GENDIL_K3_A100_PROCESS:-0}" != "1" ]]; then
     OMP_NUM_THREADS="${OMP_NUM_THREADS}" OMP_PLACES="${OMP_PLACES}" \
     OMP_PROC_BIND="${OMP_PROC_BIND}" OMP_STACKSIZE="${OMP_STACKSIZE}" \
     K3_STACK_SIZE_KB="${K3_STACK_SIZE_KB}" \
+    GENDIL_K3_A100_SHARE="${GENDIL_K3_A100_SHARE}" \
     BENCHMARK_MODE="${BENCHMARK_MODE}" \
     GENDIL_BENCHMARK_MAX_DOFS="${GENDIL_BENCHMARK_MAX_DOFS:-}" \
     GENDIL_BENCHMARK_ITERATIONS="${GENDIL_BENCHMARK_ITERATIONS:-}" \
@@ -73,6 +91,7 @@ compiler_path="$(
   printf 'build_dir=%s\n' "${BUILD_DIR}"
   printf 'core_type=%s\n' "${CORE_TYPE}"
   printf 'a100_launcher=%s\n' "${GENDIL_K3_A100_PROCESS:-0}"
+  printf 'a100_share=%s\n' "${GENDIL_K3_A100_SHARE}"
   printf 'omp_num_threads=%s\n' "${OMP_NUM_THREADS}"
   printf 'omp_places=%s\n' "${OMP_PLACES}"
   printf 'omp_proc_bind=%s\n' "${OMP_PROC_BIND}"

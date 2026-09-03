@@ -5,6 +5,9 @@ include("${CMAKE_CURRENT_LIST_DIR}/GENDILTargetHelpers.cmake")
 function(gendil_add_benchmark target source)
   add_executable(${target} "${source}")
   target_link_libraries(${target} PRIVATE GENDIL::GENDIL)
+  if(GENDIL_ENABLE_K3_EXPERIMENTS)
+    target_compile_definitions(${target} PRIVATE GENDIL_K3_HETERO_OPENMP)
+  endif()
   target_include_directories(
     ${target}
     PRIVATE

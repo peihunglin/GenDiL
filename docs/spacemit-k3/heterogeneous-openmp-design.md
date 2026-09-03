@@ -97,6 +97,13 @@ boundary and round-robin work inside each eight-worker group. This validates
 execution and output ownership before adding separately compiled optimized
 microkernels.
 
+Range benchmarks now opt into the same policy through the benchmark helper when
+`GENDIL_ENABLE_K3_EXPERIMENTS=ON`. This keeps ordinary library/tests unchanged
+while allowing the existing 18 range executables to exercise mixed X100/A100
+cell traversal. Their output is currently a timing/completion signal only;
+range benchmark correctness must be added separately before using it as Stage 2
+acceptance evidence.
+
 ## Historical Safety-Gate Result
 
 The September 2 vector-disabled probe produced `SIGILL` under both GCC and
