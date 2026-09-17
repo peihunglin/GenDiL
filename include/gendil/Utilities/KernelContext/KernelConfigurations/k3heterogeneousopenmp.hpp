@@ -114,17 +114,35 @@ private:
       }
    }
 
-   static void BindWorker( const GlobalIndex worker )
-   {
-      if ( worker < x100_workers )
-      {
-         BindX100Worker( worker );
-      }
-      else
-      {
-         MoveA100Worker();
-      }
-   }
+    static void BindWorker( const GlobalIndex worker )
+    {
+       if ( worker < x100_workers )
+       {
+          BindX100Worker( worker );
+       }
+       else
+       {
+          MoveA100Worker();
+       }
+    }
+
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+    // Runtime A100 detection via VLEN. vlenb == 128 on A100, 32 on X100.
+    static thread_local bool s_on_a100 = false;
+    static inline bool OnA100()
+    {
+       if ( s_on_a100 )
+          return true;
+       // Fast path: assume detection already done. Real implementation will
+       // query vlenb via inline asm once per thread after placement.
+       return false;
+    }
+    static inline void DetectA100()
+    {
+       // Placeholder for vlenb query. Will be implemented with vlenb asm.
+       s_on_a100 = false;
+    }
+#endif
 
    static void EnsureWorkerBound( const GlobalIndex worker )
    {
@@ -164,42 +182,53 @@ public:
       return total_workers;
    }
 
-   static inline void Synchronize()
-   {
-   }
+    static inline void Synchronize()
+    {
+    }
 
-   template < typename Lambda >
-   static void BlockLoop( const GlobalIndex count, Lambda && body )
-   {
-      omp_set_dynamic( 0 );
-      const GlobalIndex split = Split( count );
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+    static inline void EnsureAIDetection()
+    {
+       // Placeholder: detection should happen once per worker after placement.
+       DetectA100();
+    }
+#endif
 
-      #pragma omp parallel num_threads(total_workers) shared(body, split, count)
-      {
-         const auto worker = static_cast< GlobalIndex >( omp_get_thread_num() );
-         EnsureWorkerBound( worker );
-         #pragma omp barrier
+    template < typename Lambda >
+    static void BlockLoop( const GlobalIndex count, Lambda && body )
+    {
+       omp_set_dynamic( 0 );
+       const GlobalIndex split = Split( count );
 
-         if ( worker < x100_workers )
-         {
-            for ( GlobalIndex index = worker; index < split; index += x100_workers )
-            {
-               body( index );
-            }
-         }
-         else
-         {
-            const auto local_worker = worker - x100_workers;
-            for (
-               GlobalIndex index = split + local_worker;
-               index < count;
-               index += a100_workers )
-            {
-               body( index );
-            }
-         }
-      }
-   }
-};
+       #pragma omp parallel num_threads(total_workers) shared(body, split, count)
+       {
+          const auto worker = static_cast< GlobalIndex >( omp_get_thread_num() );
+          EnsureWorkerBound( worker );
+          #pragma omp barrier
+
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+          EnsureAIDetection();
+#endif
+
+          if ( worker < x100_workers )
+          {
+             for ( GlobalIndex index = worker; index < split; index += x100_workers )
+             {
+                body( index );
+             }
+          }
+          else
+          {
+             const auto local_worker = worker - x100_workers;
+             for (
+                GlobalIndex index = split + local_worker;
+                index < count;
+                index += a100_workers )
+             {
+                body( index );
+             }
+          }
+       }
+    };
 
 } // namespace gendil

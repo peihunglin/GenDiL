@@ -14,6 +14,10 @@
 #include "gendil/Utilities/getrank.hpp"
 #include "gendil/FiniteElementMethod/MatrixFreeOperators/KernelOperators/TrialSpaceOperators/interpolatevaluesthreaded.hpp"
 
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+#include <cstdint>
+#endif
+
 namespace gendil
 {
 
@@ -25,8 +29,18 @@ GENDIL_HOST_DEVICE
 auto InterpContraction( InputTensor const & u, Op1D const & B, std::index_sequence< Is ... > )
 {
    SerialRecursiveArray< Real, contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... > Bu{};
-   
+
    constexpr Integer ND = domain_dim_v< Op1D >;
+
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+   // Phase-1: FP16 uniform storage, IME path only on A100 with tile-friendly sizes
+   if constexpr ( ND >= 8 )
+   {
+      // Placeholder for A100 IME detection. Real implementation will query vlenb.
+      // For now, keep scalar path to preserve correctness.
+      // TODO: replace with OnA100() check and InterpContractionIME dispatch.
+   }
+#endif
 
    Loop< contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... >(
       [&] ( auto ... indices_ )
@@ -43,7 +57,7 @@ auto InterpContraction( InputTensor const & u, Op1D const & B, std::index_sequen
          for ( d = 0; d < ND; ++d )
          {
             const Real dof = u( std::get< Is >( indices ) ... );
-            
+
             // TODO: Replace with std::function< Real( LocalIndex, LocalIndex ) > ?
             if constexpr ( Gradient )
             {
