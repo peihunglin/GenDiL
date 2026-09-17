@@ -14,6 +14,11 @@ option(
   OFF
 )
 option(
+  GENDIL_ENABLE_K3_IME_EXPERIMENTS
+  "Enable opt-in SpacemiT K3 A100 IME experiments"
+  OFF
+)
+option(
   GENDIL_ENABLE_FILTERED_SYNC_EXPERIMENT_CTEST
   "Register filtered CellIterator Sync experiment in CTest."
   OFF
@@ -25,6 +30,9 @@ set(
   CACHE STRING
   "GPU sparse finalization support: AUTO, ON, or OFF"
 )
+if(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+  add_compile_definitions(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+endif()
 set_property(
   CACHE GENDIL_DEVICE_SPARSE_FINALIZATION
   PROPERTY STRINGS AUTO ON OFF
