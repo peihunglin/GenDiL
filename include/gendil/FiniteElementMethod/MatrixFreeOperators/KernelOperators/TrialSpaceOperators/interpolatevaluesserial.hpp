@@ -17,6 +17,7 @@
 #if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
 #include <cstdint>
 #include <type_traits>
+#include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
 #endif
 
 namespace gendil
@@ -40,12 +41,16 @@ namespace k3
       return static_cast<Real>(v);
    }
 
-   // Simple A100 check via thread-local flag in K3HeterogeneousOpenMPConfiguration
    inline bool IsA100()
    {
-      // Forward declaration, real implementation will query K3 config
-      return false;
+      return gendil::KernelContext::K3HeterogeneousOpenMPConfiguration::OnA100();
    }
+
+   // Tile parameters for Xsmtfp16fp32mm 8x8x8
+   constexpr int TILE_M = 8;
+   constexpr int TILE_N = 8;
+   constexpr int TILE_K = 8;
+#endif
 
    template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
    GENDIL_HOST_DEVICE
@@ -84,6 +89,8 @@ namespace k3
       );
       return Bu;
    }
+
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
 } // namespace k3
 #endif
 
@@ -101,7 +108,7 @@ auto InterpContraction( InputTensor const & u, Op1D const & B, std::index_sequen
    {
       if ( k3::IsA100() )
       {
-         auto res = k3::InterpContractionIME< Gradient, ActiveDim >( u, B, std::index_sequence< Is ... >{} );
+         auto res = k3::InterpContractionIME< Gradient, ActiveDim, InputTensor, Op1D, Is... >( u, B, std::index_sequence< Is ... >{} );
          return res;
       }
    }
