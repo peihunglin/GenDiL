@@ -129,18 +129,26 @@ private:
 #if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
     // Runtime A100 detection via VLEN. vlenb == 128 on A100, 32 on X100.
     static thread_local bool s_on_a100 = false;
+    static thread_local std::size_t s_vlen_bytes = 0;
+    static inline std::size_t QueryVlenBytes()
+    {
+       std::size_t bytes = 0;
+       asm volatile("csrr %0, vlenb" : "=r"(bytes));
+       return bytes;
+    }
     static inline bool OnA100()
     {
-       if ( s_on_a100 )
-          return true;
-       // Fast path: assume detection already done. Real implementation will
-       // query vlenb via inline asm once per thread after placement.
-       return false;
+       return s_on_a100;
     }
     static inline void DetectA100()
     {
-       // Placeholder for vlenb query. Will be implemented with vlenb asm.
-       s_on_a100 = false;
+       std::size_t bytes = QueryVlenBytes();
+       s_vlen_bytes = bytes;
+       s_on_a100 = (bytes == 128);
+    }
+    static inline std::size_t GetVlenBytes()
+    {
+       return s_vlen_bytes;
     }
 #endif
 

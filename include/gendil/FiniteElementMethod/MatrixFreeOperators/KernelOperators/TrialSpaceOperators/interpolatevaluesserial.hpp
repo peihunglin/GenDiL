@@ -16,6 +16,7 @@
 
 #if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
 #include <cstdint>
+#include <type_traits>
 #endif
 
 namespace gendil
@@ -33,12 +34,15 @@ auto InterpContraction( InputTensor const & u, Op1D const & B, std::index_sequen
    constexpr Integer ND = domain_dim_v< Op1D >;
 
 #if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
-   // Phase-1: FP16 uniform storage, IME path only on A100 with tile-friendly sizes
+   // Helper to detect A100 in current thread
+   auto is_a100 = []() -> bool {
+      // Access detection via K3HeterogeneousOpenMPConfiguration if available
+      // For now, assume detection is performed by BlockLoop before calling.
+      return false;
+   };
    if constexpr ( ND >= 8 )
    {
-      // Placeholder for A100 IME detection. Real implementation will query vlenb.
-      // For now, keep scalar path to preserve correctness.
-      // TODO: replace with OnA100() check and InterpContractionIME dispatch.
+      // TODO: dispatch to InterpContractionIME when is_a100() true
    }
 #endif
 
