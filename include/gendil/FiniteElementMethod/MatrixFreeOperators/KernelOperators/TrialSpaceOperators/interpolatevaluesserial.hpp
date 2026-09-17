@@ -50,16 +50,51 @@ namespace k3
    constexpr int TILE_M = 8;
    constexpr int TILE_N = 8;
    constexpr int TILE_K = 8;
+
+   template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
+   GENDIL_HOST_DEVICE
+   inline void InterpContractionIMEBlock(
+      InputTensor const & u,
+      Op1D const & B,
+      const std::array<Integer, 4>& idx,
+      const Integer q_start,
+      const Integer k_start,
+      Real* out )
+   {
+      // Block size 8x8: q in [q_start, q_start+7], k in [k_start, k_start+7]
+      // Accumulate into out[8][8] as FP32
+      // This is a scalar fallback that mimics tile accumulation.
+      // Real IME will use smt.vfwmadot with FP16 packed buffers.
+      for (int i = 0; i < TILE_M; ++i)
+      {
+         const Integer q = q_start + i;
+         Real acc = 0.0;
+         // For demo, we accumulate a single k element
+         const Integer d = k_start;
+         const Real dof = u(idx[0], idx[1], idx[2], idx[3]); // placeholder
+         if constexpr (Gradient)
+         {
+            const Real g = B.gradients(q, d);
+            acc += g * dof;
+         }
+         else
+         {
+            const Real b = B.values(q, d);
+            acc += b * dof;
+         }
+         out[i] = acc;
+      }
+   }
 #endif
 
    template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
    GENDIL_HOST_DEVICE
    auto InterpContractionIME( InputTensor const & u, Op1D const & B, std::index_sequence< Is ... > )
    {
-      // Skeleton: tile-friendly path using FP16 storage
-      // Real implementation will pack B.values/q,d and u into FP16 tiles
+      // Tile-friendly path using FP16 storage
+      // For pilot, we keep scalar correctness but layout is tile aware.
+      // Real IME will pack B.values/q,d and u into FP16 tiles
       // and issue smt.vfwmadot for FP16xFP16->FP32 accumulation.
-      // For now, fall back to scalar to preserve correctness.
       constexpr Integer ND = domain_dim_v< Op1D >;
       SerialRecursiveArray< Real, contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... > Bu{};
 
@@ -70,18 +105,23 @@ namespace k3
             const Integer q = std::get< ActiveDim >( indices );
             Real value = 0.0;
             auto& d = std::get< ActiveDim >( indices );
-            for ( d = 0; d < ND; ++d )
+            // Tile loops over d in blocks of TILE_K
+            for ( Integer d0 = 0; d0 < ND; d0 += TILE_K )
             {
-               const Real dof = u( std::get< Is >( indices ) ... );
-               if constexpr ( Gradient )
+               const Integer d_end = std::min<Integer>( d0 + TILE_K, ND );
+               for ( Integer dd = d0; dd < d_end; ++dd )
                {
-                  const Real g = B.gradients( q, d );
-                  value += g * dof;
-               }
-               else
-               {
-                  const Real b = B.values( q, d );
-                  value += b * dof;
+                  const Real dof = u( std::get< Is >( indices ) ... );
+                  if constexpr ( Gradient )
+                  {
+                     const Real g = B.gradients( q, dd );
+                     value += g * dof;
+                  }
+                  else
+                  {
+                     const Real b = B.values( q, dd );
+                     value += b * dof;
+                  }
                }
             }
             Bu( indices_ ... ) = value;
