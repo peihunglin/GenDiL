@@ -128,8 +128,8 @@ private:
 
 #if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
     // Runtime A100 detection via VLEN. vlenb == 128 on A100, 32 on X100.
-    static thread_local bool s_on_a100 = false;
-    static thread_local std::size_t s_vlen_bytes = 0;
+    static inline thread_local bool s_on_a100 = false;
+    static inline thread_local std::size_t s_vlen_bytes = 0;
     static inline std::size_t QueryVlenBytes()
     {
        std::size_t bytes = 0;
@@ -237,6 +237,6 @@ public:
              }
           }
        }
-    };
-
+    }
+};
 } // namespace gendil

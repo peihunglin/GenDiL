@@ -20,6 +20,12 @@
 #include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
 #endif
 
+#if defined(GENDIL_ENABLE_K3_FP16_BASELINE)
+#include <cstdint>
+#include <type_traits>
+#include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
+#endif
+
 namespace gendil
 {
 
@@ -84,10 +90,9 @@ namespace k3
          }
          out[i] = acc;
       }
-   }
-#endif
+    }
 
-   template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
+    template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
    GENDIL_HOST_DEVICE
    auto InterpContractionIME( InputTensor const & u, Op1D const & B, std::index_sequence< Is ... > )
    {
@@ -130,8 +135,67 @@ namespace k3
       return Bu;
    }
 
-#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
 } // namespace k3
+#endif
+
+#if defined(GENDIL_ENABLE_K3_FP16_BASELINE)
+namespace k3_fp16_baseline
+{
+   // FP16 baseline policy for A100 scalar path
+   using Storage = __fp16;
+
+   inline Storage ToStorage(Real v)
+   {
+      return static_cast<Storage>(v);
+   }
+   inline Real FromStorage(Storage v)
+   {
+      return static_cast<Real>(v);
+   }
+
+   inline bool IsA100()
+   {
+      return gendil::KernelContext::K3HeterogeneousOpenMPConfiguration::OnA100();
+   }
+
+   template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
+   GENDIL_HOST_DEVICE
+   auto InterpContractionScalarFP16( InputTensor const & u, Op1D const & B, std::index_sequence< Is ... > )
+   {
+      constexpr Integer ND = domain_dim_v< Op1D >;
+      SerialRecursiveArray< Real, contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... > Bu{};
+
+      Loop< contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... >(
+         [&] ( auto ... indices_ )
+         {
+            auto indices = std::make_tuple( indices_ ... );
+            const Integer q = std::get< ActiveDim >( indices );
+            using StorageT = __fp16;
+            StorageT value = StorageT(0.0);
+            auto& d = std::get< ActiveDim >( indices );
+            for ( Integer dd = 0; dd < ND; ++dd )
+            {
+               const Real dof_real = u( std::get< Is >( indices ) ... );
+               const StorageT dof = static_cast<StorageT>(dof_real);
+               if constexpr ( Gradient )
+               {
+                  const Real g = B.gradients( q, dd );
+                  const StorageT g_s = static_cast<StorageT>(g);
+                  value += static_cast<StorageT>( static_cast<float>(g_s) * static_cast<float>(dof) );
+               }
+               else
+               {
+                  const Real b = B.values( q, dd );
+                  const StorageT b_s = static_cast<StorageT>(b);
+                  value += static_cast<StorageT>( static_cast<float>(b_s) * static_cast<float>(dof) );
+               }
+            }
+            Bu( indices_ ... ) = static_cast<Real>(value);
+         }
+      );
+      return Bu;
+   }
+}
 #endif
 
 template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
@@ -141,6 +205,18 @@ auto InterpContraction( InputTensor const & u, Op1D const & B, std::index_sequen
    SerialRecursiveArray< Real, contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... > Bu{};
 
    constexpr Integer ND = domain_dim_v< Op1D >;
+
+#if defined(GENDIL_ENABLE_K3_FP16_BASELINE)
+   // FP16 baseline gate: ND >=8 and A100 present
+   if constexpr ( ND >= 8 )
+   {
+      if ( k3_fp16_baseline::IsA100() )
+      {
+         auto res = k3_fp16_baseline::InterpContractionScalarFP16< Gradient, ActiveDim, InputTensor, Op1D, Is... >( u, B, std::index_sequence< Is ... >{} );
+         return res;
+      }
+   }
+#endif
 
 #if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
    // Phase-1 gate: ND >=8 and A100 present

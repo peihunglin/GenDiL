@@ -19,6 +19,11 @@ option(
   OFF
 )
 option(
+  GENDIL_ENABLE_K3_FP16_BASELINE
+  "Enable opt-in SpacemiT K3 A100 FP16 baseline experiment"
+  OFF
+)
+option(
   GENDIL_ENABLE_FILTERED_SYNC_EXPERIMENT_CTEST
   "Register filtered CellIterator Sync experiment in CTest."
   OFF
@@ -32,6 +37,9 @@ set(
 )
 if(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
   add_compile_definitions(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+endif()
+if(GENDIL_ENABLE_K3_FP16_BASELINE)
+  add_compile_definitions(GENDIL_ENABLE_K3_FP16_BASELINE)
 endif()
 set_property(
   CACHE GENDIL_DEVICE_SPARSE_FINALIZATION
