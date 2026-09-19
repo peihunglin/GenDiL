@@ -121,7 +121,7 @@ namespace k3
 namespace k3_fp16_baseline
 {
    // FP16 baseline policy for A100 scalar path
-   using Storage = __fp16;
+   using Storage = _Float16;
 
    inline Storage ToStorage(Real v)
    {
@@ -132,10 +132,12 @@ namespace k3_fp16_baseline
       return static_cast<Real>(v);
    }
 
-   inline bool IsA100()
-   {
-      return gendil::KernelContext::K3HeterogeneousOpenMPConfiguration::OnA100();
-   }
+template <typename KernelConfiguration, size_t RequiredSharedMemorySize>
+inline bool IsA100()
+{
+    return gendil::KernelContext<KernelConfiguration, RequiredSharedMemorySize>::K3HeterogeneousOpenMPConfiguration::OnA100();
+}
+
 
    template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
    GENDIL_HOST_DEVICE
@@ -149,7 +151,7 @@ namespace k3_fp16_baseline
          {
             auto indices = std::make_tuple( indices_ ... );
             const Integer q = std::get< ActiveDim >( indices );
-            using StorageT = __fp16;
+            using StorageT = _Float16;
             StorageT value = StorageT(0.0);
             auto& d = std::get< ActiveDim >( indices );
             for ( Integer dd = 0; dd < ND; ++dd )
@@ -189,7 +191,8 @@ auto InterpContraction( InputTensor const & u, Op1D const & B, std::index_sequen
    // FP16 baseline gate: ND >=8 and A100 present
    if constexpr ( ND >= 8 )
    {
-      if ( k3_fp16_baseline::IsA100() )
+     // if ( k3_fp16_baseline::IsA100() )
+      if ( k3_fp16_baseline::IsA100<typename Op1D::KernelConfiguration, Op1D::shared_memory_size>() ) 
       {
          auto res = k3_fp16_baseline::InterpContractionScalarFP16< Gradient, ActiveDim, InputTensor, Op1D, Is... >( u, B, std::index_sequence< Is ... >{} );
          return res;
@@ -201,7 +204,7 @@ auto InterpContraction( InputTensor const & u, Op1D const & B, std::index_sequen
    // Phase-1 gate: ND >=8 and A100 present
    if constexpr ( ND >= 8 )
    {
-      if ( k3::IsA100() )
+     if ( k3::IsA100<typename Op1D::KernelConfiguration, Op1D::shared_memory_size>() ) 
       {
          auto res = k3::InterpContractionIME< Gradient, ActiveDim, InputTensor, Op1D, Is... >( u, B, std::index_sequence< Is ... >{} );
          return res;
