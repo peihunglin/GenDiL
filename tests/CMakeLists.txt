@@ -4,6 +4,10 @@ add_subdirectory(cmake)
 add_subdirectory(unit)
 add_subdirectory(integration)
 
+if(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+  add_subdirectory(spacemit-k3)
+endif()
+
 get_property(gendil_test_targets GLOBAL PROPERTY GENDIL_TEST_TARGETS)
 add_custom_target(
   gendil-tests

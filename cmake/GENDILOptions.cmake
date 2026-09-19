@@ -15,7 +15,12 @@ option(
 )
 option(
   GENDIL_ENABLE_K3_IME_EXPERIMENTS
-  "Enable opt-in SpacemiT K3 A100 IME experiments"
+  "Enable opt-in SpacemiT K3 A100 IME experiments with portable FP16 emulation"
+  OFF
+)
+option(
+  GENDIL_ENABLE_K3_IME_NATIVE
+  "Emit native SpacemiT A100 IME assembly (requires a validated K3 toolchain)"
   OFF
 )
 option(
@@ -37,6 +42,15 @@ set(
 )
 if(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
   add_compile_definitions(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+endif()
+if(GENDIL_ENABLE_K3_IME_NATIVE)
+  if(NOT GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+    message(FATAL_ERROR "GENDIL_ENABLE_K3_IME_NATIVE requires GENDIL_ENABLE_K3_IME_EXPERIMENTS=ON.")
+  endif()
+  if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(riscv64|riscv64gc)$")
+    message(FATAL_ERROR "GENDIL_ENABLE_K3_IME_NATIVE requires a riscv64 target.")
+  endif()
+  add_compile_definitions(GENDIL_ENABLE_K3_IME_NATIVE)
 endif()
 if(GENDIL_ENABLE_K3_FP16_BASELINE)
   add_compile_definitions(GENDIL_ENABLE_K3_FP16_BASELINE)

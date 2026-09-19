@@ -59,6 +59,10 @@ placement/VLEN probe before GenDiL kernels use it.
   accumulation and residual correction.
 - Include packing, conversion, and correction costs in performance results.
 
+The current experimental interpolation implementation and its offline/native
+verification procedures are documented in
+[`k3-ime-implementation.md`](k3-ime-implementation.md).
+
 ## Initial System Survey
 
 Run from a clean checkout on K3:

@@ -15,9 +15,7 @@
 #include "gendil/FiniteElementMethod/MatrixFreeOperators/KernelOperators/TrialSpaceOperators/interpolatevaluesthreaded.hpp"
 
 #if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
-#include <cstdint>
-#include <type_traits>
-#include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
+#include "gendil/FiniteElementMethod/MatrixFreeOperators/KernelOperators/TrialSpaceOperators/k3ime.hpp"
 #endif
 
 #if defined(GENDIL_ENABLE_K3_FP16_BASELINE)
@@ -35,104 +33,85 @@ namespace details
 #if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
 namespace k3
 {
-   // Phase-1 precision policy: uniform FP16 storage for both X100 and A100
-   using Storage = __fp16;
-
-   inline Storage ToStorage(Real v)
-   {
-      return static_cast<Storage>(v);
-   }
-   inline Real FromStorage(Storage v)
-   {
-      return static_cast<Real>(v);
-   }
-
-   inline bool IsA100()
-   {
-      return gendil::KernelContext::K3HeterogeneousOpenMPConfiguration::OnA100();
-   }
-
-   // Tile parameters for Xsmtfp16fp32mm 8x8x8
-   constexpr int TILE_M = 8;
-   constexpr int TILE_N = 8;
-   constexpr int TILE_K = 8;
-
-   template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
-   GENDIL_HOST_DEVICE
-   inline void InterpContractionIMEBlock(
-      InputTensor const & u,
-      Op1D const & B,
-      const std::array<Integer, 4>& idx,
-      const Integer q_start,
-      const Integer k_start,
-      Real* out )
-   {
-      // Block size 8x8: q in [q_start, q_start+7], k in [k_start, k_start+7]
-      // Accumulate into out[8][8] as FP32
-      // This is a scalar fallback that mimics tile accumulation.
-      // Real IME will use smt.vfwmadot with FP16 packed buffers.
-      for (int i = 0; i < TILE_M; ++i)
-      {
-         const Integer q = q_start + i;
-         Real acc = 0.0;
-         // For demo, we accumulate a single k element
-         const Integer d = k_start;
-         const Real dof = u(idx[0], idx[1], idx[2], idx[3]); // placeholder
-         if constexpr (Gradient)
-         {
-            const Real g = B.gradients(q, d);
-            acc += g * dof;
-         }
-         else
-         {
-            const Real b = B.values(q, d);
-            acc += b * dof;
-         }
-         out[i] = acc;
-      }
-    }
-
     template < bool Gradient, Integer ActiveDim, typename InputTensor, typename Op1D, size_t ... Is >
    GENDIL_HOST_DEVICE
    auto InterpContractionIME( InputTensor const & u, Op1D const & B, std::index_sequence< Is ... > )
    {
-      // Tile-friendly path using FP16 storage
-      // For pilot, we keep scalar correctness but layout is tile aware.
-      // Real IME will pack B.values/q,d and u into FP16 tiles
-      // and issue smt.vfwmadot for FP16xFP16->FP32 accumulation.
-      constexpr Integer ND = domain_dim_v< Op1D >;
-      SerialRecursiveArray< Real, contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... > Bu{};
-
-      Loop< contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... >(
-         [&] ( auto ... indices_ )
-         {
-            auto indices = std::make_tuple( indices_ ... );
-            const Integer q = std::get< ActiveDim >( indices );
-            Real value = 0.0;
-            auto& d = std::get< ActiveDim >( indices );
-            // Tile loops over d in blocks of TILE_K
-            for ( Integer d0 = 0; d0 < ND; d0 += TILE_K )
-            {
-               const Integer d_end = std::min<Integer>( d0 + TILE_K, ND );
-               for ( Integer dd = d0; dd < d_end; ++dd )
-               {
-                  const Real dof = u( std::get< Is >( indices ) ... );
-                  if constexpr ( Gradient )
-                  {
-                     const Real g = B.gradients( q, dd );
-                     value += g * dof;
-                  }
-                  else
-                  {
-                     const Real b = B.values( q, dd );
-                     value += b * dof;
-                  }
-               }
-            }
-            Bu( indices_ ... ) = value;
-         }
-      );
-      return Bu;
+       constexpr Integer ND = domain_dim_v< Op1D >;
+       constexpr Integer NQ = range_dim_v< Op1D >;
+       constexpr Integer Rank = sizeof...( Is );
+       constexpr std::array< Integer, Rank > input_extents = {
+          get_tensor_size_v< Is, InputTensor > ... };
+       Integer batch_size = 1;
+       for ( Integer dim = 0; dim < Rank; ++dim )
+       {
+          if ( dim != ActiveDim )
+             batch_size *= input_extents[ dim ];
+       }
+       SerialRecursiveArray< Real, contraction_shape< ActiveDim, Is, InputTensor, Op1D >::value ... > Bu{};
+       for ( Integer q0 = 0; q0 < NQ; q0 += TILE_M )
+       {
+          for ( Integer n0 = 0; n0 < batch_size; n0 += TILE_N )
+          {
+             float accumulator[ TILE_M * TILE_N ]{};
+             for ( Integer d0 = 0; d0 < ND; d0 += TILE_K )
+             {
+                Storage lhs[ TILE_M * TILE_K ]{};
+                Storage rhs_transposed[ TILE_N * TILE_K ]{};
+                for ( Integer m = 0; m < TILE_M && q0 + m < NQ; ++m )
+                {
+                   for ( Integer k = 0; k < TILE_K && d0 + k < ND; ++k )
+                   {
+                      if constexpr ( Gradient )
+                         lhs[ m * TILE_K + k ] = ToStorage( B.gradients( q0 + m, d0 + k ) );
+                      else
+                         lhs[ m * TILE_K + k ] = ToStorage( B.values( q0 + m, d0 + k ) );
+                   }
+                }
+                for ( Integer n = 0; n < TILE_N && n0 + n < batch_size; ++n )
+                {
+                   std::array< Integer, Rank > indices{};
+                   Integer flat = n0 + n;
+                   for ( Integer dim = Rank; dim-- > 0; )
+                   {
+                      if ( dim != ActiveDim )
+                      {
+                         indices[ dim ] = flat % input_extents[ dim ];
+                         flat /= input_extents[ dim ];
+                      }
+                   }
+                   for ( Integer k = 0; k < TILE_K && d0 + k < ND; ++k )
+                   {
+                      indices[ ActiveDim ] = d0 + k;
+                      rhs_transposed[ n * TILE_K + k ] = ToStorage( std::apply( u, indices ) );
+                   }
+                }
+                MultiplyAccumulate8x8x8( lhs, rhs_transposed, accumulator );
+             }
+             for ( Integer m = 0; m < TILE_M && q0 + m < NQ; ++m )
+             {
+                for ( Integer n = 0; n < TILE_N && n0 + n < batch_size; ++n )
+                {
+                   std::array< Integer, Rank > indices{};
+                   Integer flat = n0 + n;
+                   for ( Integer dim = Rank; dim-- > 0; )
+                   {
+                      if ( dim != ActiveDim )
+                      {
+                         indices[ dim ] = flat % input_extents[ dim ];
+                         flat /= input_extents[ dim ];
+                      }
+                   }
+                   indices[ ActiveDim ] = q0 + m;
+                   std::apply( [&] ( auto ... output_indices )
+                   {
+                      Bu( output_indices ... ) = static_cast< Real >( accumulator[ m * TILE_N + n ] );
+                   }, indices );
+                }
+             }
+          }
+       }
+       return Bu;
    }
 
 } // namespace k3
