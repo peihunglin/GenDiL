@@ -54,12 +54,13 @@ mode emulates the instruction so this baseline can run on non-K3 hosts.
 Undefine `GENDIL_ENABLE_K3_IME_EXPERIMENTS`. Revert to scalar path.
 
 ## Independent FP16 Baseline
-The intended `GENDIL_ENABLE_K3_FP16_BASELINE=ON` and
-`GENDIL_ENABLE_K3_IME_EXPERIMENTS=OFF` build is currently blocked by its
-independent A100-detection dependency and an unregistered test. It is not an
-accepted baseline until those are repaired in a separate change. See
+The independent `GENDIL_ENABLE_K3_FP16_BASELINE=ON` and
+`GENDIL_ENABLE_K3_IME_EXPERIMENTS=OFF` build shares the A100 detection
+interface and registers `fp16-baseline-correctness`. The current test is an
+A100/VLEN smoke test only; add a scalar-reference interpolation oracle before
+using it as a numerical or performance baseline. See
 [`k3-ime-implementation.md`](k3-ime-implementation.md) for the exact
-configuration and limitation.
+configuration and commands.
 
 ## Precision Scope
 The experiment does not change the project-wide `gendil::Real` alias, which

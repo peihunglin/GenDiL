@@ -115,12 +115,20 @@ cmake -S . -B build-k3-fp16 \
   -DGENDIL_ENABLE_K3_IME_EXPERIMENTS=OFF
 ```
 
-This configuration is currently blocked: A100 detection methods are compiled
-only with `GENDIL_ENABLE_K3_IME_EXPERIMENTS`, while the FP16 baseline uses
-them under its independent option. Its test source is also not CTest
-registered. Do not treat the IME emulator as a substitute for this baseline;
-the baseline must be repaired and registered in a separate change before it
-can provide an independent K3 comparison.
+The A100 detection interface is shared by the IME and baseline experiment
+options, so this configuration can be built independently. Build and run its
+initial A100 detection smoke test with:
+
+```sh
+cmake --build build-k3-fp16 --parallel --target fp16-baseline-correctness
+ai build-k3-fp16/tests/spacemit-k3/fp16-baseline-correctness
+```
+
+The registered test currently verifies that the baseline configuration can
+query A100/VLEN state. It is not yet an end-to-end FP16 interpolation oracle.
+Do not treat the IME emulator as a substitute for the independent baseline;
+add a scalar-reference interpolation comparison before using either result for
+performance acceptance.
 
 ## Limitations And Rollback
 

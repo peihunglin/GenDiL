@@ -4,7 +4,7 @@ add_subdirectory(cmake)
 add_subdirectory(unit)
 add_subdirectory(integration)
 
-if(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+if(GENDIL_ENABLE_K3_IME_EXPERIMENTS OR GENDIL_ENABLE_K3_FP16_BASELINE)
   add_subdirectory(spacemit-k3)
 endif()
 

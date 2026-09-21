@@ -1,4 +1,3 @@
-#include "gendil/FiniteElementMethod/MatrixFreeOperators/KernelOperators/TrialSpaceOperators/interpolatevaluesserial.hpp"
 #include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
 #include <iostream>
 #include <cassert>
@@ -9,7 +8,6 @@
 int main()
 {
    using namespace gendil;
-   using namespace gendil::KernelContext;
 
    bool a100 = K3HeterogeneousOpenMPConfiguration::OnA100();
    std::size_t vlen = K3HeterogeneousOpenMPConfiguration::GetVlenBytes();

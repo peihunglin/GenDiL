@@ -126,30 +126,34 @@ private:
        }
     }
 
-#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS) || defined(GENDIL_ENABLE_K3_FP16_BASELINE)
     // Runtime A100 detection via VLEN. vlenb == 128 on A100, 32 on X100.
     static inline thread_local bool s_on_a100 = false;
     static inline thread_local std::size_t s_vlen_bytes = 0;
-    static inline std::size_t QueryVlenBytes()
-    {
-       std::size_t bytes = 0;
-       asm volatile("csrr %0, vlenb" : "=r"(bytes));
-       return bytes;
-    }
-    static inline bool OnA100()
-    {
-       return s_on_a100;
-    }
-    static inline void DetectA100()
-    {
-       std::size_t bytes = QueryVlenBytes();
-       s_vlen_bytes = bytes;
-       s_on_a100 = (bytes == 128);
-    }
-    static inline std::size_t GetVlenBytes()
-    {
-       return s_vlen_bytes;
-    }
+     static inline std::size_t QueryVlenBytes()
+     {
+        std::size_t bytes = 0;
+        asm volatile("csrr %0, vlenb" : "=r"(bytes));
+        return bytes;
+     }
+
+public:
+     static inline bool OnA100()
+     {
+        return s_on_a100;
+     }
+     static inline std::size_t GetVlenBytes()
+     {
+        return s_vlen_bytes;
+     }
+
+private:
+     static inline void DetectA100()
+     {
+        std::size_t bytes = QueryVlenBytes();
+        s_vlen_bytes = bytes;
+        s_on_a100 = (bytes == 128);
+     }
 #endif
 
    static void EnsureWorkerBound( const GlobalIndex worker )
@@ -194,7 +198,7 @@ public:
     {
     }
 
-#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS) || defined(GENDIL_ENABLE_K3_FP16_BASELINE)
     static inline void EnsureAIDetection()
     {
        // Placeholder: detection should happen once per worker after placement.
@@ -214,7 +218,7 @@ public:
           EnsureWorkerBound( worker );
           #pragma omp barrier
 
-#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS) || defined(GENDIL_ENABLE_K3_FP16_BASELINE)
           EnsureAIDetection();
 #endif
 
