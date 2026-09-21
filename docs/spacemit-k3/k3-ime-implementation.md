@@ -164,6 +164,46 @@ Do not treat the IME emulator as a substitute for the independent baseline;
 add a scalar-reference interpolation comparison before using either result for
 performance acceptance.
 
+## A100 IME Versus Scalar FP16 Comparison
+
+Use separate build directories from the same commit. Both runs must start
+normally on X100 with `GENDIL_K3_A100_SHARE=100`; this gives every work item to
+workers that the K3 policy moves to A100. Do not use `ai`, because the
+heterogeneous policy still creates and pins its X100 workers.
+
+Configure the scalar baseline without IME:
+
+```sh
+cmake -S . -B build-k3-fp16 \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_CXX_FLAGS_RELEASE='-O3 -DNDEBUG' \
+  -DUSE_OPENMP=ON \
+  -DGENDIL_ENABLE_K3_EXPERIMENTS=ON \
+  -DGENDIL_ENABLE_K3_FP16_BASELINE=ON \
+  -DGENDIL_ENABLE_K3_IME_EXPERIMENTS=OFF
+```
+
+Configure the IME build as described above, with
+`GENDIL_ENABLE_K3_IME_NATIVE=ON`. Compare the same tensor case in each build
+against its FP64 reference. The scalar baseline stores and accumulates in
+FP16, while the IME path uses FP16 operands and FP32 tile accumulation; their
+results need not be identical. Compare each result's maximum error to FP64
+under the same input and shape, rather than requiring bitwise equality between
+the two modes.
+
+Both builds register tensor comparison targets:
+
+```sh
+GENDIL_K3_A100_SHARE=100 \
+  build-k3-fp16/tests/spacemit-k3/fp16-interpolation-correctness
+GENDIL_K3_A100_SHARE=100 \
+  build-k3-ime-clean/tests/spacemit-k3/ime-interpolation-correctness
+```
+
+Each prints full-tile and tail maximum errors against the same FP64 oracle. The
+IME build additionally reports the number of A100 IME tiles; the baseline
+reports A100 work items only.
+
 ## Limitations And Rollback
 
 - Native inline assembly has not been compiled or executed on K3 hardware.

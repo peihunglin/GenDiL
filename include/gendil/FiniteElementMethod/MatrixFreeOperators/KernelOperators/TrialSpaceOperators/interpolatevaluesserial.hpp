@@ -147,19 +147,19 @@ namespace k3_fp16_baseline
             using StorageT = _Float16;
             StorageT value = StorageT(0.0);
             auto& d = std::get< ActiveDim >( indices );
-            for ( Integer dd = 0; dd < ND; ++dd )
+            for ( d = 0; d < ND; ++d )
             {
                const Real dof_real = u( std::get< Is >( indices ) ... );
                const StorageT dof = static_cast<StorageT>(dof_real);
                if constexpr ( Gradient )
                {
-                  const Real g = B.gradients( q, dd );
+                  const Real g = B.gradients( q, d );
                   const StorageT g_s = static_cast<StorageT>(g);
                   value += static_cast<StorageT>( static_cast<float>(g_s) * static_cast<float>(dof) );
                }
                else
                {
-                  const Real b = B.values( q, dd );
+                  const Real b = B.values( q, d );
                   const StorageT b_s = static_cast<StorageT>(b);
                   value += static_cast<StorageT>( static_cast<float>(b_s) * static_cast<float>(dof) );
                }

@@ -4,8 +4,10 @@
 
 #include <gendil/gendil.hpp>
 
+#if defined(GENDIL_ENABLE_K3_IME_EXPERIMENTS)
 #include "gendil/FiniteElementMethod/MatrixFreeOperators/KernelOperators/TrialSpaceOperators/k3ime.hpp"
-#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
+#endif
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE) || defined(GENDIL_ENABLE_K3_FP16_BASELINE)
 #include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
 #endif
 
@@ -47,11 +49,13 @@ Real MaxDifference( const Actual & actual, const Expected & expected )
       std::make_index_sequence< get_rank_v< Actual > >{} );
 }
 
-#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE) || defined(GENDIL_ENABLE_K3_FP16_BASELINE)
 struct WorkResult
 {
    Real max_error = 0.0;
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
    Integer ime_tiles = 0;
+#endif
    bool on_a100 = false;
 };
 
@@ -141,7 +145,7 @@ bool RunValueCase( const char * name )
          reference( q0, q1 ) = value;
       } );
 
-#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE) || defined(GENDIL_ENABLE_K3_FP16_BASELINE)
    constexpr Integer work_items = 32;
    std::array< WorkResult, work_items > results{};
 
@@ -149,35 +153,51 @@ bool RunValueCase( const char * name )
       work_items,
       [&] ( const GlobalIndex index )
       {
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
          details::k3::ResetTileCallCount();
+#endif
          const auto actual = InterpolateValuesSerial( quad_data, dofs );
          results[ index ] = WorkResult{
             MaxDifference( actual, reference ),
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
             details::k3::GetTileCallCount(),
+#endif
             K3HeterogeneousOpenMPConfiguration::OnA100() };
       } );
 
    Real max_error = 0.0;
    Integer a100_items = 0;
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
    Integer a100_ime_tiles = 0;
+#endif
    for ( const auto & result : results )
    {
       max_error = std::max( max_error, result.max_error );
       if ( result.on_a100 )
       {
          ++a100_items;
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
          a100_ime_tiles += result.ime_tiles;
+#endif
       }
    }
 
    const bool expect_a100_work = A100WorkItems( work_items ) > 0;
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
    const bool a100_dispatch_passed = expect_a100_work
       ? a100_items > 0 && a100_ime_tiles > 0
       : a100_items == 0 && a100_ime_tiles == 0;
+#else
+   const bool a100_dispatch_passed = expect_a100_work
+      ? a100_items > 0
+      : a100_items == 0;
+#endif
    const bool accuracy_passed = max_error <= tolerance;
    std::cout << name << ": max error=" << max_error
               << " A100 work items=" << a100_items
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
               << " A100 IME tiles=" << a100_ime_tiles
+#endif
               << " expected A100 work=" << expect_a100_work
               << " accuracy=" << accuracy_passed
               << " dispatch=" << a100_dispatch_passed << '\n';
@@ -201,7 +221,7 @@ int main()
    const bool tail_tile_passed = RunValueCase< 9, 10 >( "2D 9x10 tail" );
    if ( !full_tile_passed || !tail_tile_passed )
    {
-      std::cerr << "K3 IME tensor interpolation validation failed\n";
+      std::cerr << "K3 tensor interpolation validation failed\n";
       return 1;
    }
    return 0;

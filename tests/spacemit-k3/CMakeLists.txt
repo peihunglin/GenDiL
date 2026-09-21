@@ -8,4 +8,8 @@ endif()
 
 if(GENDIL_ENABLE_K3_FP16_BASELINE)
   gendil_add_test(fp16-baseline-correctness fp16_baseline_correctness.cpp)
+  gendil_add_test(
+    fp16-interpolation-correctness
+    ime_interpolation_correctness.cpp
+  )
 endif()
