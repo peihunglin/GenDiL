@@ -158,6 +158,9 @@ performance acceptance.
 - Native inline assembly has not been compiled or executed on K3 hardware.
 - The installed K3 compiler flags, assembler support, vector-register clobber
   behavior, and FP16 mode-control interface must be recorded on target.
+- The native wrapper is deliberately no-inline because it uses fixed vector
+  registers. The tensor test is the required validation that this call boundary
+  prevents compiler-managed RVV state from corrupting the IME operands.
 - FP16 conversion and FP32 accumulation introduce error relative to the FP64
   reference; packing, conversion, tail, and correction costs must be included
   in performance results.

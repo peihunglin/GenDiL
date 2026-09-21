@@ -50,8 +50,13 @@ inline Integer GetTileCallCount()
    return tile_call_count;
 }
 
-GENDIL_HOST_DEVICE
-inline void MultiplyAccumulate8x8x8(
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE) && defined(__riscv)
+// The instruction sequence uses fixed vector registers. Keep it out of the
+// caller's vectorized packing loops until the K3 toolchain exposes vector
+// register clobbers for extended assembly.
+__attribute__((noinline))
+#endif
+GENDIL_HOST_DEVICE inline void MultiplyAccumulate8x8x8(
    const Storage * lhs,
    const Storage * rhs_transposed,
    float * accumulator )
