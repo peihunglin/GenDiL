@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
 
 using namespace gendil;
@@ -50,6 +51,14 @@ struct WorkResult
    Integer ime_tiles = 0;
    bool on_a100 = false;
 };
+
+Integer A100WorkItems( const Integer total )
+{
+   const char *value = std::getenv( "GENDIL_K3_A100_SHARE" );
+   if ( value == nullptr || value[ 0 ] == '\0' )
+      return total / 2;
+   return total * static_cast< Integer >( std::atoi( value ) ) / 100;
+}
 
 template < Integer NumPoints >
 struct TensorTestPoints
@@ -140,10 +149,18 @@ bool RunValueCase( const char * name )
       }
    }
 
+   const bool expect_a100_work = A100WorkItems( work_items ) > 0;
+   const bool a100_dispatch_passed = expect_a100_work
+      ? a100_items > 0 && a100_ime_tiles > 0
+      : a100_items == 0 && a100_ime_tiles == 0;
+   const bool accuracy_passed = max_error <= tolerance;
    std::cout << name << ": max error=" << max_error
-             << " A100 work items=" << a100_items
-             << " A100 IME tiles=" << a100_ime_tiles << '\n';
-   return a100_items > 0 && a100_ime_tiles > 0 && max_error <= tolerance;
+              << " A100 work items=" << a100_items
+              << " A100 IME tiles=" << a100_ime_tiles
+              << " expected A100 work=" << expect_a100_work
+              << " accuracy=" << accuracy_passed
+              << " dispatch=" << a100_dispatch_passed << '\n';
+   return accuracy_passed && a100_dispatch_passed;
 }
 
 } // namespace
