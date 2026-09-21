@@ -5,7 +5,9 @@
 #include <gendil/gendil.hpp>
 
 #include "gendil/FiniteElementMethod/MatrixFreeOperators/KernelOperators/TrialSpaceOperators/k3ime.hpp"
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
 #include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
+#endif
 
 #include <algorithm>
 #include <array>
@@ -45,6 +47,7 @@ Real MaxDifference( const Actual & actual, const Expected & expected )
       std::make_index_sequence< get_rank_v< Actual > >{} );
 }
 
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
 struct WorkResult
 {
    Real max_error = 0.0;
@@ -59,6 +62,7 @@ Integer A100WorkItems( const Integer total )
       return total / 2;
    return total * static_cast< Integer >( std::atoi( value ) ) / 100;
 }
+#endif
 
 template < Integer NumPoints >
 struct TensorTestPoints
@@ -108,7 +112,6 @@ bool RunValueCase( const char * name )
    using Map = CachedDofToQuad< ShapeFunctions, Points >;
    using DofTensor = SerialRecursiveArray< Real, Dofs, Dofs >;
 
-   constexpr Integer work_items = 32;
    constexpr Real tolerance = 1.e-2;
    const auto quad_data = MakeTensorProductData( Map{}, Map{} );
    DofTensor dofs{};
@@ -120,8 +123,26 @@ bool RunValueCase( const char * name )
             + 0.03125 * static_cast< Real >( i * j );
       } );
 
-   // Outside BlockLoop no worker has A100 state, so this is the FP64 path.
-   const auto reference = InterpolateValuesSerial( quad_data, dofs );
+   SerialRecursiveArray< Real, Quads, Quads > reference{};
+   const auto & first_map = GetTensorProductEntry< 0 >( quad_data );
+   const auto & second_map = GetTensorProductEntry< 1 >( quad_data );
+   Loop< Quads, Quads >(
+      [&] ( const Integer q0, const Integer q1 )
+      {
+         Real value = 0.0;
+         for ( Integer d0 = 0; d0 < Dofs; ++d0 )
+         {
+            for ( Integer d1 = 0; d1 < Dofs; ++d1 )
+            {
+               value += first_map.values( q0, d0 )
+                  * second_map.values( q1, d1 ) * dofs( d0, d1 );
+            }
+         }
+         reference( q0, q1 ) = value;
+      } );
+
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
+   constexpr Integer work_items = 32;
    std::array< WorkResult, work_items > results{};
 
    K3HeterogeneousOpenMPConfiguration::BlockLoop(
@@ -161,16 +182,21 @@ bool RunValueCase( const char * name )
               << " accuracy=" << accuracy_passed
               << " dispatch=" << a100_dispatch_passed << '\n';
    return accuracy_passed && a100_dispatch_passed;
+#else
+   details::k3::ResetTileCallCount();
+   const auto actual = InterpolateValuesSerial( quad_data, dofs );
+   const Real max_error = MaxDifference( actual, reference );
+   const Integer ime_tiles = details::k3::GetTileCallCount();
+   std::cout << name << ": offline max error=" << max_error
+             << " IME tiles=" << ime_tiles << '\n';
+   return max_error <= tolerance && ime_tiles > 0;
+#endif
 }
 
 } // namespace
 
 int main()
 {
-#if !defined(GENDIL_ENABLE_K3_IME_NATIVE)
-   std::cerr << "Native K3 IME is disabled\n";
-   return 2;
-#else
    const bool full_tile_passed = RunValueCase< 8, 8 >( "2D 8x8 tile" );
    const bool tail_tile_passed = RunValueCase< 9, 10 >( "2D 9x10 tail" );
    if ( !full_tile_passed || !tail_tile_passed )
@@ -179,5 +205,4 @@ int main()
       return 1;
    }
    return 0;
-#endif
 }

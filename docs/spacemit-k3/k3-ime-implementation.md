@@ -125,6 +125,12 @@ positive IME tile count. It covers a complete 8x8 tensor case and a 9-DoF,
 10-quadrature-point zero-padded tail case. It must run normally, not through
 `ai`, because the mixed policy places its own workers.
 
+The same target is registered in portable IME-emulation builds. There it uses
+an explicit FP64 tensor-product oracle and verifies the packed contraction
+without K3 placement. A passing portable result with a failing native result
+isolates the fault to the native IME instruction/control state rather than the
+tensor packing or tail logic.
+
 `GENDIL_K3_A100_SHARE=0` is a valid scalar-control run: it verifies accuracy
 while requiring no A100 work or IME tiles. Any share that assigns at least one
 of the 32 work items to A100 requires a positive A100 IME tile count.
