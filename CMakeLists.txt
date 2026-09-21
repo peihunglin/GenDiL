@@ -58,9 +58,21 @@ target_include_directories(
 )
 target_compile_features(GENDIL INTERFACE cxx_std_20)
 if(GENDIL_ENABLE_K3_IME_NATIVE)
-  # Native IME instructions are A100-specific and originate in public headers,
-  # so every consumer must compile the header implementation for A100.
-  target_compile_options(GENDIL INTERFACE -mcpu=spacemit-a100)
+  # Keep A100-only IME instructions out of X100 worker translation units. The
+  # helper is linked only from the build tree; installed headers remain scalar.
+  add_library(GENDILK3IMENative STATIC src/k3ime_native.cpp)
+  target_compile_features(GENDILK3IMENative PRIVATE cxx_std_20)
+  target_compile_options(
+    GENDILK3IMENative
+    PRIVATE
+      -mcpu=spacemit-a100
+      -fno-lto
+  )
+  target_link_libraries(
+    GENDIL
+    INTERFACE
+      "$<BUILD_INTERFACE:GENDILK3IMENative>"
+  )
 endif()
 
 gendil_validate_device_platform()

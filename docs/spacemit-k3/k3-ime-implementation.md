@@ -34,8 +34,8 @@ offline correctness testing. `GENDIL_ENABLE_K3_IME_NATIVE=ON` additionally
 selects the documented `smt.vfwmadot` inline-assembly sequence. Native mode
 requires both the IME experiment option and a `riscv64` CMake target. It also
 requires compiler support for `-mcpu=spacemit-a100`; CMake validates that flag
-and propagates it through the `GENDIL::GENDIL` interface to every consumer of
-the native IME headers.
+and applies it only to the A100 IME helper translation unit. Callers remain
+generic so X100 workers never execute code compiled for A100.
 
 The native path runs only when the K3 execution policy has identified the
 current worker as A100. It must never execute on X100.
