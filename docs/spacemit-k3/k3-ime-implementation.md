@@ -68,9 +68,10 @@ ctest --test-dir build-ime-offline \
   -R '^ime-pilot-correctness$' --output-on-failure
 ```
 
-The `ime-pilot-correctness` CTest target validates two-byte FP16 storage,
-8x8x8 packing, right-operand orientation, nonzero FP32 initial accumulation,
-and the scalar emulator result. It does not execute a K3 instruction.
+The `ime-pilot-correctness` CTest target validates two-byte FP16 storage and
+FP32 accumulation for a full 8x8x8 tile, seeded accumulation, isolated K/M/N
+tails, and a combined 9x10x9 tail case. It uses the same FP16 packing and
+zero-padding as the native wrapper, but does not execute a K3 instruction.
 
 The initial implementation passed this test with AppleClang 21 on macOS. This
 is layout and mixed-precision evidence only, not A100 instruction evidence.
