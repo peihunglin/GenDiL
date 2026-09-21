@@ -51,11 +51,51 @@ struct WorkResult
    bool on_a100 = false;
 };
 
+template < Integer NumPoints >
+struct TensorTestPoints
+{
+   static constexpr Integer GetNumPoints()
+   {
+      return NumPoints;
+   }
+
+   static constexpr Real GetCoord( const Integer q )
+   {
+      return -0.875 + 1.75 * static_cast< Real >( q )
+         / static_cast< Real >( NumPoints - 1 );
+   }
+
+   static constexpr Real GetWeight( const Integer )
+   {
+      return 1.0 / static_cast< Real >( NumPoints );
+   }
+};
+
+template < Integer NumDofs >
+struct TensorTestShapeFunctions
+{
+   static constexpr Integer num_dofs = NumDofs;
+
+   static constexpr Real ComputeValue( const Integer dof, const Real point )
+   {
+      return 0.125 * ( static_cast< Real >( dof % 5 ) - 2.0 )
+         + 0.03125 * static_cast< Real >( dof + 1 ) * point;
+   }
+
+   static constexpr Real ComputeGradientValue( const Integer dof, const Real )
+   {
+      return 0.03125 * static_cast< Real >( dof + 1 );
+   }
+};
+
 template < Integer Dofs, Integer Quads >
 bool RunValueCase( const char * name )
 {
-   using ShapeFunctions = GaussLegendreShapeFunctions< Dofs - 1 >;
-   using Points = GaussLegendrePoints< Quads >;
+   // The production Gauss-Legendre table currently ends at eight points.
+   // These deterministic maps permit a 9x10 tail case without extending that
+   // unrelated numerical-integration table.
+   using ShapeFunctions = TensorTestShapeFunctions< Dofs >;
+   using Points = TensorTestPoints< Quads >;
    using Map = CachedDofToQuad< ShapeFunctions, Points >;
    using DofTensor = SerialRecursiveArray< Real, Dofs, Dofs >;
 
