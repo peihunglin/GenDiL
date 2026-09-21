@@ -162,6 +162,10 @@ performance acceptance.
 - Native inline assembly has not been compiled or executed on K3 hardware.
 - The installed K3 compiler flags, assembler support, vector-register clobber
   behavior, and FP16 mode-control interface must be recorded on target.
+- The public instruction specification requires `MCPM.BF16=0` for FP16 but
+  does not document a CSR number or programming sequence. Native correctness
+  remains blocked until the installed K3 SDK supplies that interface and the
+  tile probe verifies it.
 - The native wrapper is deliberately no-inline because it uses fixed vector
   registers. The tensor test is the required validation that this call boundary
   prevents compiler-managed RVV state from corrupting the IME operands.

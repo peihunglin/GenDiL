@@ -3,6 +3,7 @@
 #include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
 #endif
 #include <array>
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 
