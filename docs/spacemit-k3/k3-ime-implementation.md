@@ -97,7 +97,8 @@ cmake -S . -B build-k3-ime \
   -DGENDIL_ENABLE_K3_IME_EXPERIMENTS=ON \
   -DGENDIL_ENABLE_K3_IME_NATIVE=ON
 cmake --build build-k3-ime --parallel --target ime-pilot-correctness
-ai build-k3-ime/tests/spacemit-k3/ime-pilot-correctness
+GENDIL_K3_A100_SHARE=50 \
+  build-k3-ime/tests/spacemit-k3/ime-pilot-correctness
 ```
 
 Inspect the object or executable disassembly and retain evidence that it
@@ -105,6 +106,9 @@ contains `smt.vfwmadot`. The first A100 run must also verify FP16 mode control,
 the documented result layout, nonzero accumulator behavior, and multiple K
 tiles against an independent FP32 reference before enabling end-to-end
 interpolation measurements.
+
+The native tile test starts normally on X100 and invokes the instruction only
+from A100 workers placed by `BlockLoop`; do not launch it through `ai`.
 
 The native build also registers `ime-interpolation-correctness`. Run it
 normally on X100 so its `BlockLoop` workers perform K3 self-placement:

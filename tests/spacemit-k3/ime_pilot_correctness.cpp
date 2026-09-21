@@ -1,5 +1,8 @@
 #include "gendil/FiniteElementMethod/MatrixFreeOperators/KernelOperators/TrialSpaceOperators/k3ime.hpp"
-#include <cassert>
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
+#include "gendil/Utilities/KernelContext/KernelConfigurations/k3heterogeneousopenmp.hpp"
+#endif
+#include <array>
 #include <cmath>
 #include <iostream>
 
@@ -12,6 +15,8 @@ int main()
 
    static_assert( sizeof( Storage ) == 2, "The offline IME baseline requires compiler FP16 storage." );
 
+   const auto RunTile = []()
+   {
    Storage lhs[ TILE_M * TILE_K ];
    Storage rhs_transposed[ TILE_N * TILE_K ];
    float actual[ TILE_M * TILE_N ];
@@ -40,8 +45,41 @@ int main()
 
    MultiplyAccumulate8x8x8( lhs, rhs_transposed, actual );
    for ( Integer index = 0; index < TILE_M * TILE_N; ++index )
-      assert( std::abs( actual[ index ] - expected[ index ] ) < 1.e-6f );
+      if ( std::abs( actual[ index ] - expected[ index ] ) >= 1.e-6f )
+         return false;
+   return true;
+   };
 
+#if defined(GENDIL_ENABLE_K3_IME_NATIVE)
+   constexpr Integer work_items = 32;
+   std::array< int, work_items > passed{};
+   std::array< int, work_items > ran_on_a100{};
+   K3HeterogeneousOpenMPConfiguration::BlockLoop(
+      work_items,
+      [&] ( const GlobalIndex index )
+      {
+         if ( K3HeterogeneousOpenMPConfiguration::OnA100() )
+         {
+            ran_on_a100[ index ] = 1;
+            passed[ index ] = RunTile();
+         }
+      } );
+
+   Integer a100_items = 0;
+   Integer failed_items = 0;
+   for ( Integer index = 0; index < work_items; ++index )
+   {
+      a100_items += ran_on_a100[ index ];
+      failed_items += ran_on_a100[ index ] && !passed[ index ];
+   }
+   std::cout << "A100 IME tile checks=" << a100_items
+             << " failures=" << failed_items << std::endl;
+   if ( a100_items == 0 || failed_items != 0 )
+      return 1;
+#else
+   if ( !RunTile() )
+      return 1;
+#endif
    std::cout << "IME FP16 packing/FP32 accumulation baseline passed" << std::endl;
    return 0;
 }
