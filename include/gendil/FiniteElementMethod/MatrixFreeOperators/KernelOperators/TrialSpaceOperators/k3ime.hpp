@@ -38,6 +38,17 @@ inline bool IsA100()
 constexpr Integer TILE_M = 8;
 constexpr Integer TILE_N = 8;
 constexpr Integer TILE_K = 8;
+inline thread_local Integer tile_call_count = 0;
+
+inline void ResetTileCallCount()
+{
+   tile_call_count = 0;
+}
+
+inline Integer GetTileCallCount()
+{
+   return tile_call_count;
+}
 
 GENDIL_HOST_DEVICE
 inline void MultiplyAccumulate8x8x8(
@@ -45,6 +56,7 @@ inline void MultiplyAccumulate8x8x8(
    const Storage * rhs_transposed,
    float * accumulator )
 {
+   ++tile_call_count;
 #if defined(GENDIL_ENABLE_K3_IME_NATIVE) && defined(__riscv)
    // A100 Xsmtfp16fp32mm: C += A * B^T. rhs_transposed contains one
    // contiguous K-vector per output column, as required by the IME layout.

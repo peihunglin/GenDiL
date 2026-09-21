@@ -106,6 +106,21 @@ the documented result layout, nonzero accumulator behavior, and multiple K
 tiles against an independent FP32 reference before enabling end-to-end
 interpolation measurements.
 
+The native build also registers `ime-interpolation-correctness`. Run it
+normally on X100 so its `BlockLoop` workers perform K3 self-placement:
+
+```sh
+cmake --build build-k3-ime --parallel --target ime-interpolation-correctness
+GENDIL_K3_A100_SHARE=50 \
+  build-k3-ime/tests/spacemit-k3/ime-interpolation-correctness
+```
+
+The test evaluates 32 independent 2D tensor-product interpolations, compares
+each against an FP64 scalar reference, and requires A100 workers to report a
+positive IME tile count. It covers a complete 8x8 tensor case and a 9-DoF,
+10-quadrature-point zero-padded tail case. It must run normally, not through
+`ai`, because the mixed policy places its own workers.
+
 ## FP16 Baseline Without IME
 
 The intended independent baseline configuration is:

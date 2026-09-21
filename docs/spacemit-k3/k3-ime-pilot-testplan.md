@@ -38,6 +38,10 @@ mode emulates the instruction so this baseline can run on non-K3 hosts.
 - Inspect its disassembly and retain evidence of `smt.vfwmadot`.
 - Before an end-to-end interpolation run, verify FP16 mode control, nonzero
   accumulation, and multiple K tiles on A100.
+- Build and run `ime-interpolation-correctness` normally on X100 with
+  `GENDIL_K3_A100_SHARE=50`. It compares 32 independent 2D tensor
+  interpolations with an FP64 reference and requires a positive A100 IME tile
+  count.
 
 ### 4. Tile size coverage
 - ND = 8, 16, 24. Verify the zero-padded K tails where applicable.
