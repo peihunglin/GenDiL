@@ -57,6 +57,11 @@ target_include_directories(
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_compile_features(GENDIL INTERFACE cxx_std_20)
+if(GENDIL_ENABLE_K3_IME_NATIVE)
+  # Native IME instructions are A100-specific and originate in public headers,
+  # so every consumer must compile the header implementation for A100.
+  target_compile_options(GENDIL INTERFACE -mcpu=spacemit-a100)
+endif()
 
 gendil_validate_device_platform()
 

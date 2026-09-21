@@ -11,7 +11,8 @@ mode emulates the instruction so this baseline can run on non-K3 hosts.
   opt-in `GENDIL_ENABLE_K3_IME_NATIVE=ON` is configured on K3 hardware.
 - `GENDIL_ENABLE_K3_IME_NATIVE` is blocked on non-RISC-V hosts and must only be
   enabled after the installed toolchain accepts and disassembles
-  `smt.vfwmadot`.
+  `smt.vfwmadot`. Native configuration validates and applies
+  `-mcpu=spacemit-a100` to all `GENDIL::GENDIL` consumers.
 - Offline verification needs a compiler with native `_Float16` storage.
 - Native verification needs K3 X100/A100 hardware with `ai`/`aix`, a passing
   placement/VLEN probe, and a toolchain that accepts `smt.vfwmadot`.

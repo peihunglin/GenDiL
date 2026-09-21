@@ -32,7 +32,10 @@ contraction result without a separate scalar remainder path.
 emulator with identical FP16 packing and FP32 accumulation. It is intended for
 offline correctness testing. `GENDIL_ENABLE_K3_IME_NATIVE=ON` additionally
 selects the documented `smt.vfwmadot` inline-assembly sequence. Native mode
-requires both the IME experiment option and a `riscv64` CMake target.
+requires both the IME experiment option and a `riscv64` CMake target. It also
+requires compiler support for `-mcpu=spacemit-a100`; CMake validates that flag
+and propagates it through the `GENDIL::GENDIL` interface to every consumer of
+the native IME headers.
 
 The native path runs only when the K3 execution policy has identified the
 current worker as A100. It must never execute on X100.
@@ -88,6 +91,7 @@ Then configure the native IME build on K3:
 ```sh
 cmake -S . -B build-k3-ime \
   -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_CXX_FLAGS_RELEASE='-O3 -DNDEBUG' \
   -DUSE_OPENMP=ON \
   -DGENDIL_ENABLE_K3_EXPERIMENTS=ON \
   -DGENDIL_ENABLE_K3_IME_EXPERIMENTS=ON \
