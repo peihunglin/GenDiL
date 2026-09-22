@@ -191,6 +191,10 @@ results need not be identical. Compare each result's maximum error to FP64
 under the same input and shape, rather than requiring bitwise equality between
 the two modes.
 
+`GENDIL_ENABLE_K3_FP16_BASELINE` is the fair scalar baseline for this study:
+it converts operands to FP16 and accumulates products in scalar FP32, matching
+the IME precision policy without executing an IME instruction.
+
 Both builds register tensor comparison targets:
 
 ```sh
@@ -203,6 +207,27 @@ GENDIL_K3_A100_SHARE=100 \
 Each prints full-tile and tail maximum errors against the same FP64 oracle. The
 IME build additionally reports the number of A100 IME tiles; the baseline
 reports A100 work items only.
+
+## Interpolation Performance Study
+
+`k3-ime-interpolation-benchmark` uses the same deterministic 2D full-tile and
+tail fixtures as the correctness test. It reports interpolation throughput,
+input DoF throughput, output-value throughput, and a checksum. Run one build
+per mode with identical environment values:
+
+```sh
+GENDIL_K3_A100_SHARE=100 \
+GENDIL_K3_IME_WORK_ITEMS=32768 \
+GENDIL_K3_IME_WARMUP=5 \
+GENDIL_K3_IME_ITERATIONS=1000 \
+  build-k3-ime-clean/tools/spacemit-k3/k3-ime-interpolation-benchmark
+```
+
+Repeat for the FP64 scalar, scalar FP16/FP32, and native IME builds. Use
+shares `0 25 50 75 100` only after the A100-only comparison passes. The timed
+region includes tensor packing, IME/scalar computation, output scatter, and
+one OpenMP team launch; it is an end-to-end interpolation metric, not an
+isolated instruction-latency measurement.
 
 ## Limitations And Rollback
 

@@ -145,7 +145,7 @@ namespace k3_fp16_baseline
             auto indices = std::make_tuple( indices_ ... );
             const Integer q = std::get< ActiveDim >( indices );
             using StorageT = _Float16;
-            StorageT value = StorageT(0.0);
+            float value = 0.0f;
             auto& d = std::get< ActiveDim >( indices );
             for ( d = 0; d < ND; ++d )
             {
@@ -155,16 +155,16 @@ namespace k3_fp16_baseline
                {
                   const Real g = B.gradients( q, d );
                   const StorageT g_s = static_cast<StorageT>(g);
-                  value += static_cast<StorageT>( static_cast<float>(g_s) * static_cast<float>(dof) );
+                  value += static_cast<float>( g_s ) * static_cast<float>( dof );
                }
                else
                {
                   const Real b = B.values( q, d );
                   const StorageT b_s = static_cast<StorageT>(b);
-                  value += static_cast<StorageT>( static_cast<float>(b_s) * static_cast<float>(dof) );
+                  value += static_cast<float>( b_s ) * static_cast<float>( dof );
                }
             }
-            Bu( indices_ ... ) = static_cast<Real>(value);
+            Bu( indices_ ... ) = static_cast<Real>( value );
          }
       );
       return Bu;

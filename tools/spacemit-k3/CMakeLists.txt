@@ -60,9 +60,21 @@ target_link_libraries(
   PRIVATE GENDIL::GENDIL OpenMP::OpenMP_CXX
 )
 
+add_executable(
+  k3-ime-interpolation-benchmark
+  k3-ime-interpolation-benchmark.cpp
+)
+target_compile_features(k3-ime-interpolation-benchmark PRIVATE cxx_std_20)
+target_compile_options(k3-ime-interpolation-benchmark PRIVATE -fno-lto)
+target_link_libraries(
+  k3-ime-interpolation-benchmark
+  PRIVATE GENDIL::GENDIL OpenMP::OpenMP_CXX
+)
+
 add_custom_target(k3-experiments)
 add_dependencies(
   k3-experiments
   k3-heterogeneous-openmp-probe
   k3-heterogeneous-openmp-mass
+  k3-ime-interpolation-benchmark
 )
