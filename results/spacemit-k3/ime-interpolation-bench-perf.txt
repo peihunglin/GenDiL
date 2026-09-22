@@ -1,0 +1,9 @@
+lin32@RISKY-spacemitk3:/data/projects/GenDiL$ GENDIL_K3_A100_SHARE=100 GENDIL_K3_IME_WORK_ITERMS=23768 GENDIL_K3_IME_WARMUP=5 GENDIL_K3_IME_ITERATIONS=1000 ./build-k3-ime-clean/tools/spacemit-k3/k3-ime-interpolation-benchmark 
+k3-ime-interpolation-benchmark mode=ime-native dofs_per_dim=8 quads_per_dim=8 work_items=32768 warmup=5 iterations=1000 seconds=7.2758156029999999 interpolations_per_second=4503687.5297511574 input_dofs_per_second=288236001.90407407 output_values_per_second=288236001.90407407 checksum=147392000
+k3-ime-interpolation-benchmark mode=ime-native dofs_per_dim=9 quads_per_dim=10 work_items=32768 warmup=5 iterations=1000 seconds=42.232517934999997 interpolations_per_second=775895.0117639961 input_dofs_per_second=62847495.952883683 output_values_per_second=77589501.176399618 checksum=6457429.3212890625
+
+
+lin32@RISKY-spacemitk3:/data/projects/GenDiL$ GENDIL_K3_A100_SHARE=100 GENDIL_K3_IME_WORK_ITERMS=23768 GENDIL_K3_IME_WARMUP=5 GENDIL_K3_IME_ITERATIONS=1000 ./build-k3-fp16/tools/spacemit-k3/k3-ime-interpolation-benchmark 
+k3-ime-interpolation-benchmark mode=ime-emulation dofs_per_dim=8 quads_per_dim=8 work_items=32768 warmup=5 iterations=1000 seconds=7.1120217940000003 interpolations_per_second=4607409.953052233 input_dofs_per_second=294874236.99534291 output_values_per_second=294874236.99534291 checksum=147392000
+k3-ime-interpolation-benchmark mode=ime-emulation dofs_per_dim=9 quads_per_dim=10 work_items=32768 warmup=5 iterations=1000 seconds=88.288313587000005 interpolations_per_second=371147.64875093184 input_dofs_per_second=30062959.54882548 output_values_per_second=37114764.875093184 checksum=6457428.3447265625
+
