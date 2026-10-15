@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -46,10 +47,27 @@ bool TestAtomicAddCapture()
    return success;
 }
 
+/// Number of unit increments whose running sum stays exactly representable
+/// in T: floating-point types count exactly only up to 2^digits (2048 in
+/// FP16, 256 in BF16).
+template < typename T >
+constexpr int ExactIncrementCount()
+{
+   if constexpr ( std::numeric_limits< T >::is_integer ||
+                  std::numeric_limits< T >::digits > 12 )
+   {
+      return 4096;
+   }
+   else
+   {
+      return 1 << ( std::numeric_limits< T >::digits - 1 );
+   }
+}
+
 template < typename T >
 bool TestHostAtomicAddInPlace()
 {
-   constexpr int count = 4096;
+   constexpr int count = ExactIncrementCount< T >();
    T value = T( 0 );
 
    #pragma omp parallel for
@@ -63,7 +81,7 @@ bool TestHostAtomicAddInPlace()
 #ifdef GENDIL_USE_DEVICE
 bool TestDeviceAtomicAddInPlace()
 {
-   constexpr GlobalIndex count = 4096;
+   constexpr GlobalIndex count = ExactIncrementCount< Real >();
    Vector value( 1 );
    auto * data = WriteKernelVector< true >( value );
 

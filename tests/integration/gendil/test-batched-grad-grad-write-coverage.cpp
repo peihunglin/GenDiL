@@ -28,7 +28,7 @@ namespace
 {
 constexpr Integer order = 3;
 constexpr Integer dof_count = order + 1;
-constexpr Real tolerance = 1.0e-12;
+constexpr double tolerance = RealTolerance( 1.0e-12 );
 constexpr GlobalIndex focus_first_element = 50;
 constexpr GlobalIndex focus_last_element = 52;
 constexpr int writer_id_stride = 100000;

@@ -1269,7 +1269,7 @@ bool RunFocusedSupportedDebugCase()
             zero,
             stages_batchn );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    const char * batch_classification =
       NumCells % BatchSize == 0 ? "full-batch" : "partial-batch";
    bool success = true;
@@ -1412,7 +1412,7 @@ void RunLayoutBatchSweepCase( const char * label )
             input,
             zero );
 
-      constexpr Real tolerance = 1.0e-10;
+      constexpr double tolerance = RealTolerance( 1.0e-10 );
       const Real err_batch1 = ScaledL2Error( y_batchn, y_batch1 );
       const Real err_legacy = ScaledL2Error( y_batchn, y_legacy );
       const bool batch1_ok =
@@ -1589,7 +1589,7 @@ bool RunUnsupportedDebugVariantCaseBody()
             zero,
             stages_all_candidate );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    bool success = true;
    std::cout
       << "ThreadBlockLayout<3,5>, BatchSize=device_warp_size debug, "
@@ -1883,7 +1883,7 @@ bool RunThreadDimHypothesisCase( const char * label )
          input,
          zero );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    bool success = true;
 
    std::cout

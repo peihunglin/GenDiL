@@ -26,7 +26,7 @@ namespace
 constexpr GlobalIndex num_work_items = 10;
 constexpr long long sentinel = -987654321;
 constexpr Real real_sentinel = -987654321.0;
-constexpr Real tolerance = 1.0e-12;
+constexpr double tolerance = RealTolerance( 1.0e-12 );
 
 bool Check( const bool condition, const char * message )
 {

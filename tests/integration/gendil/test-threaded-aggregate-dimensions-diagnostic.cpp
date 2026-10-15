@@ -129,7 +129,7 @@ int main()
    GENDIL_DEVICE_SYNC;
    output.CopyToHost();
 
-   constexpr Real tolerance = 1.0e-12;
+   constexpr double tolerance = RealTolerance( 1.0e-12 );
    bool success = true;
    for ( GlobalIndex retained = 0; retained < 3; ++retained )
    {

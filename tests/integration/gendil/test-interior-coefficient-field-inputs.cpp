@@ -24,14 +24,10 @@ CellAffineField CellwiseWParameters(
    const GlobalIndex iy)
 {
    return CellAffineField{
-      0.35 + 0.17 * static_cast<Real>(ix)
-           - 0.09 * static_cast<Real>(iy)
-           + 0.04 * static_cast<Real>(ix + 3 * iy),
+      static_cast<Real>(0.35 + 0.17 * ix - 0.09 * iy + 0.04 * (ix + 3 * iy)),
       std::array<Real, 2>{
-         0.80 + 0.11 * static_cast<Real>(ix + 1)
-              - 0.04 * static_cast<Real>(iy),
-        -0.55 + 0.07 * static_cast<Real>(iy + 1)
-              + 0.03 * static_cast<Real>(ix)}
+         static_cast<Real>(0.80 + 0.11 * (ix + 1) - 0.04 * iy),
+         static_cast<Real>(-0.55 + 0.07 * (iy + 1) + 0.03 * ix)}
    };
 }
 
@@ -431,7 +427,7 @@ int TestInteriorCoefficientFieldInputsDG()
    std::cout << "  jump(FieldValue) error      = " << jump_value_err << "\n";
    std::cout << "  average(FieldGradient) err  = " << avg_gradient_err << "\n";
 
-   const Real tol = 1e-12;
+   const double tol = RealTolerance( 1e-12 );
    if (avg_value_err > tol ||
        jump_value_err > tol ||
        avg_gradient_err > tol)

@@ -158,7 +158,7 @@ int TestVectorGradGrad()
          integration_rule);
 
    // Test each component with detailed diagnostics
-   const Real tol = 1e-12;
+   const double tol = RealTolerance( 1e-12 );
    bool component_test_passed = true;
 
    for (Integer comp = 0; comp < vdim; ++comp)
@@ -256,7 +256,7 @@ int TestVectorGradGrad()
 
    std::cout << "  ||A * constant||  = " << nullspace_norm << "\n";
 
-   if (nullspace_norm > 1e-12) {
+   if (nullspace_norm > RealTolerance( 1e-12 )) {
       std::cerr << "  WARNING: Constant nullspace not satisfied (may be boundary effects)\n";
    } else {
       std::cout << "  SUCCESS: Constant nullspace satisfied\n";
@@ -363,7 +363,7 @@ int TestVectorGradGrad_vdim2()
          scalar_weak_form_context,
          integration_rule);
 
-   const Real tol = 1e-12;
+   const double tol = RealTolerance( 1e-12 );
    bool vdim2_test_passed = true;
 
    // Test each component with detailed diagnostics

@@ -227,7 +227,7 @@ int TestVectorMass()
    std::cout << "  Expected order of magnitude: volume * avg(rho) * vdim = "
              << volume << " * ~1.3 * " << vdim << " ≈ 3.9\n";
 
-   if (std::abs(constant_energy) < 1e-10 || constant_energy < 0.0)
+   if (std::abs(constant_energy) < RealTolerance( 1e-10 ) || constant_energy < 0.0)
    {
       std::cerr << "FAILED: Constant field energy is invalid.\n";
       return 1;
@@ -280,7 +280,7 @@ int TestVectorMass()
       const Real rel_error = RelativeL2Error(extracted_output, scalar_output);
       std::cout << "  Component " << comp << ": rel error = " << rel_error << "\n";
 
-      const Real tol = 1e-12;
+      const double tol = RealTolerance( 1e-12 );
       if (rel_error > tol)
       {
          std::cerr << "FAILED: Component " << comp

@@ -347,7 +347,7 @@ int TestBoundaryCoefficientFieldInputs()
    std::cout << "  Boundary FieldValue+FieldGradient err  = "
              << value_and_gradient_err << "\n";
 
-   const Real tol = 1e-12;
+   const double tol = RealTolerance( 1e-12 );
    if (value_err > tol ||
        gradient_err > tol ||
        value_and_gradient_err > tol)

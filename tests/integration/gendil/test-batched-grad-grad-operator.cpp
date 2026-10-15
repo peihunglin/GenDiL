@@ -311,7 +311,7 @@ bool RunL2CaseForCellCount(
             input,
             zero );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    bool success = true;
    const char * batch_classification =
       BatchClassification< BatchSize >( num_cells );
@@ -407,7 +407,7 @@ bool TestFocusedDeviceResidentOverwriteCoverage()
          input,
          output_sentinel );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    bool success = true;
    const char * batch_classification =
       BatchClassification< BatchSize >( num_cells );
@@ -518,7 +518,7 @@ bool RunH1CaseForCellCount(
          input,
          zero );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    bool success = true;
    const char * batch_classification =
       BatchClassification< BatchSize >( num_cells );
@@ -619,7 +619,7 @@ bool Run2DL2GradientSensitivityCase( const char * label )
          input,
          zero );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    bool success = true;
    const char * batch_classification =
       BatchClassification< BatchSize >( num_cells );

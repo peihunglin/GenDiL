@@ -426,7 +426,7 @@ int main()
          std::abs(seed_q(0) - wrong_A_n[0]) +
          std::abs(seed_q(1) - wrong_A_n[1]);
 
-      if (err > Real{1e-14} || wrong_sep < Real{1e-3})
+      if (err > RealTolerance( 1e-14 ) || wrong_sep < Real{1e-3})
       {
          std::cerr
             << "FAILED: MatVec pullback seed should be A^T n, not A n.\n"

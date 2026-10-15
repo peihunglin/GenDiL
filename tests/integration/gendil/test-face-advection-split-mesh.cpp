@@ -242,7 +242,7 @@ int main(int, char**)
       }
       std::cout << "  [Per-plane L2 of Δr along x]:\n    ";
       for (Integer I=0; I<nx_full; ++I) {
-         const Real v = std::sqrt(plane_l2[I] / std::max(plane_cnt[I], 1.0));
+         const Real v = std::sqrt(plane_l2[I] / std::max(plane_cnt[I], Real(1.0)));
          std::cout << v << (I+1<nx_full ? "  " : "\n");
       }
 
@@ -259,7 +259,7 @@ int main(int, char**)
       std::cout << "  [Left column i=nxL-1]  L2(Δ|a==0)=" << std::sqrt(sum_a0)
                << "  L2(Δ|a==p)=" << std::sqrt(sum_ap) << "\n";
 
-      const bool pass = (max_err <= 1e-12 || rel_l2 <= eps);
+      const bool pass = (max_err <= RealTolerance( 1e-12 ) || rel_l2 <= eps);
       if (!pass) std::cout << "  RESULT: FAIL (" << label << " mismatch)\n";
       else       std::cout << "  RESULT: PASS (" << label << ")\n";
       return pass;
@@ -345,7 +345,7 @@ int main(int, char**)
 
    std::cout << "  [Const]   sum(r_full)=" << sum_full
                << "  sum(r_split)=" << sum_split << "\n";
-   bool pass_cons = (std::abs(sum_full) <= 1e-10 && std::abs(sum_split) <= 1e-10);
+   bool pass_cons = (std::abs(sum_full) <= RealTolerance( 1e-10 ) && std::abs(sum_split) <= RealTolerance( 1e-10 ));
    std::cout << "  RESULT: " << (pass_cons ? "PASS" : "FAIL") << " (conservation)\n";
 
    // Final verdict

@@ -118,7 +118,7 @@ bool CheckClose(
    const char* label,
    const VectorType& a,
    const VectorType& b,
-   const Real tol = 1.0e-11)
+   const double tol = RealTolerance( 1.0e-11 ))
 {
    const Real abs_err = AbsoluteL2Error(a, b);
    const Real rel_err = RelativeL2Error(a, b);
@@ -197,7 +197,7 @@ bool CheckDenseClose(
    const char* label,
    const std::vector<Real>& dense,
    const std::vector<Real>& ref,
-   const Real tol = 1.0e-11)
+   const double tol = RealTolerance( 1.0e-11 ))
 {
    GENDIL_VERIFY(dense.size() == ref.size(), "Dense matrix sizes do not match.");
 

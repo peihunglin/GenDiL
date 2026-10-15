@@ -37,7 +37,7 @@ Vector3 TestVector3()
 }
 
 template<typename Value>
-bool Close(const Value actual, const Value expected, const Real tol = 1e-14)
+bool Close(const Value actual, const Value expected, const double tol = RealTolerance( 1e-14 ))
 {
    return std::abs(actual - expected) <= tol;
 }

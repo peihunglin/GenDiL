@@ -127,7 +127,7 @@ bool RunProjectionCase( const char * label )
       MakeReadOnlyElementTensorView< SerialKernelConfiguration >(
          test_space,
          output );
-   constexpr Real tolerance = 1e-12;
+   constexpr double tolerance = RealTolerance( 1e-12 );
    bool success = true;
    for ( LocalIndex retained = 0; retained < num_points; ++retained )
    {

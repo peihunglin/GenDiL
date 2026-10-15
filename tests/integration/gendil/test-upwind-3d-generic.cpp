@@ -225,7 +225,7 @@ int TestFacetOnlyXDirection()
    PrintVectorByElement(v_h_matrix,  num_elem, elem_dofs, "assembled");
 
    const Real rel_err = RelativeL2Error(v_h_generic, v_h_matrix);
-   const Real tol = 1e-12;
+   const double tol = RealTolerance( 1e-12 );
 
    if (rel_err > tol)
    {

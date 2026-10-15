@@ -83,7 +83,7 @@ struct ConnectivityOnlyMesh
    }
 };
 
-bool Near( const Real a, const Real b, const Real tol = 1.0e-12 )
+bool Near( const Real a, const Real b, const double tol = RealTolerance( 1.0e-12 ) )
 {
    return std::abs( a - b ) <= tol;
 }

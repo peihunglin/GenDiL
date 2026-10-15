@@ -338,8 +338,8 @@ void AccumulateInteriorSIPDGOracle(
             const Real tau = kappa * h_inv;
 
             const std::array<Real, 2> normal{
-               axis == 0 ? (plus_side_face ? 1.0 : -1.0) : 0.0,
-               axis == 1 ? (plus_side_face ? 1.0 : -1.0) : 0.0
+               Real(axis == 0 ? (plus_side_face ? 1.0 : -1.0) : 0.0),
+               Real(axis == 1 ? (plus_side_face ? 1.0 : -1.0) : 0.0)
             };
 
             for (GlobalIndex q = 0; q < num_quad_1d; ++q)
@@ -608,7 +608,7 @@ int TestSIPDGCoefficientFieldInputs()
    std::cout << "  Minus-only mu diagnostic separation = "
              << minus_only_separation << "\n";
 
-   const Real tol = 1e-11;
+   const double tol = RealTolerance( 1e-11 );
    const Real separation_tol = 1e-3;
    if (rel_err > tol)
    {

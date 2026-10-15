@@ -284,8 +284,8 @@ bool RunVectorReadDofsPolicySmoke()
          const Real full_value_1 = std::get< 1 >( full_shared )( k... );
          const Real direct_value_1 = std::get< 1 >( direct_global )( k... );
 
-         if ( std::abs( full_value_0 - direct_value_0 ) > 1e-12 ||
-              std::abs( full_value_1 - direct_value_1 ) > 1e-12 )
+         if ( std::abs( full_value_0 - direct_value_0 ) > RealTolerance( 1e-12 ) ||
+              std::abs( full_value_1 - direct_value_1 ) > RealTolerance( 1e-12 ) )
          {
             success = false;
             if ( num_failures_reported < 8 )
@@ -466,13 +466,13 @@ bool RunVectorWriteDofsPolicySmokeForOp()
       {
          const bool mismatch =
             std::abs( full_shared_data_0[ i ] - direct_global_data_0[ i ] ) >
-               1e-12 ||
+               RealTolerance( 1e-12 ) ||
             std::abs( full_shared_data_1[ i ] - direct_global_data_1[ i ] ) >
-               1e-12 ||
+               RealTolerance( 1e-12 ) ||
             std::abs( full_shared_data_0[ i ] - direct_helper_data_0[ i ] ) >
-               1e-12 ||
+               RealTolerance( 1e-12 ) ||
             std::abs( full_shared_data_1[ i ] - direct_helper_data_1[ i ] ) >
-               1e-12;
+               RealTolerance( 1e-12 );
 
          if ( mismatch )
          {

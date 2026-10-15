@@ -30,8 +30,8 @@ CellVectorField CellBetaParameters(
 
    return CellVectorField{
       std::array<Real, 2>{
-         -0.35 + 0.95 * x_cell - 0.45 * y_cell,
-          0.45 - 0.75 * x_cell + 1.10 * y_cell},
+         static_cast<Real>(-0.35 + 0.95 * x_cell - 0.45 * y_cell),
+         static_cast<Real>( 0.45 - 0.75 * x_cell + 1.10 * y_cell)},
       std::array<Real, 2>{0.35, -0.20},
       std::array<Real, 2>{-0.15, 0.55}
    };
@@ -300,8 +300,8 @@ void AccumulateInteriorUpwindOracle(
             const Real ds = fe_space.h[1 - axis];
 
             const std::array<Real, 2> normal{
-               axis == 0 ? (plus_side_face ? 1.0 : -1.0) : 0.0,
-               axis == 1 ? (plus_side_face ? 1.0 : -1.0) : 0.0
+               Real(axis == 0 ? (plus_side_face ? 1.0 : -1.0) : 0.0),
+               Real(axis == 1 ? (plus_side_face ? 1.0 : -1.0) : 0.0)
             };
 
             for (GlobalIndex q = 0; q < num_quad_1d; ++q)
@@ -330,10 +330,10 @@ void AccumulateInteriorUpwindOracle(
 
                const std::array<Real, 2> beta_facet{
                   use_averaged_beta
-                     ? 0.5 * (beta_minus[0] + beta_plus[0])
+                     ? Real(0.5) * (beta_minus[0] + beta_plus[0])
                      : beta_minus[0],
                   use_averaged_beta
-                     ? 0.5 * (beta_minus[1] + beta_plus[1])
+                     ? Real(0.5) * (beta_minus[1] + beta_plus[1])
                      : beta_minus[1]
                };
 
@@ -527,7 +527,7 @@ int TestUpwindVectorCoefficientFieldInputs()
    std::cout << "  Minus-only beta diagnostic separation = "
              << minus_only_separation << "\n";
 
-   const Real tol = 1e-11;
+   const double tol = RealTolerance( 1e-11 );
    const Real separation_tol = 1e-3;
    if (rel_err > tol)
    {

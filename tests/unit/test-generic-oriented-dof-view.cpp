@@ -197,7 +197,7 @@ bool TestOpaqueOrientedView(
       success = Check(
          std::abs(
             detail::OrientedGlobalDofValueAt(
-               opaque, native, element_index ) - expected ) < 1e-12,
+               opaque, native, element_index ) - expected ) < RealTolerance( 1e-12 ),
          "opaque native access mismatch" ) && success;
 
       const Real replacement = -1000.0 - static_cast< Real >(
@@ -205,14 +205,14 @@ bool TestOpaqueOrientedView(
       [&]< size_t... Is >( std::index_sequence< Is... > )
       {
          success = Check(
-            std::abs( oriented( reference[ Is ]... ) - expected ) < 1e-12,
+            std::abs( oriented( reference[ Is ]... ) - expected ) < RealTolerance( 1e-12 ),
             "generic oriented read mismatch" ) && success;
          oriented( reference[ Is ]... ) = replacement;
       }( std::make_index_sequence< Rank >{} );
       success = Check(
          std::abs(
             detail::OrientedGlobalDofValueAt(
-               opaque, native, element_index ) - replacement ) < 1e-12,
+               opaque, native, element_index ) - replacement ) < RealTolerance( 1e-12 ),
          "generic oriented write mismatch" ) && success;
 
       Integer axis = 0;
@@ -252,7 +252,7 @@ bool TestProxyPreservation()
       reference, sizes, orientation );
    return Check(
       std::abs( static_cast< Real >(
-         proxy_view( native[ 0 ], native[ 1 ], 1 ) ) - 17.0 ) < 1e-12,
+         proxy_view( native[ 0 ], native[ 1 ], 1 ) ) - 17.0 ) < RealTolerance( 1e-12 ),
       "generic adapter did not preserve proxy access" );
 }
 
@@ -285,7 +285,7 @@ bool TestIndirectedStridedFastPathEquivalence()
       for ( Integer i = 0; i < 2; ++i )
       {
          success = Check(
-            std::abs( fast( i, j ) - generic( i, j ) ) < 1e-12,
+            std::abs( fast( i, j ) - generic( i, j ) ) < RealTolerance( 1e-12 ),
             "indirected strided fast and generic paths disagree" ) &&
             success;
       }
@@ -337,7 +337,7 @@ bool TestStridedFastPathEquivalence(
             success = Check(
                std::abs(
                   fast( reference[ Is ]... ) -
-                  generic( reference[ Is ]... ) ) < 1e-12,
+                  generic( reference[ Is ]... ) ) < RealTolerance( 1e-12 ),
                "signed-stride and generic paths disagree" ) && success;
          }( std::make_index_sequence< Rank >{} );
 
@@ -518,11 +518,11 @@ bool TestTwoFactorRestriction()
       const Real expected = view(
          native[ 0 ], native[ 1 ], face.cell_index );
       success = Check(
-         std::abs( direct( indices... ) - expected ) < 1e-12,
+         std::abs( direct( indices... ) - expected ) < RealTolerance( 1e-12 ),
          "tensor-restriction direct read used the wrong source index" ) &&
          success;
       success = Check(
-         std::abs( shared( indices... ) - expected ) < 1e-12,
+         std::abs( shared( indices... ) - expected ) < RealTolerance( 1e-12 ),
          "tensor-restriction full-shared read used the wrong source index" ) &&
          success;
    });
@@ -579,10 +579,10 @@ bool TestThreeFactorRestriction()
       const Real expected = view(
          native[ 0 ], native[ 1 ], native[ 2 ], face.cell_index );
       success = Check(
-         std::abs( direct( indices... ) - expected ) < 1e-12,
+         std::abs( direct( indices... ) - expected ) < RealTolerance( 1e-12 ),
          "three-factor direct read used the wrong source index" ) && success;
       success = Check(
-         std::abs( shared( indices... ) - expected ) < 1e-12,
+         std::abs( shared( indices... ) - expected ) < RealTolerance( 1e-12 ),
          "three-factor full-shared read used the wrong source index" ) &&
          success;
    });

@@ -103,8 +103,8 @@ int main()
    using KernelPolicy = SerialKernelConfiguration;
 
    bool all_pass = true;
-   constexpr Real tol = 1e-12;
-   constexpr Real nonzero_tol = 1e-14;  // Tolerance for nonzero output check
+   constexpr double tol = RealTolerance( 1e-12 );
+   constexpr double nonzero_tol = RealTolerance( 1e-14 );  // Tolerance for nonzero output check
 
    // Debug: print input vector
    std::cout << "\nInput DoF vector:";

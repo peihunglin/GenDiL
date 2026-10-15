@@ -27,7 +27,7 @@ using namespace gendil::test;
 
 namespace
 {
-constexpr Real tolerance = 1.0e-10;
+constexpr double tolerance = RealTolerance( 1.0e-10 );
 
 enum SegmentId : Integer
 {

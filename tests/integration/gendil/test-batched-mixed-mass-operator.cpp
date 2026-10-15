@@ -148,7 +148,7 @@ bool RunThreadedMixedMassCaseForCellCount(
          sigma,
          x );
 
-   constexpr Real tolerance = 1e-10;
+   constexpr double tolerance = RealTolerance( 1e-10 );
    std::cout << label << ", num_cells = " << num_cells << '\n';
    bool success = true;
    success =
@@ -255,7 +255,7 @@ bool RunRegisterOnlyMixedMassCaseForCellCount(
          sigma,
          x );
 
-   constexpr Real tolerance = 1e-10;
+   constexpr double tolerance = RealTolerance( 1e-10 );
    std::cout << label << ", num_cells = " << num_cells << '\n';
    return CheckScaledL2Close(
       "Register-only DeviceBatchN vs DeviceBatch1",

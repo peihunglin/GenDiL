@@ -7,6 +7,7 @@
 #include <array>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -63,7 +64,7 @@ using VectorH1Space =
 using Component0Tag = std::integral_constant< size_t, 0 >;
 using Component1Tag = std::integral_constant< size_t, 1 >;
 
-constexpr Real tolerance = 1.0e-12;
+constexpr double tolerance = RealTolerance( 1.0e-12 );
 
 bool Check( const bool condition, const char * message )
 {
@@ -693,7 +694,13 @@ bool TestScalarH1GatherScatterMapping()
 
 bool TestSharedScalarH1HostScatter()
 {
-   constexpr Integer num_elements = 4096;
+   // The scatter sums one unit contribution per element into each shared
+   // DoF; the total must stay exactly representable in Real (floating-point
+   // types count exactly only up to 2^digits, i.e. 2048 in FP16).
+   constexpr Integer num_elements =
+      std::numeric_limits< Real >::digits > 12
+         ? 4096
+         : ( Integer( 1 ) << ( std::numeric_limits< Real >::digits - 1 ) );
    Cartesian1DMesh mesh(
       Real( 1 ) / static_cast< Real >( num_elements ),
       num_elements );

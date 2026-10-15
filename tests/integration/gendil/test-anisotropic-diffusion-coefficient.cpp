@@ -482,7 +482,7 @@ int TestAnisotropicDiffusionCoefficient()
    std::cout << "  A^T seed vs wrong A seed separation  = "
              << wrong_transpose_sep << "\n";
 
-   const Real tol = 1e-11;
+   const double tol = RealTolerance( 1e-11 );
    if (primal_err > tol ||
        transpose_err > tol ||
        public_transpose_err > tol ||

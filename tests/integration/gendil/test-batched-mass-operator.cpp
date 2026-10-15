@@ -110,7 +110,7 @@ bool RunMassCaseForCellCount(
    auto y_batchn =
       ApplyMass< DeviceBatchN >( fe_space, integration_rule, sigma, x );
 
-   constexpr Real tolerance = 1e-12;
+   constexpr double tolerance = RealTolerance( 1e-12 );
    std::cout << label << ", num_cells = " << num_cells << '\n';
    return CheckRelativeL2Close(
       "DeviceBatchN vs LegacyConfig",
@@ -185,7 +185,7 @@ bool RunRegisterOnlyMassCaseForCellCount(
    auto y_batchn =
       ApplyMass< DeviceBatchN >( fe_space, integration_rule, sigma, x );
 
-   constexpr Real tolerance = 1e-12;
+   constexpr double tolerance = RealTolerance( 1e-12 );
    std::cout << label << ", num_cells = " << num_cells << '\n';
    return CheckRelativeL2Close(
       "Register-only DeviceBatchN vs DeviceBatch1",

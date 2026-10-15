@@ -12,7 +12,7 @@ using namespace gendil;
 namespace
 {
 
-constexpr Real tol = 1.0e-12;
+constexpr double tol = RealTolerance( 1.0e-12 );
 
 bool Near(const Real a, const Real b)
 {

@@ -209,7 +209,7 @@ int main(int, char**)
     const Real* pr = r.ReadHostData();
     for (Integer g=0; g<ndofs_split; ++g) sum += pr[g];
     std::cout << "  [Const u=1] sum(r) = " << sum << "  → "
-              << (std::abs(sum) <= 1e-12 ? "PASS" : "FAIL") << "\n";
+              << (std::abs(sum) <= RealTolerance( 1e-12 ) ? "PASS" : "FAIL") << "\n";
   }
 
   // (2) Interface pulse (coarse left interface column only)
@@ -278,7 +278,7 @@ int main(int, char**)
     }
     l2 = std::sqrt(l2);
     std::cout << "\n[r=1 fallback: interface-only] ||Δ||_2 = " << l2
-              << "  → " << (l2 <= 1e-12 ? "PASS" : "FAIL") << "\n";
+              << "  → " << (l2 <= RealTolerance( 1e-12 ) ? "PASS" : "FAIL") << "\n";
   }
 
   return 0;

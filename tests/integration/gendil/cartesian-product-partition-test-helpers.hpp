@@ -14,7 +14,7 @@
 namespace gendil::test
 {
 
-inline constexpr Real product_partition_tolerance = 1.0e-11;
+inline constexpr double product_partition_tolerance = RealTolerance( 1.0e-11 );
 
 inline bool Check(const bool condition, const std::string& message)
 {

@@ -87,7 +87,7 @@ int main() {
         bool has_minus_one = false;
         for (int local_dof = 0; local_dof < dofs_per_elem; local_dof++) {
             int dof = elem * dofs_per_elem + local_dof;
-            Real ratio = (std::abs(v_h_legacy_symm[dof]) > 1e-14)
+            Real ratio = (std::abs(v_h_legacy_symm[dof]) > RealTolerance( 1e-14 ))
                          ? (v_h_generic[dof] / v_h_legacy_symm[dof]) : 0.0;
             if (std::abs(ratio + 1.0) < 0.01) {
                 has_minus_one = true;

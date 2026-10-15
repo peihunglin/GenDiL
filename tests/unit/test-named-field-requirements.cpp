@@ -41,7 +41,7 @@ struct FakeQuadPointContext2D
    std::array<std::array<Real, 2>, 2> inv_J_mesh;
 };
 
-bool Near(Real a, Real b, Real tol = 1e-12)
+bool Near(Real a, Real b, double tol = RealTolerance( 1e-12 ))
 {
    return std::abs(a - b) <= tol;
 }

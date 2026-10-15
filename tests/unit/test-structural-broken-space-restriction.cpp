@@ -124,7 +124,7 @@ int main()
    const Real * direct_output_data = direct_output.ReadHostData();
    const Real * permuted_output_data = permuted_output.ReadHostData();
 
-   constexpr Real tolerance = 1.0e-12;
+   constexpr double tolerance = RealTolerance( 1.0e-12 );
    for ( GlobalIndex element = 0; element < 2; ++element )
    {
       for ( GlobalIndex local = 0; local < 2; ++local )

@@ -73,8 +73,8 @@ int main() {
     std::cout << "DOF | Legacy_Symm | Generic_Symm | Ratio\n";
     std::cout << "----+-------------+--------------+-------\n";
     for (Integer i = 0; i < num_dofs; i++) {
-        if (std::abs(v_h_legacy_symm[i]) > 1e-14 || std::abs(v_h_generic[i]) > 1e-14) {
-            Real ratio = (std::abs(v_h_legacy_symm[i]) > 1e-14) ? (v_h_generic[i] / v_h_legacy_symm[i]) : 0.0;
+        if (std::abs(v_h_legacy_symm[i]) > RealTolerance( 1e-14 ) || std::abs(v_h_generic[i]) > RealTolerance( 1e-14 )) {
+            Real ratio = (std::abs(v_h_legacy_symm[i]) > RealTolerance( 1e-14 )) ? (v_h_generic[i] / v_h_legacy_symm[i]) : 0.0;
             printf("%3d | %12.6e | %12.6e | %6.3f\n", (int)i, v_h_legacy_symm[i], v_h_generic[i], ratio);
         }
     }

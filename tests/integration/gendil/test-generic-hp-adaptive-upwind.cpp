@@ -360,7 +360,7 @@ bool CheckVectorClose(
    const char* label,
    const Vector& got,
    const Vector& expected,
-   const Real tol = 1.0e-11)
+   const double tol = RealTolerance( 1.0e-11 ))
 {
    GENDIL_VERIFY(got.Size() == expected.Size(), "Vector sizes do not match.");
    const Real* got_data = got.ReadHostData();
@@ -383,7 +383,7 @@ bool CheckDenseClose(
    const char* label,
    const std::vector<Real>& got,
    const std::vector<Real>& expected,
-   const Real tol = 1.0e-11)
+   const double tol = RealTolerance( 1.0e-11 ))
 {
    GENDIL_VERIFY(got.size() == expected.size(), "Dense matrix sizes do not match.");
    Real max_err = 0.0;
@@ -412,7 +412,7 @@ bool CheckNear(
    const char* label,
    const Real got,
    const Real expected,
-   const Real tol = 1.0e-11)
+   const double tol = RealTolerance( 1.0e-11 ))
 {
    const Real err = std::abs(got - expected);
    std::cout << label << " | got = " << got

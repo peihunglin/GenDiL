@@ -127,9 +127,9 @@ int TestAdvection()
       const Real x = X[0];
       const Real y = X[1];
       const Real z = X[2];
-      return { -x * (1.0 - x),
-               -y * (1.0 - y),
-               -z * (1.0 - z) };
+      return { -x * (Real(1.0) - x),
+               -y * (Real(1.0) - y),
+               -z * (Real(1.0) - z) };
    };
 
    auto adv = [beta_fn] GENDIL_HOST_DEVICE
@@ -222,9 +222,9 @@ int TestAdvection()
    PrintComparison("generic",  v_h_generic, "assembled", v_h_matrix);
    PrintComparison("legacy",   v_h_legacy,  "assembled", v_h_matrix);
 
-   const Real tol_generic_vs_legacy    = 1e-11;
-   const Real tol_generic_vs_assembled = 1e-11;
-   const Real tol_legacy_vs_assembled  = 1e-11;
+   const double tol_generic_vs_legacy    = RealTolerance( 1e-11 );
+   const double tol_generic_vs_assembled = RealTolerance( 1e-11 );
+   const double tol_legacy_vs_assembled  = RealTolerance( 1e-11 );
 
    const Real err_generic_vs_legacy =
       RelativeL2Error(v_h_generic, v_h_legacy);

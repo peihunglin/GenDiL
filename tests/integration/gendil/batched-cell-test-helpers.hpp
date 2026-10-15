@@ -202,7 +202,7 @@ inline bool CheckScalarClose(
 
 inline bool CheckNontrivialPositive( const char * label, const Real value )
 {
-   if ( !std::isfinite( value ) || value <= 1e-8 )
+   if ( !std::isfinite( value ) || value <= RealTolerance( 1e-8 ) )
    {
       std::cout << "FAILED: " << label
                 << " produced a near-zero oracle, which would not detect "
@@ -322,7 +322,7 @@ inline bool CheckNoValue(
    const char * label,
    const Vector & x,
    const Real forbidden_value,
-   const Real tolerance = 1.0e-12 )
+   const double tolerance = RealTolerance( 1.0e-12 ) )
 {
    bool success = true;
    const Real * data = x.ReadHostData();

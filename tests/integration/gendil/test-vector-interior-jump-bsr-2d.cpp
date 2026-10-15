@@ -216,7 +216,7 @@ int TestVectorInteriorJumpBsrAction()
    std::cout << "abs L2 error   = " << abs_error << "\n";
    std::cout << "rel L2 error   = " << rel_error << "\n";
 
-   const Real tolerance = 1.0e-12;
+   const double tolerance = RealTolerance( 1.0e-12 );
    if ( rel_error > tolerance )
    {
       std::cerr

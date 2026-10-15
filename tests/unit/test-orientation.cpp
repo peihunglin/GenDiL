@@ -111,7 +111,7 @@ bool Check( const bool condition, const char * message )
    return condition;
 }
 
-constexpr Real identity_tolerance = 1.0e-13;
+constexpr double identity_tolerance = RealTolerance( 1.0e-13 );
 
 bool NearlyEqual( const Real left, const Real right )
 {

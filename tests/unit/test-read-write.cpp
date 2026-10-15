@@ -11,7 +11,7 @@
 using namespace std;
 using namespace gendil;
 
-bool approximately_equal(Real a, Real b, Real tol = 1e-12)
+bool approximately_equal(Real a, Real b, double tol = RealTolerance( 1e-12 ))
 {
    return std::abs(a - b) <= tol * std::max(std::abs(a), std::abs(b));
 }

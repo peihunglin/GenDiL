@@ -177,7 +177,7 @@ bool RunL2CaseForCellCount(
          integration_rule,
          source );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    bool success = true;
    std::cout << label << " L2, num_cells = " << num_cells << '\n';
 
@@ -329,7 +329,7 @@ bool RunH1CaseForCellCount(
          integration_rule,
          source );
 
-   constexpr Real tolerance = 1.0e-10;
+   constexpr double tolerance = RealTolerance( 1.0e-10 );
    bool success = true;
    std::cout << label << " H1, num_cells = " << num_cells << '\n';
 

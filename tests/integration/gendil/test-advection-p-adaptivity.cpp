@@ -103,7 +103,7 @@ int main(int, char**)
       sumR += r_data[i];
    }
 
-   if (std::abs(sumL + sumR) > 1e-10)
+   if (std::abs(sumL + sumR) > RealTolerance( 1e-10 ))
    {
       return 2;
    }

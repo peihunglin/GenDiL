@@ -14,7 +14,7 @@ using namespace gendil;
 namespace
 {
 
-constexpr Real tolerance = 1.0e-6;
+constexpr double tolerance = RealTolerance( 1.0e-6 );
 
 bool Check( const bool condition, const char * message )
 {

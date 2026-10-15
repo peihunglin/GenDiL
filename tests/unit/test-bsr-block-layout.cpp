@@ -34,7 +34,7 @@ static_assert( std::is_copy_constructible_v< HostDevicePointer< Real > > );
 static_assert(
    std::is_copy_constructible_v< RawCOOAssemblyTarget<> > );
 
-constexpr Real tolerance = 1.0e-12;
+constexpr double tolerance = RealTolerance( 1.0e-12 );
 
 bool Check( const bool condition, const char * message )
 {

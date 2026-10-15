@@ -78,7 +78,7 @@ static_assert(
 namespace
 {
 
-constexpr Real tolerance = 1.0e-12;
+constexpr double tolerance = RealTolerance( 1.0e-12 );
 
 bool Check( const bool condition, const char * message )
 {

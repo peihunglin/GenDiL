@@ -334,7 +334,7 @@ bool RunGlobalFaceAdvectionThreadedCase(
          x,
          baseline );
 
-   constexpr Real tolerance = 1e-10;
+   constexpr double tolerance = RealTolerance( 1e-10 );
    bool success = true;
    success =
       CheckVectorFinite( "LegacyConfig", y_legacy ) && success;
@@ -447,7 +447,7 @@ bool RunGlobalFaceAdvectionRegisterOnlyCase(
          x,
          baseline );
 
-   constexpr Real tolerance = 1e-10;
+   constexpr double tolerance = RealTolerance( 1e-10 );
    bool success = true;
    success =
       CheckVectorFinite( "DeviceBatch1", y_batch1 ) && success;

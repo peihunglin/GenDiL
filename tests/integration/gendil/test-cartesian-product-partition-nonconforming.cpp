@@ -322,7 +322,7 @@ bool TestNumericalNonconformingProduct()
    const Vector sparse =
       ApplyNonconformingSparseForm(generated, input);
    bool success = Check(
-      VectorNorm(expected) > Real{1.0e-8},
+      VectorNorm(expected) > RealTolerance( 1.0e-8 ),
       "nonconforming oracle is nonzero");
    success = CheckVectorClose(
       FacedFirst
@@ -374,12 +374,12 @@ bool TestNumericalNonconformingProduct()
    const Vector unsigned_output =
       ApplyNonconformingForm(unsigned_orientation, input);
    success = Check(
-      DifferenceNorm(expected, wrong_map_output) > Real{1.0e-7},
+      DifferenceNorm(expected, wrong_map_output) > RealTolerance( 1.0e-7 ),
       FacedFirst
          ? "faced-first oracle detects a wrong coordinate block"
          : "faced-second oracle detects a wrong coordinate block") && success;
    success = Check(
-      DifferenceNorm(expected, unsigned_output) > Real{1.0e-7},
+      DifferenceNorm(expected, unsigned_output) > RealTolerance( 1.0e-7 ),
       FacedFirst
          ? "faced-first oracle detects a lost signed orientation"
          : "faced-second oracle detects a lost signed orientation") && success;
@@ -439,7 +439,7 @@ bool TestH1NonconformingSmoke()
    const Vector output = Apply(op, input);
    const Real norm = VectorNorm(output);
    return Check(
-      std::isfinite(norm) && norm > Real{1.0e-8},
+      std::isfinite(norm) && norm > RealTolerance( 1.0e-8 ),
       "scalar H1 nonconforming product smoke is finite and nonzero");
 }
 
@@ -508,7 +508,7 @@ bool TestVectorRawCOONonconformingValuesAndGradients()
       const Vector coo_result = Apply( coo, input );
       const Vector csr_result = Apply( csr, input );
       case_success = Check(
-         VectorNorm( expected ) > Real{1.0e-8},
+         VectorNorm( expected ) > RealTolerance( 1.0e-8 ),
          std::string( label ) + " matrix-free action is nonzero" ) &&
          case_success;
       case_success = CheckVectorClose(

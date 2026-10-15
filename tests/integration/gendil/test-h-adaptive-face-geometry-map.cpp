@@ -24,7 +24,7 @@ template <Integer>
 using GlobalFaceKernelPolicy = SerialKernelConfiguration;
 #endif
 
-constexpr Real tol = 1.0e-11;
+constexpr double tol = RealTolerance( 1.0e-11 );
 
 bool CheckNear(const std::string& label, const Real got, const Real expected)
 {
@@ -42,8 +42,11 @@ bool CheckNear(const std::string& label, const Real got, const Real expected)
 
 bool CheckFar(const std::string& label, const Real a, const Real b)
 {
+   // Separation is judged relative to the magnitude of the values so that
+   // the criterion stays meaningful in reduced precision.
    const Real diff = std::abs(a - b);
-   if (diff <= 100.0 * tol)
+   const Real scale = std::max(std::abs(a), std::abs(b));
+   if (diff <= RealTolerance(1e-9) * scale)
    {
       std::cerr << "FAILED: " << label
                 << " values unexpectedly matched: " << a
@@ -129,7 +132,7 @@ struct TangentialReversalCase
 
    static std::array<Real, 2> NativePoint(const Real x_ref, const Real y_ref)
    {
-      return {x_ref, 1.0 - y_ref};
+      return {x_ref, Real(1.0) - y_ref};
    }
 
    static std::array<LocalIndex, 2> ReferenceDofFromNative(

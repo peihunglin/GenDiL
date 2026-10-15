@@ -78,8 +78,8 @@ int main() {
     std::cout << "------+--------------+--------------+-------+--------------\n";
     int count = 0;
     for (int i = 0; i < num_dofs && count < 30; i++) {
-        if (std::abs(v_h_legacy_symm[i]) > 1e-14 || std::abs(v_h_generic[i]) > 1e-14) {
-            Real ratio = (std::abs(v_h_legacy_symm[i]) > 1e-14) ? (v_h_generic[i] / v_h_legacy_symm[i]) : 0.0;
+        if (std::abs(v_h_legacy_symm[i]) > RealTolerance( 1e-14 ) || std::abs(v_h_generic[i]) > RealTolerance( 1e-14 )) {
+            Real ratio = (std::abs(v_h_legacy_symm[i]) > RealTolerance( 1e-14 )) ? (v_h_generic[i] / v_h_legacy_symm[i]) : 0.0;
             Real diff = v_h_generic[i] - v_h_legacy_symm[i];
             printf("%5d | %12.6e | %12.6e | %6.3f | %12.6e\n", i, v_h_legacy_symm[i], v_h_generic[i], ratio, diff);
             count++;

@@ -73,8 +73,8 @@ int TestSingleFaceDirection() {
 
     bool has_exact_minus_one = false;
     for (Integer i = 0; i < num_dofs; i++) {
-        if (std::abs(v_h_legacy_symm[i]) > 1e-14 || std::abs(v_h_generic[i]) > 1e-14) {
-            Real ratio = (std::abs(v_h_legacy_symm[i]) > 1e-14) ? (v_h_generic[i] / v_h_legacy_symm[i]) : 0.0;
+        if (std::abs(v_h_legacy_symm[i]) > RealTolerance( 1e-14 ) || std::abs(v_h_generic[i]) > RealTolerance( 1e-14 )) {
+            Real ratio = (std::abs(v_h_legacy_symm[i]) > RealTolerance( 1e-14 )) ? (v_h_generic[i] / v_h_legacy_symm[i]) : 0.0;
             printf("DOF %3d | Legacy: %12.6e | Generic: %12.6e | Ratio: %7.3f%s\n",
                    (int)i, v_h_legacy_symm[i], v_h_generic[i], ratio,
                    (std::abs(ratio + 1.0) < 0.01) ? " <-- EXACT -1.0" : "");

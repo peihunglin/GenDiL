@@ -338,7 +338,7 @@ bool RunOrientedGlobalViewCase(
          const bool identity_match =
             orientation != identity || native_indices == reference_indices;
 
-         if ( std::abs( expected - actual ) > 1e-12 ||
+         if ( std::abs( expected - actual ) > RealTolerance( 1e-12 ) ||
               !identity_match )
          {
             success = false;
@@ -384,7 +384,7 @@ bool CompareLocalDofs(
    {
       const Real full_value = full_shared( k... );
       const Real direct_value = direct_global( k... );
-      if ( std::abs( full_value - direct_value ) > 1e-12 )
+      if ( std::abs( full_value - direct_value ) > RealTolerance( 1e-12 ) )
       {
          success = false;
          if ( num_failures_reported < 8 )
@@ -578,7 +578,7 @@ bool RunScalarWriteDofsSupportedCase(
             return global_dofs( native_indices[ I ]..., element_index );
          }( std::make_index_sequence< dim >{} );
 
-         if ( std::abs( expected - actual ) > 1e-12 )
+         if ( std::abs( expected - actual ) > RealTolerance( 1e-12 ) )
          {
             success = false;
             if ( num_failures_reported < 8 )
@@ -755,7 +755,7 @@ bool RunScalarWriteDofsPolicyEquivalenceOpCase(
       {
          const Real full_value = full_shared_data[ i ];
          const Real direct_value = direct_global_data[ i ];
-         if ( std::abs( full_value - direct_value ) > 1e-12 )
+         if ( std::abs( full_value - direct_value ) > RealTolerance( 1e-12 ) )
          {
             success = false;
             if ( num_failures_reported < 8 )

@@ -193,9 +193,9 @@ int TestMass()
    PrintComparison("generic", y_generic, "assembled", y_assembled);
    PrintComparison("legacy",  y_legacy,  "assembled", y_assembled);
 
-   const Real tol_generic_vs_legacy    = 1e-12;
-   const Real tol_generic_vs_assembled = 1e-12;
-   const Real tol_legacy_vs_assembled  = 1e-12;
+   const double tol_generic_vs_legacy    = RealTolerance( 1e-12 );
+   const double tol_generic_vs_assembled = RealTolerance( 1e-12 );
+   const double tol_legacy_vs_assembled  = RealTolerance( 1e-12 );
 
    const Real err_generic_vs_legacy =
       RelativeL2Error(y_generic, y_legacy);

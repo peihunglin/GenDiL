@@ -49,7 +49,7 @@ Vector ApplyMassInverse(
    Sigma & sigma,
    const Vector & rhs,
    const Integer max_iters = 10000,
-   const Real tolerance = 1e-14 )
+   const double tolerance = RealTolerance( 1e-14 ) )
 {
    Vector x( fe_space.GetNumberOfFiniteElementDofs() );
    x = 0.0;
@@ -179,7 +179,7 @@ bool RunMassInverseCaseForCellCount(
          sigma,
          rhs );
 
-   constexpr Real tolerance = 1e-8;
+   constexpr double tolerance = RealTolerance( 1e-8 );
    bool success = true;
    std::cout << label << ", num_cells = " << num_cells << '\n';
    success =
@@ -212,7 +212,7 @@ bool RunMassInverseCaseForCellCount(
                sigma,
                rhs,
                10000,
-               1e-14 );
+               RealTolerance( 1e-14 ) );
          success =
             CheckScaledL2Close(
                "DeviceBatchN explicit defaults vs implicit defaults",
@@ -311,7 +311,7 @@ bool RunRegisterOnlyMassInverseCaseForCellCount(
          sigma,
          rhs );
 
-   constexpr Real tolerance = 1e-8;
+   constexpr double tolerance = RealTolerance( 1e-8 );
    bool success = true;
    std::cout << label << ", num_cells = " << num_cells << '\n';
    success =
@@ -332,7 +332,7 @@ bool RunRegisterOnlyMassInverseCaseForCellCount(
                sigma,
                rhs,
                10000,
-               1e-14 );
+               RealTolerance( 1e-14 ) );
          success =
             CheckScaledL2Close(
                "Register-only explicit defaults vs implicit defaults",

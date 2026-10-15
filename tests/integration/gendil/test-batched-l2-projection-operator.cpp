@@ -140,7 +140,7 @@ bool RunL2ProjectionCaseForCellCount(
          integration_rule,
          x );
 
-   constexpr Real tolerance = 1e-10;
+   constexpr double tolerance = RealTolerance( 1e-10 );
    bool success = true;
    std::cout << label << ", num_cells = " << num_cells << '\n';
    success =
@@ -227,7 +227,7 @@ bool RunRegisterOnlyL2ProjectionCaseForCellCount(
          integration_rule,
          x );
 
-   constexpr Real tolerance = 1e-10;
+   constexpr double tolerance = RealTolerance( 1e-10 );
    std::cout << label << ", num_cells = " << num_cells << '\n';
    return CheckRelativeL2Close(
       "Register-only DeviceBatchN vs DeviceBatch1",

@@ -1,5 +1,6 @@
 
 gendil_add_test(test-dot test-dot.cpp)
+gendil_add_test(test-real-type test-real-type.cpp)
 gendil_add_test(test-kernel-configuration test-kernel-configuration.cpp)
 gendil_add_test(test-getpoint test-getpoint.cpp)
 gendil_add_test(test-garbage-collector test-garbage-collector.cpp)

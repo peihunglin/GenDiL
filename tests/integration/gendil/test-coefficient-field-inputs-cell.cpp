@@ -83,7 +83,7 @@ int TestCoefficientFieldInputsCell()
 
    const Integer n = 3;
    const Real h = 1.0 / n;
-   CartesianMesh<3> mesh({n, n, n}, {h, 2.0 * h, 0.5 * h}, {0.0, 0.0, 0.0});
+   CartesianMesh<3> mesh({n, n, n}, {h, Real(2.0) * h, Real(0.5) * h}, {0.0, 0.0, 0.0});
 
    FiniteElementOrders<order, order, order> orders;
    auto finite_element = MakeLobattoFiniteElement(orders);
@@ -211,7 +211,7 @@ int TestCoefficientFieldInputsCell()
    const Vector y_value_and_gradient = ApplyOperator(value_and_gradient_op, x);
    const Vector y_multiple_fields = ApplyOperator(multiple_fields_op, x);
 
-   const Real tol = 1e-12;
+   const double tol = RealTolerance( 1e-12 );
 
    const Real err_value = RelativeL2Error(y_value, y_ref_25);
    const Real err_gradient = RelativeL2Error(y_gradient, y_ref_affine_gradient);

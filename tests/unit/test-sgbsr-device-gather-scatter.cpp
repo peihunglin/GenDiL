@@ -26,7 +26,7 @@ using namespace gendil;
 namespace
 {
 
-constexpr Real tolerance = 1.0e-10;
+constexpr double tolerance = RealTolerance( 1.0e-10 );
 using ScalarFE = GLFiniteElement< 1 >;
 
 bool Check( const bool condition, const char * message )

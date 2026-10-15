@@ -15,7 +15,7 @@ using namespace gendil;
 namespace
 {
 
-constexpr Real tolerance = 1.0e-12;
+constexpr double tolerance = RealTolerance( 1.0e-12 );
 
 #ifdef GENDIL_USE_HYPRE_DEVICE
 using ExpectedHypreCSRBackend = HypreCSRDeviceBackend;

@@ -18,9 +18,9 @@ using namespace gendil;
 namespace
 {
 
-constexpr Real device_oracle_tolerance = Real{1.0e-10};
-constexpr Real device_sensitivity_tolerance = Real{1.0e-8};
-constexpr Real device_nonzero_tolerance = Real{1.0e-12};
+constexpr double device_oracle_tolerance = RealTolerance( 1.0e-10 );
+constexpr double device_sensitivity_tolerance = RealTolerance( 1.0e-8 );
+constexpr double device_nonzero_tolerance = RealTolerance( 1.0e-12 );
 
 #if defined(GENDIL_USE_DEVICE)
 template<Integer Q, Integer BatchSize>

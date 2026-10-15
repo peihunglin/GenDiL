@@ -115,7 +115,7 @@ bool RunL2ErrorCaseForCellCount(
    const Real error_batchn =
       ComputeL2Error< DeviceBatchN >( fe_space, integration_rule, x );
 
-   constexpr Real tolerance = 1e-10;
+   constexpr double tolerance = RealTolerance( 1e-10 );
    bool success = true;
    std::cout << label << ", num_cells = " << num_cells << '\n';
    success =
@@ -192,7 +192,7 @@ bool RunRegisterOnlyL2ErrorCaseForCellCount(
    const Real error_batchn =
       ComputeL2Error< DeviceBatchN >( fe_space, integration_rule, x );
 
-   constexpr Real tolerance = 1e-10;
+   constexpr double tolerance = RealTolerance( 1e-10 );
    std::cout << label << ", num_cells = " << num_cells << '\n';
    return
       CheckNontrivialPositive( "DeviceBatch1 L2Error", error_batch1 ) &&

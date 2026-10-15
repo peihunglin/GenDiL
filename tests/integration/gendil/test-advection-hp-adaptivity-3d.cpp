@@ -158,7 +158,7 @@ int main(int, char**)
     const Real* pr = r.ReadHostData();
     for (Integer g=0; g<ndofs_split; ++g) sum += pr[g];
     std::cout << "  [Const u=1] sum(r) = " << sum << "  → "
-              << (std::abs(sum) <= 1e-12 ? "PASS" : "FAIL") << "\n\n";
+              << (std::abs(sum) <= RealTolerance( 1e-12 ) ? "PASS" : "FAIL") << "\n\n";
   }
 
   // --------------------------
@@ -207,7 +207,7 @@ int main(int, char**)
     for (Integer g=0; g<r_nc.Size(); ++g) l2 += sqr(a[g]-b[g]);
     l2 = std::sqrt(l2);
     std::cout << "[r=1 fallback vs conforming] ||Δ||_2 = " << l2
-              << "  → " << (l2 <= 1e-12 ? "PASS" : "FAIL") << "\n\n";
+              << "  → " << (l2 <= RealTolerance( 1e-12 ) ? "PASS" : "FAIL") << "\n\n";
   }
 
   // --------------------------
@@ -230,7 +230,7 @@ int main(int, char**)
     for (Integer g=0; g<ndofs_split; ++g) l2 += sqr(rp[g] + rn[g]);
     l2 = std::sqrt(l2);
     std::cout << "[β sign flip] ||r(+β) + r(−β)||_2 = " << l2
-              << "  → " << (l2 <= 1e-12 ? "PASS" : "WARN") << "\n\n";
+              << "  → " << (l2 <= RealTolerance( 1e-12 ) ? "PASS" : "WARN") << "\n\n";
   }
 
   // --------------------------

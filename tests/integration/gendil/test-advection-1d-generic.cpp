@@ -209,9 +209,9 @@ int TestAdvection1D()
    PrintComparison("generic", v_h_generic, "assembled", v_h_matrix);
    PrintComparison("legacy",  v_h_legacy,  "assembled", v_h_matrix);
 
-   const Real tol_generic_vs_legacy    = 1e-12;
-   const Real tol_generic_vs_assembled = 1e-12;
-   const Real tol_legacy_vs_assembled  = 1e-12;
+   const double tol_generic_vs_legacy    = RealTolerance( 1e-12 );
+   const double tol_generic_vs_assembled = RealTolerance( 1e-12 );
+   const double tol_legacy_vs_assembled  = RealTolerance( 1e-12 );
 
    const Real err_generic_vs_legacy =
       RelativeL2Error(v_h_generic, v_h_legacy);

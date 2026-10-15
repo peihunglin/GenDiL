@@ -23,7 +23,7 @@ bool Check( const bool condition, const char * message )
 
 bool Near( const Real lhs, const Real rhs )
 {
-   return std::abs( lhs - rhs ) < 1.0e-12;
+   return std::abs( lhs - rhs ) < RealTolerance( 1.0e-12 );
 }
 
 void FillInputAndOutput( Vector & x, Vector & y )

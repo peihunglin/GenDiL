@@ -338,7 +338,7 @@ int main()
       -> std::array<Real, Dim>
    {
       const Real x = X[0];
-      return { x * (1.0 - x) };
+      return { x * (Real(1.0) - x) };
    };
    auto beta = MakeVectorCoefficient<"beta", PhysicalCoordinates>(beta_fn);
 

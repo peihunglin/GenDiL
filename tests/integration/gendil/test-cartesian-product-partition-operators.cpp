@@ -258,7 +258,7 @@ bool TestCellDomainWeightedMass()
    const Vector expected = Apply(direct_op, input);
    const Vector got = Apply(partition_op, input);
    return Check(
-             VectorNorm(expected) > Real{1.0e-8},
+             VectorNorm(expected) > RealTolerance( 1.0e-8 ),
              "weighted mass reference is nonzero") &&
           CheckVectorClose(
              "partition cell-domain weighted mass matches direct product mesh",
@@ -332,7 +332,7 @@ bool TestBoundaryDomainWeightedMass()
    const Vector got = Apply(generated_op, input);
    const Vector expected = Apply(manual_op, input);
    return Check(
-             VectorNorm(expected) > Real{1.0e-8},
+             VectorNorm(expected) > RealTolerance( 1.0e-8 ),
              "boundary weighted-mass oracle is nonzero") &&
           CheckVectorClose(
              "product boundary adapter matches materialized connectivity",
@@ -467,7 +467,7 @@ bool TestStaticIdentityPlusGeometryFirstFactor()
          << " relative=" << relative_error << '\n';
    }
    success = Check(
-      reference_norm > Real{1.0e-8},
+      reference_norm > RealTolerance( 1.0e-8 ),
       "forced plus-geometry runtime oracle is nonzero") && success;
    success = CheckVectorClose(
       "generated plus geometry matches manual identity oracle",
@@ -616,7 +616,7 @@ bool TestStaticIdentityPlusGeometrySecondFactor()
          << " relative=" << relative_error << '\n';
    }
    success = Check(
-      reference_norm > Real{1.0e-8},
+      reference_norm > RealTolerance( 1.0e-8 ),
       "second-factor forced plus-geometry runtime oracle is nonzero") &&
       success;
    success = CheckVectorClose(

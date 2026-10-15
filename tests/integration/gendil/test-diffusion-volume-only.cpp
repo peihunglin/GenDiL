@@ -190,7 +190,7 @@ int TestDiffusionVolumeOnly()
 
    PrintComparison("generic", v_h_generic, "assembled", v_h_matrix);
 
-   const Real tol_generic_vs_assembled = 1e-10;
+   const double tol_generic_vs_assembled = RealTolerance( 1e-10 );
 
    const Real err_generic_vs_assembled =
       RelativeL2Error(v_h_generic, v_h_matrix);

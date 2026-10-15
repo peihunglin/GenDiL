@@ -82,7 +82,7 @@ bool VectorsNear( const Vector & lhs, const Vector & rhs )
    const Real * rhs_data = rhs.ReadHostData();
    for ( size_t i = 0; i < lhs.Size(); ++i )
    {
-      if ( std::abs( lhs_data[i] - rhs_data[i] ) > 1.0e-11 )
+      if ( std::abs( lhs_data[i] - rhs_data[i] ) > RealTolerance( 1.0e-11 ) )
       {
          return false;
       }
@@ -144,7 +144,7 @@ bool CheckMFEMApplyAdd(
    for ( int i = 0; i < output_size; ++i )
    {
       success = Check(
-         std::abs( host_data[i] - device_data[i] ) < 1.0e-11,
+         std::abs( host_data[i] - device_data[i] ) < RealTolerance( 1.0e-11 ),
          message ) && success;
    }
    return success;
@@ -187,7 +187,7 @@ bool CheckMixedVectorApply(
       for ( int i = 0; i < output_size; ++i )
       {
          result = Check(
-            std::abs( host_data[i] - device_data[i] ) < 1.0e-11,
+            std::abs( host_data[i] - device_data[i] ) < RealTolerance( 1.0e-11 ),
             message ) && result;
       }
       return result;

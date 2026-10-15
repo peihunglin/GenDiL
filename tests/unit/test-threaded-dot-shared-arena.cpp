@@ -26,7 +26,7 @@ namespace
 constexpr GlobalIndex num_work_items = 10;
 constexpr Real real_sentinel = -987654321.0;
 constexpr long long int_sentinel = -987654321;
-constexpr Real tolerance = 1.0e-12;
+constexpr double tolerance = RealTolerance( 1.0e-12 );
 
 template < typename T >
 struct DeviceBuffer

@@ -55,7 +55,7 @@ bool CheckClose(
    const Real value,
    const Real reference,
    const char* label,
-   const Real tolerance = 1e-14)
+   const double tolerance = RealTolerance( 1e-14 ))
 {
    const Real diff = std::abs(value - reference);
    const Real scale = std::max(Real{1.0}, std::abs(reference));
