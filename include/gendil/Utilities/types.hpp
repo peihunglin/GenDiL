@@ -39,8 +39,32 @@ using Integer = size_t;
 using Integer = size_t;
 #endif
 
-// Type used for real numbers
+// Type used for real numbers.
+//
+// Selected at configure time through the GENDIL_REAL_TYPE CMake option, which
+// defines exactly one of GENDIL_REAL_TYPE_DOUBLE (default), GENDIL_REAL_TYPE_FLOAT,
+// GENDIL_REAL_TYPE_FP16, or GENDIL_REAL_TYPE_BF16. The FP16 and BF16 modes map
+// Real onto the compiler's native extended floating-point types so that the
+// whole library, including the tests, runs in purely low precision arithmetic.
+#if defined( GENDIL_REAL_TYPE_FP16 )
+#if defined( __CUDACC__ ) && !defined( __clang__ )
+#error "GENDIL_REAL_TYPE_FP16 requires Clang as the CUDA compiler: NVCC does not support _Float16 arithmetic."
+#endif
+using Real = _Float16;
+#define GENDIL_LOW_PRECISION_REAL 1
+#elif defined( GENDIL_REAL_TYPE_BF16 )
+#if defined( __CUDACC__ ) && !defined( __clang__ )
+#error "GENDIL_REAL_TYPE_BF16 requires Clang as the CUDA compiler: NVCC does not support __bf16 arithmetic."
+#endif
+using Real = __bf16;
+#define GENDIL_LOW_PRECISION_REAL 1
+#elif defined( GENDIL_REAL_TYPE_FLOAT )
+using Real = float;
+#define GENDIL_LOW_PRECISION_REAL 0
+#else
 using Real = double;
+#define GENDIL_LOW_PRECISION_REAL 0
+#endif
 
 struct Empty { };
 
@@ -162,3 +186,7 @@ void hip_error(
 #endif
 
 }
+
+// Standard library support for the low precision real types and the
+// precision-aware helpers (RealTolerance, RealTypeName, ...).
+#include "gendil/Utilities/realtype.hpp"

@@ -10,6 +10,7 @@ project(
 include(GNUInstallDirs)
 include(CTest)
 include("${PROJECT_SOURCE_DIR}/cmake/GENDILOptions.cmake")
+include("${PROJECT_SOURCE_DIR}/cmake/GENDILRealType.cmake")
 include(
   "${PROJECT_SOURCE_DIR}/cmake/dependencies/GENDILDeviceSparseFinalization.cmake"
 )
@@ -96,6 +97,10 @@ gendil_finalize_device_sparse_finalization(
   GENDIL
   "${GENDIL_HAS_DEVICE_SPARSE_FINALIZATION}"
 )
+
+# The real type is configured after device languages are enabled so that the
+# device compiler identity is known when validating low precision support.
+gendil_configure_real_type(GENDIL)
 
 get_target_property(GENDIL_INCLUDES GENDIL INTERFACE_INCLUDE_DIRECTORIES)
 message(STATUS "GENDIL include directories: ${GENDIL_INCLUDES}")

@@ -54,6 +54,7 @@ if (@USE_HIP@)
     endif()
 endif()
 
+set(GENDIL_REAL_TYPE "@GENDIL_REAL_TYPE@")
 set(GENDIL_USE_CUDA "@USE_CUDA@")
 set(GENDIL_USE_HIP "@USE_HIP@")
 set(GENDIL_USE_HYPRE "@USE_HYPRE@")

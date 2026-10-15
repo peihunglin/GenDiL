@@ -8,6 +8,31 @@ option(USE_RAJA "Enables RAJA features." OFF)
 option(USE_CALIPER "Enables Caliper interface for benchmarking." OFF)
 option(USE_HYPRE "Enables Hypre interface." OFF)
 option(GENDIL_ENABLE_BENCHMARKS "Build GenDiL benchmark executables" OFF)
+
+set(
+  GENDIL_REAL_TYPE
+  "DOUBLE"
+  CACHE STRING
+  "Floating-point type behind gendil::Real: DOUBLE, FLOAT, FP16, or BF16"
+)
+set_property(CACHE GENDIL_REAL_TYPE PROPERTY STRINGS DOUBLE FLOAT FP16 BF16)
+string(TOUPPER "${GENDIL_REAL_TYPE}" GENDIL_REAL_TYPE)
+if(NOT GENDIL_REAL_TYPE MATCHES "^(DOUBLE|FLOAT|FP16|BF16)$")
+  message(
+    FATAL_ERROR
+    "GENDIL_REAL_TYPE must be DOUBLE, FLOAT, FP16, or BF16 (received "
+    "'${GENDIL_REAL_TYPE}')."
+  )
+endif()
+if(GENDIL_REAL_TYPE MATCHES "^(FP16|BF16)$" AND (USE_MFEM OR USE_HYPRE))
+  message(
+    FATAL_ERROR
+    "GENDIL_REAL_TYPE=${GENDIL_REAL_TYPE} cannot be combined with USE_MFEM "
+    "or USE_HYPRE: both interfaces require gendil::Real to be double "
+    "precision."
+  )
+endif()
+
 option(
   GENDIL_ENABLE_FILTERED_SYNC_EXPERIMENT_CTEST
   "Register filtered CellIterator Sync experiment in CTest."
