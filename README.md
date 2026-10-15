@@ -96,6 +96,41 @@ remain explicitly selectable. See the documentation for
 and [sparse matrix assembly](include/gendil/FiniteElementMethod/MatrixAssembly/README.md)
 for the detailed interfaces and capability rules.
 
+### Low precision builds (float, FP16, BF16)
+The floating-point type behind `gendil::Real` is selected at configure time
+with `GENDIL_REAL_TYPE`, which accepts `DOUBLE` (default), `FLOAT`, `FP16`
+(`_Float16`, IEEE binary16), or `BF16` (`__bf16`, bfloat16). The low precision
+modes run the whole library, including the test suite, in purely low precision
+arithmetic:
+```sh
+cmake -S . -B build-fp16 \
+      -D CMAKE_BUILD_TYPE=Release \
+      -D GENDIL_REAL_TYPE=FP16
+
+cmake --build build-fp16 --parallel
+ctest --test-dir build-fp16
+```
+
+`FP16` and `BF16` require a compiler with native arithmetic on the extended
+floating-point types (GCC 13+ or Clang 17+ on x86-64 and AArch64; Clang must
+be used as the CUDA compiler since NVCC lacks `_Float16` support). They cannot
+be combined with `USE_MFEM` or `USE_HYPRE`, which require double precision.
+The selected type is exported through the CMake package as `GENDIL_REAL_TYPE`
+and defined in code as one of `GENDIL_REAL_TYPE_DOUBLE`, `GENDIL_REAL_TYPE_FLOAT`,
+`GENDIL_REAL_TYPE_FP16`, or `GENDIL_REAL_TYPE_BF16`.
+
+`gendil/Utilities/realtype.hpp` (included through `gendil/gendil.hpp`) adds the
+`std::numeric_limits`, `<cmath>`, and stream support that C++20 standard
+libraries lack for the 16-bit types, and provides precision-aware helpers:
+`RealTypeName()`, `RealEpsilon()`, `is_low_precision_real_v`, and
+`RealTolerance(tol)`. The tests use `RealTolerance` to rescale tolerances
+written for double precision so that they demand the same fraction of the
+available digits in the active type (`1e-12` becomes about `3.6e-6` in float,
+`3e-3` in FP16, and `1.5e-2` in BF16). Tests whose arithmetic genuinely
+exceeds the range or resolution of a 16-bit type are expected to fail in those
+modes; the failures are reported by CTest and document the numerical limits of
+each precision.
+
 ### Usage
 Include the main header file in your project:
 ```cpp

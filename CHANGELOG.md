@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Added the `GENDIL_REAL_TYPE` CMake option (`DOUBLE`, `FLOAT`, `FP16`, `BF16`) to select the floating-point type behind `gendil::Real`, with compiler capability probing, exported package metadata, and `GENDIL_REAL_TYPE_*` compile definitions. `FP16` maps to `_Float16` and `BF16` to `__bf16` so that the library and its test suite run in purely low precision arithmetic.
+- Added `gendil/Utilities/realtype.hpp` with `std::numeric_limits`, `<cmath>`, and stream support for the 16-bit real types, plus the precision-aware helpers `RealTypeName`, `RealEpsilon`, `is_low_precision_real_v`, and `RealTolerance`.
+- Added 16-bit host and device atomic additions, low precision `Sqrt`/`Abs`, scalar arithmetic operators for `Point<1>`, and the `test-real-type` unit test.
+
+### Changed
+- Tests express tolerances through `RealTolerance`, which rescales a double precision tolerance to the active real type.
+- The MFEM and Hypre interfaces assert at compile time that `gendil::Real` is double (MFEM) or float/double (Hypre); the configuration rejects `FP16`/`BF16` together with `USE_MFEM` or `USE_HYPRE`.
+- `FillRandom` draws in double precision and rounds to `Real`, since `std::uniform_real_distribution` only supports the standard floating-point types.
+
 ## [0.0.6] - 2026-08-25
 
 ### Added
