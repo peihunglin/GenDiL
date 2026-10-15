@@ -5,6 +5,7 @@
 #pragma once
 
 #include <ostream>
+#include <type_traits>
 
 #include "gendil/Utilities/types.hpp"
 #include "gendil/Utilities/MathHelperFunctions/sqrt.hpp"
@@ -29,7 +30,7 @@ struct Point
    constexpr Point() : coordinates{} { }
 
    template < typename... Args >
-   constexpr Point( Args... args ) : coordinates{ args... }
+   constexpr Point( Args... args ) : coordinates{ static_cast< Real >( args )... }
    {
       static_assert(
          sizeof...(Args) == Dim,
@@ -85,6 +86,37 @@ struct Point<1>
       return coordinates[ 0 ];
    }
 };
+
+namespace internal {
+
+/// Scalar types that may combine with a Point<1> in arithmetic expressions.
+template < typename T >
+concept PointScalar =
+   std::is_arithmetic_v< std::remove_cvref_t< T > > ||
+   std::is_same_v< std::remove_cvref_t< T >, Real >;
+
+}
+
+// Arithmetic between the scalar point and a scalar. Point<1> converts
+// implicitly to Real, but the built-in operator candidates do not cover the
+// low precision real types, so the mixed cases are spelled out explicitly;
+// they evaluate exactly as the implicit conversion would.
+template < internal::PointScalar T >
+GENDIL_HOST_DEVICE constexpr auto operator+( Point<1> const & a, const T & b ) { return a[0] + b; }
+template < internal::PointScalar T >
+GENDIL_HOST_DEVICE constexpr auto operator+( const T & a, Point<1> const & b ) { return a + b[0]; }
+template < internal::PointScalar T >
+GENDIL_HOST_DEVICE constexpr auto operator-( Point<1> const & a, const T & b ) { return a[0] - b; }
+template < internal::PointScalar T >
+GENDIL_HOST_DEVICE constexpr auto operator-( const T & a, Point<1> const & b ) { return a - b[0]; }
+template < internal::PointScalar T >
+GENDIL_HOST_DEVICE constexpr auto operator*( Point<1> const & a, const T & b ) { return a[0] * b; }
+template < internal::PointScalar T >
+GENDIL_HOST_DEVICE constexpr auto operator*( const T & a, Point<1> const & b ) { return a * b[0]; }
+template < internal::PointScalar T >
+GENDIL_HOST_DEVICE constexpr auto operator/( Point<1> const & a, const T & b ) { return a[0] / b; }
+template < internal::PointScalar T >
+GENDIL_HOST_DEVICE constexpr auto operator/( const T & a, Point<1> const & b ) { return a / b[0]; }
 
 template < size_t Dim >
 std::ostream& operator<<(std::ostream& os, Point<Dim> const & index) {
@@ -156,7 +188,7 @@ Real Distance( Point<Dim> const & a, Point<Dim> const & b )
 template < size_t Dim >
 bool AlmostEqual( Point<Dim> const & a, Point<Dim> const & b )
 {
-   const Real tol = 1e-8;
+   const double tol = RealTolerance( 1e-8 );
    return Distance(a, b) < tol;
 }
 

@@ -4,6 +4,18 @@
 
 #pragma once
 
+#include <type_traits>
+
+#include "gendil/Utilities/types.hpp"
+
+#ifdef GENDIL_USE_MFEM
+// MFEM stores its scalars as double; the interface shares buffers between
+// gendil::Vector and mfem::Vector and therefore requires the same real type.
+static_assert(
+   std::is_same_v< gendil::Real, double >,
+   "The MFEM interface requires GENDIL_REAL_TYPE=DOUBLE." );
+#endif
+
 // Factories to build gendil unstructured meshes from MFEM meshes.
 #include "meshfactories.hpp"
 

@@ -271,7 +271,7 @@ void L2ProjectionOperator(
          decltype(rhs) x{};
 
          Integer max_iters = 1000;
-         Real tolerance = 1e-10;
+         Real tolerance = RealTolerance( 1e-10 );
          ConjugateGradient(
             kernel_conf,
             op,

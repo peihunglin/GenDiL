@@ -6,6 +6,16 @@
 
 #ifdef GENDIL_USE_HYPRE
 
+#include <type_traits>
+
+#include "gendil/Utilities/types.hpp"
+
+// The Hypre interface creates zero-copy views over GenDiL buffers, which
+// requires gendil::Real to match HYPRE_Real (float or double).
+static_assert(
+   std::is_same_v< gendil::Real, double > || std::is_same_v< gendil::Real, float >,
+   "The Hypre interface requires GENDIL_REAL_TYPE=DOUBLE or FLOAT." );
+
 // Hypre backend tags and small type-level interface markers.
 #include "gendil/Interfaces/Hypre/hypretypes.hpp"
 // Error-checking helper for Hypre functions that return integer status codes.

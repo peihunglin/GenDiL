@@ -273,7 +273,7 @@ auto MakeMassInverseFiniteElementOperator(
    const IntegrationRule & int_rule,
    Sigma & sigma,
    const Integer max_iters = 10000,
-   const Real tolerance = 1e-14 )
+   const Real tolerance = RealTolerance( 1e-14 ) )
 {
    return MassInverseFiniteElementOperator<
              KernelPolicy,
@@ -305,7 +305,7 @@ auto MakeMassInverseFiniteElementOperator(
    const IntegrationRule & int_rule,
    Sigma & sigma,
    const Integer max_iters = 10000,
-   const Real tolerance = 1e-14 )
+   const Real tolerance = RealTolerance( 1e-14 ) )
 {
    using KernelPolicy = SerialKernelConfiguration;
 

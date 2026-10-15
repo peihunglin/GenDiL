@@ -640,11 +640,14 @@ void FillRandom(
    v.WriteHostData(); // Ensure host buffer is allocated and valid
 
    std::mt19937 rng(seed);
-   std::uniform_real_distribution<Real> dist(min_value, max_value);
+   // std::uniform_real_distribution only supports float, double, and
+   // long double; draw in double and round to Real.
+   std::uniform_real_distribution<double> dist(
+      static_cast<double>(min_value), static_cast<double>(max_value));
 
    for (size_t i = 0; i < v.Size(); ++i)
    {
-      v[i] = dist(rng);
+      v[i] = static_cast<Real>(dist(rng));
    }
 }
 
