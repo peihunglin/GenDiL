@@ -51,6 +51,29 @@ within the exactly representable range: 2048 for FP16 and 256 for BF16.
 `test-nodal-subspace-projection` instantiates the host projection path and
 verifies its reduced-precision result.
 
+## Range Benchmark Build
+
+After the focused tests pass, the complete range benchmark set can be built for
+throughput experiments:
+
+```sh
+cmake -S . -B build-k3-fp16-gcc \
+  -D CMAKE_BUILD_TYPE=Release \
+  -D GENDIL_REAL_TYPE=FP16 \
+  -D GENDIL_ENABLE_BENCHMARKS=ON
+cmake --build build-k3-fp16-gcc --parallel --target range-benchmarks
+```
+
+Repeat with `GENDIL_REAL_TYPE=BF16` and with Clang. Run the executables from
+`build-k3-fp16-gcc/benchmarks` in separate X100 and freshly `ai`-launched A100
+processes. Keep the precision, compiler, core class, OpenMP environment, command
+line, and benchmark output with each result.
+
+The range programs are throughput measurements, not numerical oracles. Before
+accepting a low-precision performance result, compare the selected operator's
+output against a double-precision reference for the same mesh and input, and
+record the maximum error and tolerance alongside the throughput.
+
 No K3 hardware results are included in this change. The complete test and
 example build is not yet an acceptance gate because remaining direct C++20
 `std` math and streaming uses on compiler extended types must be migrated to

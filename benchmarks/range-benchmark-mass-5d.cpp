@@ -69,7 +69,7 @@ void test_mass_5D(
       Vector dofs_in( num_dofs );
       Vector dofs_out( num_dofs );
 
-      dofs_in = 1.0;
+       dofs_in = Real{ 1 };
       mass_operator( dofs_in, dofs_out );
 
       GENDIL_DEVICE_SYNC;

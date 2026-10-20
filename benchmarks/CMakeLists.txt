@@ -87,3 +87,26 @@ gendil_add_benchmark(benchmark-advection-6d benchmark-advection-6d.cpp)
 gendil_add_benchmark(range-benchmark-advection-6d range-benchmark-advection-6d.cpp)
 gendil_add_non_cuda_benchmark(range-benchmark-advection-p-adaptivity-6d range-benchmark-advection-p-adaptivity-6d.cpp)
 gendil_add_non_cuda_benchmark(range-benchmark-advection-h-adaptivity-6d range-benchmark-advection-h-adaptivity-6d.cpp)
+
+add_custom_target(range-benchmarks)
+add_dependencies(
+  range-benchmarks
+  range-benchmark-sol-3d
+  range-benchmark-sol-6d
+  range-benchmark-mass-3d
+  range-benchmark-mass-4d
+  range-benchmark-mass-5d
+  range-benchmark-mass-6d
+  range-benchmark-advection-3d
+  range-benchmark-advection-4d
+  range-benchmark-advection-5d
+  range-benchmark-advection-6d
+  range-benchmark-advection-p-adaptivity-3d
+  range-benchmark-advection-p-adaptivity-4d
+  range-benchmark-advection-p-adaptivity-5d
+  range-benchmark-advection-p-adaptivity-6d
+  range-benchmark-advection-h-adaptivity-3d
+  range-benchmark-advection-h-adaptivity-4d
+  range-benchmark-advection-h-adaptivity-5d
+  range-benchmark-advection-h-adaptivity-6d
+)

@@ -67,8 +67,8 @@ void bench_face_components_once_6D(int nx_half, int nyL, int nzL, int nwL, int n
     (GlobalIndex)nxR,(GlobalIndex)nyR,(GlobalIndex)nzR,(GlobalIndex)nwR,(GlobalIndex)nvR,(GlobalIndex)nuR
   };
 
-  const std::array<Real,Dim> hL{ 1.0/nxL, 1.0/nyL, 1.0/nzL, 1.0/nwL, 1.0/nvL, 1.0/nuL };
-  const std::array<Real,Dim> hR{ 1.0/nxR, 1.0/nyR, 1.0/nzR, 1.0/nwR, 1.0/nvR, 1.0/nuR };
+   const std::array<Real,Dim> hL{ static_cast<Real>( 1.0/nxL ), static_cast<Real>( 1.0/nyL ), static_cast<Real>( 1.0/nzL ), static_cast<Real>( 1.0/nwL ), static_cast<Real>( 1.0/nvL ), static_cast<Real>( 1.0/nuL ) };
+   const std::array<Real,Dim> hR{ static_cast<Real>( 1.0/nxR ), static_cast<Real>( 1.0/nyR ), static_cast<Real>( 1.0/nzR ), static_cast<Real>( 1.0/nwR ), static_cast<Real>( 1.0/nvR ), static_cast<Real>( 1.0/nuR ) };
 
   CartesianMesh<Dim> meshL(sizesL, hL, Point<Dim>{0.0,0.0,0.0,0.0,0.0,0.0});
   CartesianMesh<Dim> meshR(sizesR, hR, Point<Dim>{1.0,0.0,0.0,0.0,0.0,0.0}); // shift +1 in x

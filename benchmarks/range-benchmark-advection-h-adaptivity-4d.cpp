@@ -60,8 +60,8 @@ void bench_face_components_once_4D(int nx_half, int nyL, int nzL, int nwL,
   const std::array<GlobalIndex,Dim> sizesL{ (GlobalIndex)nxL,(GlobalIndex)nyL,(GlobalIndex)nzL,(GlobalIndex)nwL };
   const std::array<GlobalIndex,Dim> sizesR{ (GlobalIndex)nxR,(GlobalIndex)nyR,(GlobalIndex)nzR,(GlobalIndex)nwR };
 
-  const std::array<Real,Dim> hL{ 1.0/nxL, 1.0/nyL, 1.0/nzL, 1.0/nwL };
-  const std::array<Real,Dim> hR{ 1.0/nxR, 1.0/nyR, 1.0/nzR, 1.0/nwR };
+   const std::array<Real,Dim> hL{ static_cast<Real>( 1.0/nxL ), static_cast<Real>( 1.0/nyL ), static_cast<Real>( 1.0/nzL ), static_cast<Real>( 1.0/nwL ) };
+   const std::array<Real,Dim> hR{ static_cast<Real>( 1.0/nxR ), static_cast<Real>( 1.0/nyR ), static_cast<Real>( 1.0/nzR ), static_cast<Real>( 1.0/nwR ) };
 
   CartesianMesh<Dim> meshL(sizesL, hL, Point<Dim>{0.0,0.0,0.0,0.0});
   CartesianMesh<Dim> meshR(sizesR, hR, Point<Dim>{1.0,0.0,0.0,0.0}); // shift +1 in x

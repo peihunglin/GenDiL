@@ -41,7 +41,7 @@ void test_speed_of_light_6D( const Integer n1, const Integer n2, const Integer n
    const Integer num_dofs = fe_space.GetNumberOfFiniteElementDofs();
    Vector dofs_in( num_dofs );
    Vector dofs_out( num_dofs );
-   dofs_in = 1.0;
+    dofs_in = Real{ 1 };
 
    const Integer num_iter = 5;
    GENDIL_DEVICE_SYNC;
