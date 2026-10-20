@@ -29,7 +29,7 @@ auto SerialAggregateDimensions(
    auto v = MakeQuadraturePointValuesContainer( kernel_conf, TestIntegrationRule{} );
    QuadraturePointLoop< TestIntegrationRule >( kernel_conf, [&] ( auto const & quad_index )
    {
-      WriteQuadratureLocalValues( kernel_conf, quad_index, 0.0, v );
+       WriteQuadratureLocalValues( kernel_conf, quad_index, Real{ 0 }, v );
    });
    QuadraturePointLoop< TrialIntegrationRule >( kernel_conf, [&] ( auto const & quad_index )
    {
@@ -64,7 +64,7 @@ auto ThreadedAggregateDimensions(
    {
       WriteQuadratureLocalValues(
          quad_index,
-         0.0,
+          Real{ 0 },
          v_shared,
          std::make_index_sequence< TestIntegrationRule::space_dim >{} );
    });
