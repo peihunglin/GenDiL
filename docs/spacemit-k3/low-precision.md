@@ -18,6 +18,9 @@ format.
   and `Real{ 1 }` rather than `double` literals. GCC 15 on K3 diagnoses direct
   `double` to `_Float16` conversion as a narrowing conversion when range
   kernels instantiate it.
+- Range benchmark mesh spacings, coefficient vectors, and deterministic input
+  fills likewise use `Real` arithmetic so their assignments remain valid under
+  the K3 GCC extended-type rules.
 - Host low-precision accumulation uses a compare-and-swap loop on the actual
   aligned `Real` object. It never reads a neighboring half-word.
 - FP16/BF16 are rejected with CUDA, HIP, MFEM, or HYPRE. Those paths have not

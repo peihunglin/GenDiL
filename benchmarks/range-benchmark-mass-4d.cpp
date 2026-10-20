@@ -20,7 +20,7 @@ void test_mass_4D(
 
    //////////////
    // Mesh
-   const Real h_space = 1.0;
+   const Real h_space = Real{ 1 };
    Cartesian2DMesh mesh1( h_space, n1, n2 );
    Cartesian2DMesh mesh2( h_space, n3, n4 );
    auto mesh = MakeCartesianProductMesh( mesh1, mesh2 );

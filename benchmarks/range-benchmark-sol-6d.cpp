@@ -13,7 +13,7 @@ void test_speed_of_light_6D( const Integer n1, const Integer n2, const Integer n
                              const Integer n4, const Integer n5, const Integer n6,
                              OperatorFactory make_operator )
 {
-   const Real h_space = 1.0;
+   const Real h_space = Real{ 1 };
    Cartesian3DMesh mesh1( h_space, n1, n2, n3 );
    Cartesian3DMesh mesh2( h_space, n4, n5, n6 );
    auto mesh = MakeCartesianProductMesh( mesh1, mesh2 );

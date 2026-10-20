@@ -12,7 +12,7 @@ using namespace gendil;
 template < typename OperatorFactory, Integer order, Integer num_quad_1d = order + 2 >
 void test_speed_of_light_3D( const Integer nx, const Integer ny, const Integer nz, OperatorFactory make_operator )
 {
-   const Real h_space = 1.0;
+   const Real h_space = Real{ 1 };
    Cartesian3DMesh mesh( h_space, nx, ny, nz );
    auto face_meshes = MakeCartesianInteriorFaceConnectivity<3>( {nx, ny, nz} );
 

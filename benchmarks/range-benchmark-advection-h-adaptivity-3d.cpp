@@ -54,11 +54,11 @@ void bench_face_components_once_3D(int nx_half, int nyL, int nzL,
   const int nyR = ry*nyL;
   const int nzR = rz*nzL;
 
-  const Real hx = 1.0 / nxL;               // same physical size on each half in x
-  const Real hyL = 1.0 / nyL;
-  const Real hzL = 1.0 / nzL;
-  const Real hyR = 1.0 / nyR;
-  const Real hzR = 1.0 / nzR;
+   const Real hx = Real{ 1 } / nxL;               // same physical size on each half in x
+   const Real hyL = Real{ 1 } / nyL;
+   const Real hzL = Real{ 1 } / nzL;
+   const Real hyR = Real{ 1 } / nyR;
+   const Real hzR = Real{ 1 } / nzR;
 
   // meshes: L at [0,1]×[0,1]×[0,1], R shifted by +1 in x
   Cartesian3DMesh meshL(hx, hyL, hzL, nxL, nyL, nzL, Point<3>{0.0,0.0,0.0});
@@ -96,7 +96,7 @@ void bench_face_components_once_3D(int nx_half, int nyL, int nzL,
 
   // advection β = (1,1,1) (any constant is fine; no special casing)
   auto adv = [] GENDIL_HOST_DEVICE (const std::array<Real,Dim>&, Real (&v)[Dim]){
-    v[0]=1.0; v[1]=1.0; v[2]=1.0;
+    v[0]=Real{ 1 }; v[1]=Real{ 1 }; v[2]=Real{ 1 };
   };
 
 #if defined(GENDIL_USE_DEVICE)
@@ -117,9 +117,9 @@ void bench_face_components_once_3D(int nx_half, int nyL, int nzL,
   // deterministic fill
   {
     Real* pu = u.WriteHostData();
-    for (Integer g=0; g<u.Size(); ++g) pu[g] = Real((g % 7) - 3) / 3.0;
+    for (Integer g=0; g<u.Size(); ++g) pu[g] = Real((g % 7) - 3) / Real{ 3 };
   }
-  r = 0.0;
+  r = Real{ 0 };
 
   // time each component separately
   tL  = time_operator(face_L,  u, r);

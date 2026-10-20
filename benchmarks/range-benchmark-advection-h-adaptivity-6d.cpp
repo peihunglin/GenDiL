@@ -104,7 +104,7 @@ void bench_face_components_once_6D(int nx_half, int nyL, int nzL, int nwL, int n
 
   // advection β = (1,1,1,1,1,1)
   auto adv = [] GENDIL_HOST_DEVICE (const std::array<Real,Dim>&, Real (&v)[Dim]){
-    v[0]=1.0; v[1]=1.0; v[2]=1.0; v[3]=1.0; v[4]=1.0; v[5]=1.0;
+    v[0]=Real{ 1 }; v[1]=Real{ 1 }; v[2]=Real{ 1 }; v[3]=Real{ 1 }; v[4]=Real{ 1 }; v[5]=Real{ 1 };
   };
 
 #if defined(GENDIL_USE_DEVICE)
@@ -125,9 +125,9 @@ void bench_face_components_once_6D(int nx_half, int nyL, int nzL, int nwL, int n
   // deterministic fill
   {
     Real* pu = u.WriteHostData();
-    for (Integer g=0; g<u.Size(); ++g) pu[g] = Real((g % 7) - 3) / 3.0;
+    for (Integer g=0; g<u.Size(); ++g) pu[g] = Real((g % 7) - 3) / Real{ 3 };
   }
-  r = 0.0;
+  r = Real{ 0 };
 
   // time each component separately
   tL  = time_operator(face_L,  u, r);

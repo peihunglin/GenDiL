@@ -21,7 +21,7 @@ void test_mass_5D(
 
    //////////////
    // Mesh
-   const Real h_space = 1.0;
+   const Real h_space = Real{ 1 };
    Cartesian3DMesh mesh1( h_space, n1, n2, n3 );
    Cartesian2DMesh mesh2( h_space, n4, n5 );
    auto mesh = MakeCartesianProductMesh( mesh1, mesh2 );

@@ -20,7 +20,7 @@ void test_advection_4D(
 
    //////////////
    // Mesh
-   const Real h_space = 1.0;
+   const Real h_space = Real{ 1 };
    Cartesian2DMesh mesh1( h_space, n1, n2 );
    Cartesian2DMesh mesh2( h_space, n3, n4 );
    auto mesh = MakeCartesianProductMesh( mesh1, mesh2 );
@@ -46,10 +46,10 @@ void test_advection_4D(
    constexpr Integer Dim = GetDim( fe_space );
    auto advection_field = [] GENDIL_HOST_DEVICE ( const std::array< Real, Dim> & X, Real (&v)[Dim] )
    {
-      v[0] = 1.0;
-      v[1] = 1.0;
-      v[2] = 1.0;
-      v[3] = 1.0;
+      v[0] = Real{ 1 };
+      v[1] = Real{ 1 };
+      v[2] = Real{ 1 };
+      v[3] = Real{ 1 };
    };
 
    // Kernel configuration

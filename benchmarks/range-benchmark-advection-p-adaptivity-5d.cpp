@@ -45,11 +45,11 @@ void bench_face_components_once_5D(Integer nx_full, Integer ny, Integer nz, Inte
   const Integer nxL = nx_full / 2;
   const Integer nxR = nx_full - nxL;
 
-  const Real hx = 1.0 / nxL;
-  const Real hy = 1.0 / ny;
-  const Real hz = 1.0 / nz;
-  const Real hw = 1.0 / nw;
-  const Real ht = 1.0 / nt;
+   const Real hx = Real{ 1 } / nxL;
+   const Real hy = Real{ 1 } / ny;
+   const Real hz = Real{ 1 } / nz;
+   const Real hw = Real{ 1 } / nw;
+   const Real ht = Real{ 1 } / nt;
 
   // 5D Cartesian meshes: left in [0,1]^5, right shifted +1 in x
   CartesianMesh<5> meshL({nxL, ny, nz, nw, nt}, {hx, hy, hz, hw, ht}, Point<5>{0.0, 0.0, 0.0, 0.0, 0.0});
@@ -85,7 +85,7 @@ void bench_face_components_once_5D(Integer nx_full, Integer ny, Integer nz, Inte
       {(GlobalIndex)nxR,(GlobalIndex)ny,(GlobalIndex)nz,(GlobalIndex)nw,(GlobalIndex)nt});
 
   auto adv = [] GENDIL_HOST_DEVICE (const std::array<Real,5>&, Real (&v)[5]) {
-    v[0] = 1.0; v[1] = 1.0; v[2] = 1.0; v[3] = 1.0; v[4] = 1.0;
+    v[0] = Real{ 1 }; v[1] = Real{ 1 }; v[2] = Real{ 1 }; v[3] = Real{ 1 }; v[4] = Real{ 1 };
   };
 
 #if defined(GENDIL_USE_DEVICE)
@@ -102,7 +102,7 @@ void bench_face_components_once_5D(Integer nx_full, Integer ny, Integer nz, Inte
 
   const Integer ndofs_split = ndofsL + ndofsR;
   Vector x(ndofs_split), y(ndofs_split);
-  x = 1.0; y = 0.0;
+  x = Real{ 1 }; y = Real{ 0 };
 
   const int num_iter = 5;
   const double tpL  = time_face_op(face_L,  x, y, num_iter);

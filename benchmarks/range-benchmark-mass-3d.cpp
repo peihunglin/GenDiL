@@ -16,7 +16,7 @@ void test_mass_3D( const Integer nx, const Integer ny, const Integer nz )
 
    //////////////
    // Mesh
-   const Real h_space = 1.0;
+   const Real h_space = Real{ 1 };
    Cartesian3DMesh mesh( h_space, nx, ny, nz );
 
    ///////////////////////

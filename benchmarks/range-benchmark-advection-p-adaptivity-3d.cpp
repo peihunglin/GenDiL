@@ -43,9 +43,9 @@ void bench_face_components_once_3D(Integer nx_full, Integer ny, Integer nz,
   const Integer nxL = nx_full / 2;
   const Integer nxR = nx_full - nxL;
 
-  const Real hx = 1.0 / nxL;
-  const Real hy = 1.0 / ny;
-  const Real hz = 1.0 / nz;
+   const Real hx = Real{ 1 } / nxL;
+   const Real hy = Real{ 1 } / ny;
+   const Real hz = Real{ 1 } / nz;
 
   Cartesian3DMesh meshL(hx, hy, hz, nxL, ny, nz, Point<3>{0.0, 0.0, 0.0});
   Cartesian3DMesh meshR(hx, hy, hz, nxR, ny, nz, Point<3>{1.0, 0.0, 0.0});
@@ -78,7 +78,7 @@ void bench_face_components_once_3D(Integer nx_full, Integer ny, Integer nz,
       {(GlobalIndex)nxR,(GlobalIndex)ny,(GlobalIndex)nz});
 
   auto adv = [] GENDIL_HOST_DEVICE (const std::array<Real,3>&, Real (&v)[3]) {
-    v[0] = 1.0; v[1] = 1.0; v[2] = 1.0;
+    v[0] = Real{ 1 }; v[1] = Real{ 1 }; v[2] = Real{ 1 };
   };
 
 #if defined(GENDIL_USE_DEVICE)
@@ -95,7 +95,7 @@ void bench_face_components_once_3D(Integer nx_full, Integer ny, Integer nz,
 
   const Integer ndofs_split = ndofsL + ndofsR;
   Vector x(ndofs_split), y(ndofs_split);
-  x = 1.0; y = 0.0;
+  x = Real{ 1 }; y = Real{ 0 };
 
   const int num_iter = 5;
   const double tpL  = time_face_op(face_L,  x, y, num_iter);
