@@ -43,7 +43,7 @@ constexpr Real PointMatrixDecodeTolerance( Integer dim )
    // so the tolerance is capped at 1/64: in the 16-bit real types the
    // epsilon-based value alone would exceed the spacing between corners.
    const Real epsilon_based =
-      Real( 256 ) * std::numeric_limits< Real >::epsilon() * Real( dim + 1 );
+       Real( 256 ) * RealEpsilonValue() * Real( dim + 1 );
    const Real cap = Real( 1 ) / Real( 64 );
    return epsilon_based < cap ? epsilon_based : cap;
 }

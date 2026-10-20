@@ -6,47 +6,25 @@
 
 /**
  * @file realtype.hpp
- * @brief Precision-aware helpers for gendil::Real and standard library support
- *        for the low precision (FP16 / BF16) real types.
+ * @brief Precision-aware helpers for gendil::Real.
  *
- * In C++20 the standard library knows nothing about `_Float16` and `__bf16`:
- * `std::numeric_limits` is unspecialized (every member is zero), the `<cmath>`
- * functions are ambiguous (the value converts equally well to `float`,
- * `double`, and `long double`), and streams cannot print the values. This
- * header fills those gaps when GenDiL is configured with
- * `GENDIL_REAL_TYPE=FP16` or `GENDIL_REAL_TYPE=BF16` so that generic code
- * written against `Real` and the standard library keeps compiling.
- *
- * The additions to namespace `std` are limited to the single low precision
- * type in use, mirror what C++23 `<stdfloat>` provides for `std::float16_t`
- * and `std::bfloat16_t`, and are disabled when the standard library already
- * ships that support (`__STDCPP_FLOAT16_T__` / `__STDCPP_BFLOAT16_T__`).
+ * C++20 does not specify standard-library support for compiler extended types
+ * such as `_Float16` and `__bf16`. GenDiL deliberately does not add overloads
+ * or specializations to `namespace std` for those compiler types. Use the
+ * helpers below, plus `gendil::Sqrt` and `gendil::Abs`, in generic GenDiL code.
  */
 
 #include <cmath>
 #include <cstdint>
-#include <cstring>
 #include <limits>
-#include <ostream>
-#include <string>
-#include <type_traits>
 
 #include "gendil/Utilities/types.hpp"
-
-#if GENDIL_LOW_PRECISION_REAL
-
-#if defined( GENDIL_REAL_TYPE_FP16 ) && defined( __STDCPP_FLOAT16_T__ )
-#define GENDIL_STD_HAS_LOW_PRECISION_REAL 1
-#elif defined( GENDIL_REAL_TYPE_BF16 ) && defined( __STDCPP_BFLOAT16_T__ )
-#define GENDIL_STD_HAS_LOW_PRECISION_REAL 1
-#else
-#define GENDIL_STD_HAS_LOW_PRECISION_REAL 0
-#endif
 
 namespace gendil {
 
 namespace internal {
 
+#if GENDIL_LOW_PRECISION_REAL
 /// Compile-time description of the low precision real types.
 template < typename T >
 struct LowPrecisionTraits;
@@ -91,174 +69,11 @@ struct LowPrecisionTraits< __bf16 >
 
 using RealTraits = LowPrecisionTraits< Real >;
 
+#endif
+
 } // namespace internal
 
 } // namespace gendil
-
-#if !GENDIL_STD_HAS_LOW_PRECISION_REAL
-
-namespace std {
-
-template < >
-class numeric_limits< gendil::Real >
-{
-   using traits = gendil::internal::RealTraits;
-
-public:
-   static constexpr bool is_specialized = true;
-   static constexpr bool is_signed = true;
-   static constexpr bool is_integer = false;
-   static constexpr bool is_exact = false;
-   static constexpr bool has_infinity = true;
-   static constexpr bool has_quiet_NaN = true;
-   static constexpr bool has_signaling_NaN = true;
-   static constexpr float_denorm_style has_denorm = denorm_present;
-   static constexpr bool has_denorm_loss = false;
-   static constexpr float_round_style round_style = round_to_nearest;
-   static constexpr bool is_iec559 = true;
-   static constexpr bool is_bounded = true;
-   static constexpr bool is_modulo = false;
-   static constexpr int digits = traits::digits;
-   static constexpr int digits10 = traits::digits10;
-   static constexpr int max_digits10 = traits::max_digits10;
-   static constexpr int radix = 2;
-   static constexpr int min_exponent = traits::min_exponent;
-   static constexpr int min_exponent10 = traits::min_exponent10;
-   static constexpr int max_exponent = traits::max_exponent;
-   static constexpr int max_exponent10 = traits::max_exponent10;
-   static constexpr bool traps = false;
-   static constexpr bool tinyness_before = false;
-
-   static constexpr gendil::Real min() noexcept { return traits::min(); }
-   static constexpr gendil::Real lowest() noexcept { return -traits::max(); }
-   static constexpr gendil::Real max() noexcept { return traits::max(); }
-   static constexpr gendil::Real epsilon() noexcept { return traits::epsilon(); }
-   static constexpr gendil::Real round_error() noexcept { return static_cast< gendil::Real >( 0.5f ); }
-   static constexpr gendil::Real infinity() noexcept { return static_cast< gendil::Real >( __builtin_inff() ); }
-   static constexpr gendil::Real quiet_NaN() noexcept { return static_cast< gendil::Real >( __builtin_nanf( "" ) ); }
-   static constexpr gendil::Real signaling_NaN() noexcept { return static_cast< gendil::Real >( __builtin_nansf( "" ) ); }
-   static constexpr gendil::Real denorm_min() noexcept { return traits::denorm_min(); }
-};
-
-template < >
-class numeric_limits< const gendil::Real > : public numeric_limits< gendil::Real > { };
-template < >
-class numeric_limits< volatile gendil::Real > : public numeric_limits< gendil::Real > { };
-template < >
-class numeric_limits< const volatile gendil::Real > : public numeric_limits< gendil::Real > { };
-
-// Unary <cmath> functions evaluated in single precision and rounded back.
-#define GENDIL_LOW_PRECISION_UNARY_MATH( name ) \
-   inline gendil::Real name( gendil::Real x ) \
-   { \
-      return static_cast< gendil::Real >( name( static_cast< float >( x ) ) ); \
-   }
-
-GENDIL_LOW_PRECISION_UNARY_MATH( abs )
-GENDIL_LOW_PRECISION_UNARY_MATH( fabs )
-GENDIL_LOW_PRECISION_UNARY_MATH( sqrt )
-GENDIL_LOW_PRECISION_UNARY_MATH( cbrt )
-GENDIL_LOW_PRECISION_UNARY_MATH( exp )
-GENDIL_LOW_PRECISION_UNARY_MATH( exp2 )
-GENDIL_LOW_PRECISION_UNARY_MATH( expm1 )
-GENDIL_LOW_PRECISION_UNARY_MATH( log )
-GENDIL_LOW_PRECISION_UNARY_MATH( log2 )
-GENDIL_LOW_PRECISION_UNARY_MATH( log10 )
-GENDIL_LOW_PRECISION_UNARY_MATH( log1p )
-GENDIL_LOW_PRECISION_UNARY_MATH( sin )
-GENDIL_LOW_PRECISION_UNARY_MATH( cos )
-GENDIL_LOW_PRECISION_UNARY_MATH( tan )
-GENDIL_LOW_PRECISION_UNARY_MATH( asin )
-GENDIL_LOW_PRECISION_UNARY_MATH( acos )
-GENDIL_LOW_PRECISION_UNARY_MATH( atan )
-GENDIL_LOW_PRECISION_UNARY_MATH( sinh )
-GENDIL_LOW_PRECISION_UNARY_MATH( cosh )
-GENDIL_LOW_PRECISION_UNARY_MATH( tanh )
-GENDIL_LOW_PRECISION_UNARY_MATH( floor )
-GENDIL_LOW_PRECISION_UNARY_MATH( ceil )
-GENDIL_LOW_PRECISION_UNARY_MATH( round )
-GENDIL_LOW_PRECISION_UNARY_MATH( trunc )
-
-#undef GENDIL_LOW_PRECISION_UNARY_MATH
-
-// Binary <cmath> functions. Mixed overloads with the standard floating-point
-// types are provided so that expressions such as `std::pow( x, 2.0 )` stay
-// unambiguous; they return the wider type, as the usual arithmetic
-// conversions would.
-#define GENDIL_LOW_PRECISION_BINARY_MATH( name ) \
-   inline gendil::Real name( gendil::Real x, gendil::Real y ) \
-   { \
-      return static_cast< gendil::Real >( \
-         name( static_cast< float >( x ), static_cast< float >( y ) ) ); \
-   } \
-   inline float name( gendil::Real x, float y ) \
-   { \
-      return name( static_cast< float >( x ), y ); \
-   } \
-   inline float name( float x, gendil::Real y ) \
-   { \
-      return name( x, static_cast< float >( y ) ); \
-   } \
-   inline double name( gendil::Real x, double y ) \
-   { \
-      return name( static_cast< double >( x ), y ); \
-   } \
-   inline double name( double x, gendil::Real y ) \
-   { \
-      return name( x, static_cast< double >( y ) ); \
-   } \
-   inline gendil::Real name( gendil::Real x, int y ) \
-   { \
-      return static_cast< gendil::Real >( \
-         name( static_cast< float >( x ), static_cast< float >( y ) ) ); \
-   }
-
-GENDIL_LOW_PRECISION_BINARY_MATH( pow )
-GENDIL_LOW_PRECISION_BINARY_MATH( atan2 )
-GENDIL_LOW_PRECISION_BINARY_MATH( fmod )
-GENDIL_LOW_PRECISION_BINARY_MATH( hypot )
-GENDIL_LOW_PRECISION_BINARY_MATH( fmax )
-GENDIL_LOW_PRECISION_BINARY_MATH( fmin )
-GENDIL_LOW_PRECISION_BINARY_MATH( fdim )
-
-#undef GENDIL_LOW_PRECISION_BINARY_MATH
-
-inline gendil::Real fma( gendil::Real x, gendil::Real y, gendil::Real z )
-{
-   return static_cast< gendil::Real >(
-      fma( static_cast< float >( x ), static_cast< float >( y ), static_cast< float >( z ) ) );
-}
-
-inline bool isnan( gendil::Real x ) { return isnan( static_cast< float >( x ) ); }
-inline bool isinf( gendil::Real x ) { return isinf( static_cast< float >( x ) ); }
-inline bool isfinite( gendil::Real x ) { return isfinite( static_cast< float >( x ) ); }
-inline bool isnormal( gendil::Real x ) { return isnormal( static_cast< float >( x ) ); }
-inline bool signbit( gendil::Real x ) { return signbit( static_cast< float >( x ) ); }
-
-inline string to_string( gendil::Real x ) { return to_string( static_cast< float >( x ) ); }
-
-/// Stream insertion prints the value through its exact single precision image.
-template < typename CharT, typename Traits >
-basic_ostream< CharT, Traits > & operator<<( basic_ostream< CharT, Traits > & os, gendil::Real x )
-{
-   return os << static_cast< float >( x );
-}
-
-/// Stream extraction reads a float and rounds it to the low precision type.
-template < typename CharT, typename Traits >
-basic_istream< CharT, Traits > & operator>>( basic_istream< CharT, Traits > & is, gendil::Real & x )
-{
-   float value;
-   is >> value;
-   x = static_cast< gendil::Real >( value );
-   return is;
-}
-
-} // namespace std
-
-#endif // !GENDIL_STD_HAS_LOW_PRECISION_REAL
-
-#endif // GENDIL_LOW_PRECISION_REAL
 
 namespace gendil {
 
@@ -266,7 +81,17 @@ namespace gendil {
 inline constexpr bool is_low_precision_real_v = GENDIL_LOW_PRECISION_REAL;
 
 /// Number of significand bits of gendil::Real (including the implicit bit).
+#if GENDIL_LOW_PRECISION_REAL
+inline constexpr int real_significand_digits_v = internal::RealTraits::digits;
+constexpr Real RealMinNormal() { return internal::RealTraits::min(); }
+constexpr Real RealMax() { return internal::RealTraits::max(); }
+constexpr Real RealEpsilonValue() { return internal::RealTraits::epsilon(); }
+#else
 inline constexpr int real_significand_digits_v = std::numeric_limits< Real >::digits;
+constexpr Real RealMinNormal() { return std::numeric_limits< Real >::min(); }
+constexpr Real RealMax() { return std::numeric_limits< Real >::max(); }
+constexpr Real RealEpsilonValue() { return std::numeric_limits< Real >::epsilon(); }
+#endif
 
 /// Human readable name of the active real type.
 constexpr const char * RealTypeName()
@@ -285,7 +110,7 @@ constexpr const char * RealTypeName()
 /// Machine epsilon of gendil::Real as a double.
 constexpr double RealEpsilon()
 {
-   return static_cast< double >( std::numeric_limits< Real >::epsilon() );
+   return static_cast< double >( RealEpsilonValue() );
 }
 
 namespace internal {
@@ -363,7 +188,7 @@ constexpr double ConstexprExp( double y )
 constexpr double RealTolerance( double double_precision_tolerance )
 {
    constexpr double exponent =
-      static_cast< double >( std::numeric_limits< Real >::digits ) /
+       static_cast< double >( real_significand_digits_v ) /
       static_cast< double >( std::numeric_limits< double >::digits );
    if constexpr ( exponent == 1.0 )
    {

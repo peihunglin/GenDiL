@@ -520,11 +520,11 @@ std::ostream& operator<<(std::ostream& os, const Vector& vec)
 
    for (size_t i = 0; i < vec.Size()-1; i++)
    {
-      os << vec[i] << ", ";
+      os << static_cast< float >( vec[i] ) << ", ";
    }
 
    if (vec.Size() > 0) {
-      os << vec[vec.Size()-1];
+      os << static_cast< float >( vec[vec.Size()-1] );
    }
 
    return os;

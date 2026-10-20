@@ -88,7 +88,7 @@ auto GMRES_no_alloc(
    Array &          y            // length = restart
 )
 {
-   const Real eps = std::numeric_limits<Real>::epsilon();
+    const Real eps = RealEpsilonValue();
 
    auto H = [&](const Integer i, const Integer j) -> decltype(auto)
    {

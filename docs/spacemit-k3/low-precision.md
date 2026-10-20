@@ -1,0 +1,59 @@
+# K3 FP16 And BF16 Host Support
+
+## Rationale
+
+GenDiL can select compiler-native `_Float16` or `__bf16` as `gendil::Real` for
+host/OpenMP experiments on SpacemiT K3. This validates storage, arithmetic, and
+contention behavior before any RVV or IME implementation is introduced. It does
+not assume an RVV vector length, IME instruction, compiler flag, or accumulation
+format.
+
+## Design
+
+- `GENDIL_REAL_TYPE=FP16` and `BF16` use the compiler extended scalar types.
+- `RealMinNormal`, `RealMax`, `RealEpsilonValue`, `Sqrt`, and `Abs` are GenDiL
+  APIs. C++20 does not authorize adding overloads or specializations for these
+  compiler types to `namespace std`.
+- Host low-precision accumulation uses a compare-and-swap loop on the actual
+  aligned `Real` object. It never reads a neighboring half-word.
+- FP16/BF16 are rejected with CUDA, HIP, MFEM, or HYPRE. Those paths have not
+  established a compatible scalar ABI or a safe atomic implementation.
+
+## K3 Verification
+
+First record the installed compiler support and flags; do not invent ISA flags:
+
+```sh
+scripts/machines/spacemit-k3/collect-system-info.sh results/spacemit-k3/system-info.txt
+```
+
+For each available GCC 15 and Clang 24 compiler, configure, build, and run the
+focused scalar tests on X100:
+
+```sh
+cmake -S . -B build-k3-fp16-gcc -D CMAKE_BUILD_TYPE=Release -D GENDIL_REAL_TYPE=FP16
+cmake --build build-k3-fp16-gcc --parallel --target test-real-type test-atomic-add
+ctest --test-dir build-k3-fp16-gcc -R '^(test-real-type|test-atomic-add)$' --output-on-failure
+```
+
+Repeat with `GENDIL_REAL_TYPE=BF16` and with Clang. Then run each focused CTest
+command through `ai` in a newly created A100 process. Never move an already
+vectorized process between X100 and A100. Run the complete configured CTest
+suite only after the focused tests pass, recording every failing test and whether
+the failure is a compiler capability rejection, build failure, or numerical
+failure.
+
+## Acceptance And Limits
+
+The focused tests must pass with `OMP_NUM_THREADS=1` and `OMP_NUM_THREADS=8` on
+both core classes. `test-atomic-add` verifies loss-free concurrent increments
+within the exactly representable range: 2048 for FP16 and 256 for BF16.
+
+No K3 hardware results are included in this change. The complete test and
+example build is not yet an acceptance gate because remaining direct C++20
+`std` math and streaming uses on compiler extended types must be migrated to
+GenDiL helpers or explicit `float` conversions. Vectorized low-precision
+kernels, IME use, mixed-precision accumulation, device backends, and external
+`std` math support remain out of scope. Disable the feature by configuring
+`-D GENDIL_REAL_TYPE=DOUBLE`; reverting this change removes the FP16/BF16 host
+path without affecting the default build.

@@ -32,6 +32,13 @@ if(GENDIL_REAL_TYPE MATCHES "^(FP16|BF16)$" AND (USE_MFEM OR USE_HYPRE))
     "precision."
   )
 endif()
+if(GENDIL_REAL_TYPE MATCHES "^(FP16|BF16)$" AND (USE_CUDA OR USE_HIP))
+  message(
+    FATAL_ERROR
+    "GENDIL_REAL_TYPE=${GENDIL_REAL_TYPE} currently supports host/OpenMP builds "
+    "only. Configure with USE_CUDA=OFF and USE_HIP=OFF."
+  )
+endif()
 
 option(
   GENDIL_ENABLE_FILTERED_SYNC_EXPERIMENT_CTEST

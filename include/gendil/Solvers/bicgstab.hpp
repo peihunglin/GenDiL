@@ -55,7 +55,7 @@ auto BiCGSTAB_no_alloc(
     // Breakdown/stagnation guard. 1e-30 underflows to zero in the 16-bit real
     // types, where the smallest normal number plays the same role.
     const Real tiny = is_low_precision_real_v
-       ? std::numeric_limits<Real>::min() : Real(1e-30);
+        ? RealMinNormal() : Real(1e-30);
 
     // Initial residual: r = rhs - A*x
     A(x, t);     // t = A*x

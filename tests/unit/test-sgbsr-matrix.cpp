@@ -698,9 +698,9 @@ bool TestSharedScalarH1HostScatter()
    // DoF; the total must stay exactly representable in Real (floating-point
    // types count exactly only up to 2^digits, i.e. 2048 in FP16).
    constexpr Integer num_elements =
-      std::numeric_limits< Real >::digits > 12
+       real_significand_digits_v > 12
          ? 4096
-         : ( Integer( 1 ) << ( std::numeric_limits< Real >::digits - 1 ) );
+          : ( Integer( 1 ) << ( real_significand_digits_v - 1 ) );
    Cartesian1DMesh mesh(
       Real( 1 ) / static_cast< Real >( num_elements ),
       num_elements );

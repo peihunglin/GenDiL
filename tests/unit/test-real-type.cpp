@@ -2,9 +2,8 @@
 //
 // SPDX-License-Identifier: (BSD-3-Clause)
 
-// Verifies the standard library support and precision helpers provided for
-// gendil::Real, in particular when the library is configured with one of the
-// low precision real types (GENDIL_REAL_TYPE=FP16 or BF16).
+// Verifies the GenDiL-owned precision helpers used when gendil::Real is one
+// of the compiler extended 16-bit floating-point types.
 
 #include <gendil/gendil.hpp>
 
@@ -12,7 +11,6 @@
 #include <cstring>
 #include <iostream>
 #include <limits>
-#include <sstream>
 #include <string>
 #include <type_traits>
 
@@ -34,35 +32,26 @@ void Check( const bool condition, const std::string & what )
 
 bool TestNumericLimits()
 {
-   using limits = std::numeric_limits< Real >;
-   Check( limits::is_specialized, "numeric_limits<Real> is specialized" );
-   Check( limits::is_iec559, "numeric_limits<Real> is IEEE" );
-   Check( limits::digits == real_significand_digits_v, "significand digits exposed" );
+   Check( real_significand_digits_v > 0, "significand digits exposed" );
 
    // 1 + epsilon is the smallest representable number above one.
    const Real one = Real( 1 );
-   const Real eps = limits::epsilon();
+   const Real eps = RealEpsilonValue();
    const Real half_eps = static_cast< Real >( static_cast< double >( eps ) * 0.5 );
    Check( one + eps > one, "1 + epsilon > 1" );
    Check( one + half_eps == one, "1 + epsilon / 2 == 1" );
 
    // The reported extrema are finite and bracket the representable range.
-   Check( std::isfinite( limits::max() ), "max is finite" );
-   Check( std::isinf( limits::infinity() ), "infinity is infinite" );
-   Check( std::isnan( limits::quiet_NaN() ), "quiet_NaN is NaN" );
-   Check( limits::lowest() == -limits::max(), "lowest == -max" );
-   Check( limits::min() > Real( 0 ), "min is positive" );
-   Check( limits::denorm_min() > Real( 0 ), "denorm_min is positive" );
-   Check( limits::denorm_min() < limits::min(), "denorm_min < min" );
+   Check( std::isfinite( static_cast< long double >( RealMax() ) ), "max is finite" );
+   Check( RealMinNormal() > Real( 0 ), "min is positive" );
+   Check( RealMinNormal() < Real( 1 ), "min is less than one" );
 
    if constexpr ( is_low_precision_real_v )
    {
       // Doubling the maximum overflows, halving denorm_min underflows.
-      const Real two_max = static_cast< Real >( static_cast< float >( limits::max() ) * 2.0f );
-      Check( std::isinf( two_max ), "2 * max overflows" );
-      const Real half_denorm = static_cast< Real >( static_cast< float >( limits::denorm_min() ) * 0.5f );
-      Check( half_denorm == Real( 0 ), "denorm_min / 2 underflows" );
-      Check( sizeof( Real ) == 2, "low precision Real is 16 bits wide" );
+       const Real two_max = static_cast< Real >( static_cast< float >( RealMax() ) * 2.0f );
+       Check( std::isinf( two_max ), "2 * max overflows" );
+       Check( sizeof( Real ) == 2, "low precision Real is 16 bits wide" );
    }
    return failures == 0;
 }
@@ -70,38 +59,13 @@ bool TestNumericLimits()
 bool TestMathFunctions()
 {
    const Real x = Real( 2.25 );
-   Check( std::sqrt( x ) == Real( 1.5 ), "std::sqrt" );
    Check( Sqrt( x ) == Real( 1.5 ), "gendil::Sqrt" );
-   Check( std::abs( Real( -1.5 ) ) == Real( 1.5 ), "std::abs" );
-   Check( std::fabs( Real( -1.5 ) ) == Real( 1.5 ), "std::fabs" );
    Check( Abs( Real( -1.5 ) ) == Real( 1.5 ), "gendil::Abs" );
-   Check( std::pow( Real( 2 ), Real( 3 ) ) == Real( 8 ), "std::pow(Real, Real)" );
-   Check( std::pow( Real( 2 ), 3 ) == Real( 8 ), "std::pow(Real, int)" );
-   Check( std::pow( Real( 2 ), 3.0 ) == 8.0, "std::pow(Real, double)" );
    Check( Pow< 3 >( Real( 2 ) ) == Real( 8 ), "gendil::Pow" );
-   Check( std::floor( Real( 1.75 ) ) == Real( 1 ), "std::floor" );
-   Check( std::ceil( Real( 1.25 ) ) == Real( 2 ), "std::ceil" );
-   Check( std::isfinite( x ), "std::isfinite" );
-   Check( !std::isnan( x ), "std::isnan" );
    Check( std::max( x, Real( 1 ) ) == x, "std::max" );
    Check( std::min( x, Real( 1 ) ) == Real( 1 ), "std::min" );
    Check( Max( x, Real( 1 ) ) == x, "gendil::Max" );
    Check( Min( x, Real( 1 ) ) == Real( 1 ), "gendil::Min" );
-   const double cos_zero = static_cast< double >( std::cos( Real( 0 ) ) );
-   Check( cos_zero == 1.0, "std::cos" );
-   return failures == 0;
-}
-
-bool TestStreams()
-{
-   std::ostringstream out;
-   out << Real( 1.5 ) << ' ' << Real( -2 );
-   Check( out.str() == "1.5 -2", "ostream insertion prints Real: '" + out.str() + "'" );
-
-   std::istringstream in( "0.25" );
-   Real value = Real( 0 );
-   in >> value;
-   Check( value == Real( 0.25 ), "istream extraction reads Real" );
    return failures == 0;
 }
 
@@ -110,7 +74,7 @@ bool TestRealTolerance()
    // RealTolerance preserves the fraction of available digits that a double
    // precision tolerance demands, and is the identity in double precision.
    const double exponent =
-      static_cast< double >( std::numeric_limits< Real >::digits ) /
+      static_cast< double >( real_significand_digits_v ) /
       static_cast< double >( std::numeric_limits< double >::digits );
    for ( const double tol : { 1e-6, 1e-8, 1e-10, 1e-11, 1e-12, 1e-14, 2.5e-9 } )
    {
@@ -131,7 +95,7 @@ bool TestRealTolerance()
    static_assert( RealTolerance( 1e-12 ) > 0.0, "RealTolerance is usable in constant expressions" );
    Check( RealTolerance( 0.0 ) == 0.0, "RealTolerance(0) == 0" );
    Check( RealTolerance( 1e-12 ) < RealTolerance( 1e-10 ), "RealTolerance is monotone" );
-   Check( RealEpsilon() == static_cast< double >( std::numeric_limits< Real >::epsilon() ), "RealEpsilon" );
+   Check( RealEpsilon() == static_cast< double >( RealEpsilonValue() ), "RealEpsilon" );
    Check( std::string( RealTypeName() ).size() > 0, "RealTypeName" );
    return failures == 0;
 }
@@ -165,7 +129,7 @@ bool TestVectorRandomFill()
       nonzero = nonzero || v[i] != Real( 0 );
    }
    Check( in_range && nonzero, "FillRandom produces values in range" );
-   Check( std::isfinite( Norml2( v ) ), "Norml2 of a random vector is finite" );
+   Check( std::isfinite( static_cast< float >( Norml2( v ) ) ), "Norml2 of a random vector is finite" );
    return failures == 0;
 }
 
@@ -180,7 +144,6 @@ int main()
 
    TestNumericLimits();
    TestMathFunctions();
-   TestStreams();
    TestRealTolerance();
    TestAtomicAdd();
    TestVectorRandomFill();

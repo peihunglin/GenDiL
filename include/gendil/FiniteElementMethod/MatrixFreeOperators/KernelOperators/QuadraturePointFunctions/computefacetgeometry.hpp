@@ -110,7 +110,7 @@ FacetGeometry<Dim> ComputeFacetGeometry(
    {
       inverse_facet_size_sq += n_unnormalized_array[i] * n_unnormalized_array[i];
    }
-   Real inverse_facet_size = std::sqrt(inverse_facet_size_sq);
+    Real inverse_facet_size = Sqrt(inverse_facet_size_sq);
 
    // Compute normalized physical normal: n_physical = n_unnormalized / InverseFacetSize
    // This gives a unit-length normal vector

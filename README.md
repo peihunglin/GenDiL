@@ -100,8 +100,10 @@ for the detailed interfaces and capability rules.
 The floating-point type behind `gendil::Real` is selected at configure time
 with `GENDIL_REAL_TYPE`, which accepts `DOUBLE` (default), `FLOAT`, `FP16`
 (`_Float16`, IEEE binary16), or `BF16` (`__bf16`, bfloat16). The low precision
-modes run the whole library, including the test suite, in purely low precision
-arithmetic:
+modes enable the GenDiL host/OpenMP scalar path to run in purely low precision
+arithmetic. The focused scalar tests are the supported validation target while
+remaining tests and examples are migrated away from direct C++20 `std` math and
+streaming calls on compiler extended types:
 ```sh
 cmake -S . -B build-fp16 \
       -D CMAKE_BUILD_TYPE=Release \
@@ -112,16 +114,15 @@ ctest --test-dir build-fp16
 ```
 
 `FP16` and `BF16` require a compiler with native arithmetic on the extended
-floating-point types (GCC 13+ or Clang 17+ on x86-64 and AArch64; Clang must
-be used as the CUDA compiler since NVCC lacks `_Float16` support). They cannot
-be combined with `USE_MFEM` or `USE_HYPRE`, which require double precision.
+floating-point types (GCC 13+ or Clang 17+ on x86-64 and AArch64). They
+currently support host/OpenMP builds only and cannot be combined with
+`USE_CUDA`, `USE_HIP`, `USE_MFEM`, or `USE_HYPRE`.
 The selected type is exported through the CMake package as `GENDIL_REAL_TYPE`
 and defined in code as one of `GENDIL_REAL_TYPE_DOUBLE`, `GENDIL_REAL_TYPE_FLOAT`,
 `GENDIL_REAL_TYPE_FP16`, or `GENDIL_REAL_TYPE_BF16`.
 
-`gendil/Utilities/realtype.hpp` (included through `gendil/gendil.hpp`) adds the
-`std::numeric_limits`, `<cmath>`, and stream support that C++20 standard
-libraries lack for the 16-bit types, and provides precision-aware helpers:
+`gendil/Utilities/realtype.hpp` (included through `gendil/gendil.hpp`) provides
+precision-aware helpers without adding unsupported overloads to `namespace std`:
 `RealTypeName()`, `RealEpsilon()`, `is_low_precision_real_v`, and
 `RealTolerance(tol)`. The tests use `RealTolerance` to rescale tolerances
 written for double precision so that they demand the same fraction of the

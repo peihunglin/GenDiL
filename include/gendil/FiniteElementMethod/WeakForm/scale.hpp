@@ -41,7 +41,7 @@ struct ScaleExpr : FieldBase
 
 std::ostream& operator<<(std::ostream& os, const ScaleExpr& Scale)
 {
-   return os << Scale.scale_factor;
+   return os << static_cast< float >( Scale.scale_factor );
 }
 
 template < FieldExpr Expr >

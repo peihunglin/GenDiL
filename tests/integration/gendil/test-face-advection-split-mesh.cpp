@@ -225,7 +225,7 @@ int main(int, char**)
       l2_err = std::sqrt(l2_err);
       l2_ref = std::sqrt(std::max(l2_ref, Real(1e-300)));
       const Real rel_l2 = l2_err / l2_ref;
-      const Real eps = 200 * std::numeric_limits<Real>::epsilon();
+       const Real eps = 200 * RealEpsilonValue();
 
       std::cout << "  [" << label << "]  max|Δr|=" << max_err
                << "  relL2=" << rel_l2

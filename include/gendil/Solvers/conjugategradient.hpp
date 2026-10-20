@@ -44,7 +44,7 @@ auto ConjugateGradient(
    // 1e-30 underflows to zero in the 16-bit real types; use the smallest
    // normal number there so that the floor keeps its meaning.
    constexpr Real absolute_tolerance_floor = is_low_precision_real_v
-      ? std::numeric_limits<Real>::min() : Real( 1e-30 );
+       ? RealMinNormal() : Real( 1e-30 );
    if( rhs_norm == 0 || rhs_norm < absolute_tolerance_floor )
    {
       x = 0.0;
@@ -157,7 +157,7 @@ auto ConjugateGradient(
    // 1e-30 underflows to zero in the 16-bit real types; use the smallest
    // normal number there so that the floor keeps its meaning.
    constexpr Real absolute_tolerance_floor = is_low_precision_real_v
-      ? std::numeric_limits<Real>::min() : Real( 1e-30 );
+       ? RealMinNormal() : Real( 1e-30 );
    if ( rhs_n == 0.0 || rhs_n < absolute_tolerance_floor ) {
       // trivial solution if rhs is zero or negligibly small
       x = 0.0;
