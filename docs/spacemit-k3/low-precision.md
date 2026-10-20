@@ -24,6 +24,9 @@ format.
 - Template calls that select scalar `Real` overloads pass `Real{ 0 }` or
   `Real{ 1 }` explicitly; deduction does not apply the required conversion from
   a `double` literal.
+- Low-precision integration tests use explicit `Real` mesh dimensions and
+  reference expressions for the same reason; this keeps K3 GCC diagnostics out
+  of the validation targets.
 - Host low-precision accumulation uses a compare-and-swap loop on the actual
   aligned `Real` object. It never reads a neighboring half-word.
 - FP16/BF16 are rejected with CUDA, HIP, MFEM, or HYPRE. Those paths have not
