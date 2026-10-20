@@ -55,7 +55,7 @@ auto MakeBlockDiagonalDGBSRPattern(
 
    for (GlobalIndex i = 0; i < num_elements * block_rows * block_cols; ++i)
    {
-      data.values[i] = 0.0;
+       data.values[i] = Real{ 0 };
    }
 
    Sync( bsr_matrix );

@@ -70,10 +70,10 @@ struct LineCell
    {
       for (LocalIndex i = 0; i < Dim; i++)
       {
-         X[ i ] = 0.0;
+          X[ i ] = Real{ 0 };
          for (LocalIndex j = 0; j < Dim; j++)
          {
-            J_mesh[ i ][ j ] = 0.0;
+             J_mesh[ i ][ j ] = Real{ 0 };
          }
       }
       for (LocalIndex dx = 0; dx < D1D; ++dx)
