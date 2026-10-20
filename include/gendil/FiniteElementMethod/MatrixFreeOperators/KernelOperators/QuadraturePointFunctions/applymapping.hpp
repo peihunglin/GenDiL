@@ -232,7 +232,7 @@ void ApplyMapping(
       std::array<Real, Dim> grad_c_phys;
       ConstexprLoop< Dim >( [&]( auto i )
       {
-         Real sum = 0.0;
+         Real sum = Real{ 0 };
          ConstexprLoop< Dim >( [&]( auto j )
          {
             sum += inv_J[i][j] * grad_c_ref[j];

@@ -26,7 +26,7 @@ template < typename FiniteElementSpace >
 GENDIL_HOST_DEVICE
 Real Norml2( const ElementDoF< FiniteElementSpace > & u )
 {
-   Real res = 0.0;
+   Real res = Real{ 0 };
    DofLoop< FiniteElementSpace >(
       [&]( auto... indices )
       {

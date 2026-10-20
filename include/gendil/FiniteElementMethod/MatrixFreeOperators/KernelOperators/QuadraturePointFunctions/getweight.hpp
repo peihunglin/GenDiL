@@ -73,7 +73,7 @@ Real GetTensorProductWeightImpl(
    Integer& dimension,
    std::index_sequence<Is...>)
 {
-   Real weight = 1.0;
+   Real weight = Real{ 1 };
    (
       (weight *= GetTensorProductWeightImpl(
          index,

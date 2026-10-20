@@ -44,7 +44,7 @@ namespace InterpHelperFunctions
          auto sx_view = MakeDimensionSubView< ActiveDim >( sx, j... );
          const Integer q = get< ActiveDim >( j... );
 
-         Real value = 0.0;
+         Real value = Real{ 0 };
 
          for ( LocalIndex d = 0; d < ND; ++d )
          {
@@ -79,7 +79,7 @@ namespace InterpHelperFunctions
          auto x_view = MakeDimensionSubView< ActiveDim >( x, j... );
          const Integer q = get< ActiveDim >( j... );
 
-         Real value = 0.0;
+         Real value = Real{ 0 };
 
          // TODO Unroll with constexpr loop?
          for ( LocalIndex d = 0; d < ND; ++d )

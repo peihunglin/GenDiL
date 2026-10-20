@@ -36,7 +36,7 @@ namespace GradHelperFunctions
             
             const Integer p = get< SharedDim >( t..., j... );
 
-            Real value = 0.0;
+            Real value = Real{ 0 };
 
             for ( Integer q = 0; q < NQ; ++q )
             {
@@ -64,7 +64,7 @@ namespace GradHelperFunctions
          auto x_view = MakeDimensionSubView< RegisterDim >( x, j... );
          const Integer p = get< RegisterDim >( j... );
 
-         Real value = 0.0;
+         Real value = Real{ 0 };
 
          for ( Integer q = 0; q < NQ; ++q )
          {

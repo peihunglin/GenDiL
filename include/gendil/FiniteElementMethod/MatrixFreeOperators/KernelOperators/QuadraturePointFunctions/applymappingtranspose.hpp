@@ -230,7 +230,7 @@ void ApplyMappingTranspose(
       std::array<Real, Dim> grad_c_out;
       ConstexprLoop< Dim >( [&]( auto i )
       {
-         Real sum = 0.0;
+         Real sum = Real{ 0 };
          ConstexprLoop< Dim >( [&]( auto j )
          {
             sum += inv_J[j][i] * grad_c_in[j];  // Transposed indexing

@@ -64,7 +64,7 @@ auto AdjointGradientContraction( InputTensor const & u, Op1D const & B, std::ind
 
          if constexpr ( SumReduce )
          {
-            Real sum = 0.0;
+            Real sum = Real{ 0 };
             ConstexprLoop< Rank >( [&] (auto l) { sum += grad[ l ]; } );
             Bu( indices_ ... ) = sum;
          }

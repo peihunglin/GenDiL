@@ -47,7 +47,7 @@ namespace AdjGradHelperFunctions
          {
             auto sx_view = MakeDimensionSubView< SharedDim >( sx, t..., j... );
 
-            Real value = 0.0;
+            Real value = Real{ 0 };
 
             for ( Integer p = 0; p < NQ; ++p )
             {
@@ -85,7 +85,7 @@ namespace AdjGradHelperFunctions
 
          const Integer q = get< RegisterDim >( j... );
 
-         Real value = 0.0;
+         Real value = Real{ 0 };
 
          for ( Integer p = 0; p < NQ; ++p )
          {
@@ -215,7 +215,7 @@ void ApplyGradientTestFunctionsAtQPoints(
    using rshape = subsequence_t< quad_shape, RegisterDimensions >;
    UnitLoop < rshape >( [&] ( auto... j )
    {
-      GTu( j... ) = 0.0;
+      GTu( j... ) = Real{ 0 };
    });
 
 // contraction along threaded dimensions

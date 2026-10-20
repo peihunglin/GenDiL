@@ -24,7 +24,7 @@ void ComputeInverse( const Real & det, const Real (& A)[1][1], Real (& inv_A)[1]
 GENDIL_HOST_DEVICE
 void ComputeInverse( const Real & det, const Real (& A)[2][2], Real (& inv_A)[2][2] )
 {
-   Real det_inv = 1.0 / det;
+   Real det_inv = Real{ 1 } / det;
    inv_A[0][0] = det_inv * A[1][1];
    inv_A[0][1] = - det_inv * A[0][1];
    inv_A[1][0] = - det_inv * A[1][0];
@@ -63,7 +63,7 @@ void ComputeInverse( const Real & det, const std::array< std::array< Real, 1 >, 
 GENDIL_HOST_DEVICE
 void ComputeInverse( const Real & det, const std::array< std::array< Real, 2 >, 2 > & A, std::array< std::array< Real, 2 >, 2 > & inv_A )
 {
-   Real det_inv = 1.0 / det;
+   Real det_inv = Real{ 1 } / det;
    inv_A[0][0] = det_inv * A[1][1];
    inv_A[0][1] = - det_inv * A[0][1];
    inv_A[1][0] = - det_inv * A[1][0];

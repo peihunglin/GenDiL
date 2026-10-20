@@ -36,7 +36,7 @@ auto FusedAdjointGradInterpContractionSumReduce( Pair const & u_and_Du, Op1D con
          auto indices = std::make_tuple( indices_ ... );
          const Integer d = std::get< ActiveDim >( indices );
 
-         Real value = 0.0;
+         Real value = Real{ 0 };
 
          auto& q = std::get< ActiveDim >( indices );
          for ( q = 0; q < NQ; ++q )
@@ -91,7 +91,7 @@ auto FusedAdjointGradInterpContraction( Pair const & u_and_Du, Op1D const & B, s
          const Integer d = std::get< ActiveDim >( indices );
 
          Real grad[ Rank ]{};
-         Real value = 0.0;
+         Real value = Real{ 0 };
 
          auto& q = std::get< ActiveDim >( indices );
          for ( q = 0; q < NQ; ++q )

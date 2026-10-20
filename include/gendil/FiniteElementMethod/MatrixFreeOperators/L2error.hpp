@@ -46,7 +46,7 @@ void L2ErrorElementOperatorSerial(
    auto Bu = InterpolateValues( kernel_conf, element_quad_data, u );
    const auto cell = fe_space.GetCell( element_index );
 
-   Real error = 0.0;
+   Real error = Real{ 0 };
    QuadraturePointLoop< IntegrationRule >( kernel_conf, [&] ( auto const & quad_index )
    {
       PhysicalCoordinates X;
@@ -104,7 +104,7 @@ void L2ErrorElementOperatorThreaded(
    // thread index, so this elects one leader per BatchIndex lane.
    if ( kernel_conf.GetLinearThreadIndex() == 0 )
    {
-      *error = 0.0;
+      *error = Real{ 0 };
    }
    kernel_conf.Sync();
 
@@ -241,7 +241,7 @@ Real L2Error(
    HostDevicePointer< Real > sum_ptr;
    AllocateHostPointer< Real >( 1, sum_ptr );
    AllocateDevicePointer< Real >( 1, sum_ptr );
-   *sum_ptr = 0.0;
+   *sum_ptr = Real{ 0 };
    ToDevice( 1, sum_ptr );
 
    mesh::CellIterator< KernelConfiguration >(

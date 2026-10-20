@@ -176,7 +176,7 @@ auto operator*( std::array<Real,Dim> const & a, Point<Dim> const & b )
 template < size_t Dim >
 Real Distance( Point<Dim> const & a, Point<Dim> const & b )
 {
-   Real result = 0.0;
+   Real result = Real{ 0 };
    for ( size_t i = 0; i < Dim; ++i )
    {
       Real d = a[i] - b[i];

@@ -18,7 +18,7 @@ template < int size >
 GENDIL_HOST_DEVICE
 Real Dot( const Real (& u)[ size ], const Real (& v)[ size ] )
 {
-   Real res = 0.0;
+   Real res = Real{ 0 };
    for (size_t i = 0; i < size; i++)
    {
       res += u[ i ] * v[ i ];
@@ -30,7 +30,7 @@ template < size_t size >
 GENDIL_HOST_DEVICE
 Real Dot( const Real (& u)[ size ], const std::array< Real, size > & v )
 {
-   Real res = 0.0;
+   Real res = Real{ 0 };
    for (size_t i = 0; i < size; i++)
    {
       res += u[ i ] * v[ i ];
@@ -42,7 +42,7 @@ template < size_t size >
 GENDIL_HOST_DEVICE
 Real Dot( const std::array< Real, size > & u, const std::array< Real, size > & v )
 {
-   Real res = 0.0;
+   Real res = Real{ 0 };
    for (size_t i = 0; i < size; i++)
    {
       res += u[ i ] * v[ i ];
@@ -54,7 +54,7 @@ template < typename FiniteElementSpace >
 GENDIL_HOST_DEVICE
 Real Dot( const ElementDoF< FiniteElementSpace > & u, const ElementDoF< FiniteElementSpace > & v )
 {
-   Real res = 0.0;
+   Real res = Real{ 0 };
    DofLoop< FiniteElementSpace >(
       [&]( auto... indices )
       {
@@ -122,7 +122,7 @@ Real Dot( const Vector & u, const Vector & v )
    // TODO: Make it device compatible
    const Real* u_ptr( u.ReadHostData() );
    const Real* v_ptr( v.ReadHostData() );
-   Real sum = 0.0;
+   Real sum = Real{ 0 };
    #pragma omp parallel for reduction(+:sum)
    for (size_t i = 0; i < u.Size(); ++i) {
       sum += u_ptr[i] * v_ptr[i];

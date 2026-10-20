@@ -105,7 +105,7 @@ FacetGeometry<Dim> ComputeFacetGeometry(
    // Compute InverseFacetSize = norm(n_unnormalized)
    // For affine/tensor-product elements, this is the inverse of the
    // local facet diameter/mesh size h_F
-   Real inverse_facet_size_sq = 0.0;
+   Real inverse_facet_size_sq = Real{ 0 };
    for (Integer i = 0; i < Dim; ++i)
    {
       inverse_facet_size_sq += n_unnormalized_array[i] * n_unnormalized_array[i];
