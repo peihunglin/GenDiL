@@ -33,13 +33,13 @@ struct GaussLegendrePoints< 1 >
    GENDIL_HOST_DEVICE
    static constexpr Real GetCoord( index_type index)
    {
-      return 0.5;
+       return Real{ 0.5 };
    }
 
    GENDIL_HOST_DEVICE
    static constexpr Real GetWeight( index_type index )
    {
-      return 1.0;
+       return Real{ 1 };
    }
 };
 

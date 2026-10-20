@@ -34,7 +34,7 @@ struct TestSpace : FieldBase
       const QuadPtContext & quad_pt_context,
       const Fields & fields ) const
    {
-      return 1.0;
+       return Real{ 1 };
    }
 };
 

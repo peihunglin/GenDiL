@@ -14,9 +14,10 @@ format.
 - `RealMinNormal`, `RealMax`, `RealEpsilonValue`, `Sqrt`, and `Abs` are GenDiL
   APIs. C++20 does not authorize adding overloads or specializations for these
   compiler types to `namespace std`.
-- Core kernels initialize `Real` values with `Real{ 0 }` and `Real{ 1 }` rather
-  than `double` literals. GCC 15 on K3 diagnoses direct `double` to `_Float16`
-  initialization as a narrowing conversion when range kernels instantiate it.
+- Core kernels initialize and return `Real` values with `Real{ 0 }` and
+  `Real{ 1 }` rather than `double` literals. GCC 15 on K3 diagnoses direct
+  `double` to `_Float16` conversion as a narrowing conversion when range
+  kernels instantiate it.
 - Host low-precision accumulation uses a compare-and-swap loop on the actual
   aligned `Real` object. It never reads a neighboring half-word.
 - FP16/BF16 are rejected with CUDA, HIP, MFEM, or HYPRE. Those paths have not

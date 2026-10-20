@@ -48,7 +48,7 @@ void test_mass_6D(
    constexpr Integer Dim = GetDim( fe_space );
    auto sigma = [=] GENDIL_HOST_DEVICE ( std::array< Real, Dim> const & X ) -> Real
    {
-      return 1.0;
+       return Real{ 1 };
    };
 
 #if defined(GENDIL_USE_DEVICE)

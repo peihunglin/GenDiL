@@ -65,7 +65,7 @@ struct ConformingFaceMap {
    Point<Dim> MapReferenceToFaceCoordinates1d(const Point<1>& p) const { return p; }
 
    GENDIL_HOST_DEVICE
-   Real Measure() const { return 1.0; }
+   Real Measure() const { return Real{ 1 }; }
 };
 
 template <Integer Dim>

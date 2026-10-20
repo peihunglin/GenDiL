@@ -28,13 +28,13 @@ struct ZeroPoint
    GENDIL_HOST_DEVICE
    static constexpr Real GetCoord( index_type index )
    {
-      return 0.0;
+       return Real{ 0 };
    }
 
    GENDIL_HOST_DEVICE
    static constexpr Real GetWeight( index_type index )
    {
-      return 1.0;
+       return Real{ 1 };
    }
 };
 

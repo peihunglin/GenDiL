@@ -156,7 +156,7 @@ Real GetWeight(
       dependent_false_v<std::tuple<QData...>>,
       "GetWeight volume qdata requires TensorProductData; plain "
       "std::tuple volume qdata is unsupported.");
-   return 0.0;
+    return Real{ 0 };
 }
 
 template < CellFaceView FaceInfo, Integer Dim, typename... DofToQuads >
