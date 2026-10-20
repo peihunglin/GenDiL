@@ -516,8 +516,8 @@ bool TestRectangularElementBSR()
       {
          success =
             Check(
-               std::isfinite(
-                  matrix_data.GetBlockEntry(block, 0, col)),
+                std::isfinite( static_cast< float >(
+                   matrix_data.GetBlockEntry(block, 0, col) ) ),
                "Rectangular element BSR contains a non-finite value.") &&
             success;
       }

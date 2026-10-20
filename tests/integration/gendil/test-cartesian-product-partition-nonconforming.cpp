@@ -439,7 +439,7 @@ bool TestH1NonconformingSmoke()
    const Vector output = Apply(op, input);
    const Real norm = VectorNorm(output);
    return Check(
-      std::isfinite(norm) && norm > RealTolerance( 1.0e-8 ),
+       std::isfinite( static_cast< float >( norm ) ) && norm > RealTolerance( 1.0e-8 ),
       "scalar H1 nonconforming product smoke is finite and nonzero");
 }
 

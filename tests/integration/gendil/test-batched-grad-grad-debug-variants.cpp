@@ -44,7 +44,7 @@ bool PrintScaledL2Diagnostic(
 {
    const Real scaled_error = ScaledL2Error( observed, expected );
    std::cout << label << " scaled L2 error = " << scaled_error << '\n';
-   return std::isfinite( scaled_error ) && scaled_error <= tolerance;
+   return std::isfinite( static_cast< float >( scaled_error ) ) && scaled_error <= tolerance;
 }
 
 enum class StageId : Integer
@@ -1416,9 +1416,9 @@ void RunLayoutBatchSweepCase( const char * label )
       const Real err_batch1 = ScaledL2Error( y_batchn, y_batch1 );
       const Real err_legacy = ScaledL2Error( y_batchn, y_legacy );
       const bool batch1_ok =
-         std::isfinite( err_batch1 ) && err_batch1 <= tolerance;
+          std::isfinite( static_cast< float >( err_batch1 ) ) && err_batch1 <= tolerance;
       const bool legacy_ok =
-         std::isfinite( err_legacy ) && err_legacy <= tolerance;
+          std::isfinite( static_cast< float >( err_legacy ) ) && err_legacy <= tolerance;
       const bool divides_wavefront =
          device_warp_size % Layout::GetNumberOfThreads() == 0;
       const char * batch_classification =

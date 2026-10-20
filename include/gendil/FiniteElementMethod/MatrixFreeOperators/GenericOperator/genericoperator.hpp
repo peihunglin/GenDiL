@@ -114,7 +114,7 @@ public:
    {
       // Prepare the output exactly once. Recursive term and domain-batch
       // dispatch contributes additively into this vector.
-      dofs_vector_out = 0.0;
+       dofs_vector_out = Real{ 0 };
 
       GenericExplicitOperator<KernelPolicy>(
          weak_form,

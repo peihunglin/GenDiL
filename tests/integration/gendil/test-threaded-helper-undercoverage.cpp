@@ -864,8 +864,8 @@ bool CheckSegment(
          max_abs = std::max( max_abs, std::abs( obs ) );
 
          const Real scale = std::max( Real{ 1.0 }, std::abs( exp ) );
-         if ( !std::isfinite( obs ) ||
-              !std::isfinite( exp ) ||
+          if ( !std::isfinite( static_cast< float >( obs ) ) ||
+               !std::isfinite( static_cast< float >( exp ) ) ||
               std::abs( diff ) / scale > tolerance )
          {
             ++mismatches;
@@ -903,7 +903,7 @@ bool CheckSegment(
       }
       std::cout << ".\n";
 
-      if ( !std::isfinite( scaled_error ) ||
+       if ( !std::isfinite( static_cast< float >( scaled_error ) ) ||
            scaled_error > tolerance ||
            mismatches > 0 )
       {

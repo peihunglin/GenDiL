@@ -107,7 +107,7 @@ bool CheckRawTripletRangesAndFinite(
          ReadHost( buffer.cols )[i] < buffer.num_cols,
          "Raw COO emitted a column outside the matrix dimensions." ) && success;
       success = Check(
-         std::isfinite( ReadHost( buffer.values )[i] ),
+          std::isfinite( static_cast< float >( ReadHost( buffer.values )[i] ) ),
          "Raw COO emitted a non-finite value." ) && success;
    }
    return success;
@@ -272,7 +272,7 @@ bool CheckCanonicalCOOSortedUnique(
          ReadHost( matrix.cols )[i] < matrix.num_cols,
          "Canonical COO emitted a column outside the matrix dimensions." ) && success;
       success = Check(
-         std::isfinite( ReadHost( matrix.values )[i] ),
+         std::isfinite( static_cast< float >( ReadHost( matrix.values )[i] ) ),
          "Canonical COO emitted a non-finite value." ) && success;
    }
 

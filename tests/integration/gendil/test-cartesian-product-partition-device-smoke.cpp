@@ -618,7 +618,7 @@ bool TestOriginalInteriorBoundarySmoke()
    };
 
    bool success =
-      std::isfinite(norm) && norm > device_nonzero_tolerance;
+       std::isfinite( static_cast< float >( norm ) ) && norm > device_nonzero_tolerance;
    success = CheckClose(
       "partition sparse BatchSize=1 versus matrix-free",
       coo_batch1_output,

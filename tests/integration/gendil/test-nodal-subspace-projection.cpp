@@ -127,20 +127,22 @@ bool RunProjectionCase( const char * label )
       MakeReadOnlyElementTensorView< SerialKernelConfiguration >(
          test_space,
          output );
-   constexpr double tolerance = RealTolerance( 1e-12 );
+   constexpr double tolerance = is_low_precision_real_v
+      ? RealTolerance( 1e-10 ) : RealTolerance( 1e-12 );
    bool success = true;
    for ( LocalIndex retained = 0; retained < num_points; ++retained )
    {
       const Real xi = NodalPoints::GetCoord( retained );
       const Real expected =
          integrated_interval_length * integrated_reference_factor *
-         ( 2.0 + xi + xi * xi );
+         ( Real{ 2 } + xi + xi * xi );
       const Real actual = output_view( retained, 0 );
-      if ( std::abs( actual - expected ) > tolerance )
+      if ( Abs( actual - expected ) > tolerance )
       {
          std::cerr
-            << label << " node " << retained << ": expected " << expected
-            << ", got " << actual << '\n';
+            << label << " node " << retained << ": expected "
+            << static_cast< float >( expected )
+            << ", got " << static_cast< float >( actual ) << '\n';
          success = false;
       }
    }

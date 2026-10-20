@@ -129,7 +129,7 @@ bool CheckVectorFinite( const char * label, const VectorType & values )
    bool success = true;
    for ( Integer i = 0; i < values.Size(); ++i )
    {
-      if ( !std::isfinite( values[ i ] ) )
+       if ( !std::isfinite( static_cast< float >( values[ i ] ) ) )
       {
          std::cout << "FAILED: " << label
                    << " has non-finite entry at index " << i << ".\n";

@@ -32,8 +32,8 @@ focused scalar tests on X100:
 
 ```sh
 cmake -S . -B build-k3-fp16-gcc -D CMAKE_BUILD_TYPE=Release -D GENDIL_REAL_TYPE=FP16
-cmake --build build-k3-fp16-gcc --parallel --target test-real-type test-atomic-add
-ctest --test-dir build-k3-fp16-gcc -R '^(test-real-type|test-atomic-add)$' --output-on-failure
+cmake --build build-k3-fp16-gcc --parallel --target test-real-type test-atomic-add test-nodal-subspace-projection
+ctest --test-dir build-k3-fp16-gcc -R '^(test-real-type|test-atomic-add|test-nodal-subspace-projection)$' --output-on-failure
 ```
 
 Repeat with `GENDIL_REAL_TYPE=BF16` and with Clang. Then run each focused CTest
@@ -48,6 +48,8 @@ failure.
 The focused tests must pass with `OMP_NUM_THREADS=1` and `OMP_NUM_THREADS=8` on
 both core classes. `test-atomic-add` verifies loss-free concurrent increments
 within the exactly representable range: 2048 for FP16 and 256 for BF16.
+`test-nodal-subspace-projection` instantiates the host projection path and
+verifies its reduced-precision result.
 
 No K3 hardware results are included in this change. The complete test and
 example build is not yet an acceptance gate because remaining direct C++20

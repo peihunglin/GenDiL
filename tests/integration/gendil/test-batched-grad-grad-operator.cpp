@@ -141,8 +141,8 @@ ErrorSummary ComputeErrorSummary(
    const Real scale = std::max( Real{ 1.0 }, std::sqrt( expected_norm_sq ) );
    const Real scaled_l2_error = abs_error / scale;
    const bool ok =
-      std::isfinite( max_abs_error ) &&
-      std::isfinite( scaled_l2_error ) &&
+       std::isfinite( static_cast< float >( max_abs_error ) ) &&
+       std::isfinite( static_cast< float >( scaled_l2_error ) ) &&
       scaled_l2_error <= tolerance;
 
    return { scaled_l2_error, max_abs_error, ok };

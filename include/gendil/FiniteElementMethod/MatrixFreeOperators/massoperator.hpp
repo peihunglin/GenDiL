@@ -216,7 +216,7 @@ public:
       }
       else // Potentially shared restriction rows.
       {
-         dofs_vector_out = 0.0;
+          dofs_vector_out = Real{ 0 };
          auto dofs_in = MakeReadOnlyElementTensorView< KernelPolicy >( this->finite_element_space, dofs_vector_in );
          auto dofs_out = MakeReadWriteElementTensorView< KernelPolicy >( this->finite_element_space, dofs_vector_out );
          Apply( dofs_in, dofs_out );

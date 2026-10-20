@@ -50,7 +50,7 @@ bool TestNumericLimits()
    {
       // Doubling the maximum overflows, halving denorm_min underflows.
        const Real two_max = static_cast< Real >( static_cast< float >( RealMax() ) * 2.0f );
-       Check( std::isinf( two_max ), "2 * max overflows" );
+       Check( std::isinf( static_cast< float >( two_max ) ), "2 * max overflows" );
        Check( sizeof( Real ) == 2, "low precision Real is 16 bits wide" );
    }
    return failures == 0;
