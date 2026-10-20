@@ -38,11 +38,11 @@ bool TestNumericLimits()
    const Real one = Real( 1 );
    const Real eps = RealEpsilonValue();
    const Real quarter_eps = static_cast< Real >( static_cast< double >( eps ) * 0.25 );
+   const Real one_plus_quarter_eps = one + quarter_eps;
    Check( one + eps > one, "1 + epsilon > 1" );
-   // Half epsilon is a rounding tie whose result depends on the compiler's
-   // extended-type evaluation model. Quarter epsilon is unambiguously below
-   // the next representable value for every supported Real type.
-   Check( one + quarter_eps == one, "1 + epsilon / 4 == 1" );
+   // Extended types may be evaluated in a wider type. Store the sum to check
+   // the rounding behavior of Real rather than the intermediate expression.
+   Check( one_plus_quarter_eps == one, "stored 1 + epsilon / 4 == 1" );
 
    // The reported extrema are finite and bracket the representable range.
    Check( std::isfinite( static_cast< long double >( RealMax() ) ), "max is finite" );
