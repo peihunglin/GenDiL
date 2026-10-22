@@ -4,6 +4,7 @@
 
 
 #include <gendil/gendil.hpp>
+#include "finite-check.hpp"
 #include <chrono>
 
 using namespace std;
@@ -49,9 +50,15 @@ void test_speed_of_light_3D( const Integer nx, const Integer ny, const Integer n
       op( dofs_out, dofs_in );
       op( dofs_in, dofs_out );
    }
-   GENDIL_DEVICE_SYNC;
-   auto end = std::chrono::steady_clock::now();
-   double time = std::chrono::duration<double>(end - start).count() / (2 * num_iter);
+    GENDIL_DEVICE_SYNC;
+    auto end = std::chrono::steady_clock::now();
+
+    // Deliberately outside the timed region; catches FP16/BF16 overflow
+    // and invalid arithmetic without affecting the reported throughput.
+    benchmark::VerifyFinite( dofs_in, "speed-of-light operator input" );
+    benchmark::VerifyFinite( dofs_out, "speed-of-light operator output" );
+
+    double time = std::chrono::duration<double>(end - start).count() / (2 * num_iter);
    double throughput = num_dofs / time;
    std::cout << "          (" << num_dofs << ", " << throughput << ")\n";
 }

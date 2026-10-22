@@ -4,6 +4,7 @@
 
 
 #include <gendil/gendil.hpp>
+#include "finite-check.hpp"
 
 #include <chrono>
 
@@ -83,10 +84,15 @@ void test_mass_3D( const Integer nx, const Integer ny, const Integer nz )
          mass_operator( dofs_out, dofs_in );
          mass_operator( dofs_in, dofs_out );
       }
-      GENDIL_DEVICE_SYNC;
-      const auto end = std::chrono::steady_clock::now();
+       GENDIL_DEVICE_SYNC;
+       const auto end = std::chrono::steady_clock::now();
 
-      const std::chrono::duration<double> elapsed_seconds = end - start;
+       // Deliberately outside the timed region; catches FP16/BF16 overflow
+       // and invalid arithmetic without affecting the reported throughput.
+       benchmark::VerifyFinite( dofs_in, "mass operator input" );
+       benchmark::VerifyFinite( dofs_out, "mass operator output" );
+
+       const std::chrono::duration<double> elapsed_seconds = end - start;
       const Integer total_iter = 2 * num_iter;
       const double time_per_iter = elapsed_seconds.count() / total_iter;
       throughput = num_dofs / time_per_iter;
