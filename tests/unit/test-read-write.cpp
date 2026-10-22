@@ -49,6 +49,16 @@ bool test_read_write_consistency()
    dofs_read = 0.0;
    dofs_write = 0.0;
 
+   // A double literal must be accepted even when Real is a C++23
+   // low-precision type such as std::bfloat16_t.
+   for (Integer i = 0; i < num_dofs; ++i)
+   {
+       if (dofs_read[i] != Real{})
+       {
+          return false;
+       }
+   }
+
    // Set a pattern to dofs_in
    auto dofs_in_ptr = dofs_in.WriteHostData();
    for (Integer i = 0; i < num_dofs; ++i)

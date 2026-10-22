@@ -28,6 +28,8 @@
 #include "gendil/Utilities/MemoryManagement/hostdevicepointer.hpp"
 #include "gendil/Interfaces/MFEM/vector.hpp"
 
+#include <type_traits>
+
 namespace gendil
 {
 
@@ -176,21 +178,28 @@ public:
    }
 
    /**
-    * @brief Fill the vector with a scalar value (host path).
-    * @param val Value assigned to each entry.
+    * @brief Fill the vector with an arithmetic scalar value (host path).
+    * @param val Value assigned to each entry, explicitly converted to `Real`.
     * @post Host valid, device invalid.
+    *
+    * The explicit conversion permits ordinary literals such as `0.0` when
+    * `Real` is a low-precision C++23 floating-point type (for example,
+    * `std::bfloat16_t`), whose conversion from `double` is not implicit on
+    * all supported standard libraries.
     */
-   Vector& operator=( Real val )
+   template < typename Scalar >
+      requires std::is_arithmetic_v< std::remove_cvref_t< Scalar > >
+   Vector& operator=( Scalar val )
    {
-      // TODO: Make it device compatible
-      Real* ptr = WriteHostData();
+       // TODO: Make it device compatible
+       Real* ptr = WriteHostData();
 
-      #pragma omp parallel for
-      for ( size_t i=0; i<Size(); ++i )
-      {
-         ptr[i] = val;
-      }
-      return *this;
+       #pragma omp parallel for
+       for ( size_t i=0; i<Size(); ++i )
+       {
+          ptr[i] = static_cast< Real >( val );
+       }
+       return *this;
    }
 
    /**
